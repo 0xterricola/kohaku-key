@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:hardware": "node scripts/verify-keycard-account.mjs"
+    "test:hardware": "node scripts/verify-keycard-account.mjs",
+    "test:typed-data": "node scripts/verify-keycard-typed-data.mjs"
   },
   "dependencies": {
     "viem": "2.55.19"

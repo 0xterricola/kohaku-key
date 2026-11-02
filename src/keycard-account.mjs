@@ -2,9 +2,10 @@ import { execFileSync } from "node:child_process";
 import {
   getAddress,
   hashMessage,
+  hashTypedData,
+  recoverAddress,
   isAddressEqual,
   padHex,
-  recoverMessageAddress,
   serializeSignature,
 } from "viem";
 import { publicKeyToAddress, toAccount } from "viem/accounts";
@@ -48,42 +49,44 @@ export function createKeycardAccount({
     throw new Error("Keycard public key/address mismatch");
   }
 
+  async function signDigest(digest) {
+    const result = command("sign", [
+      "--hex", digest,
+      "--path", path,
+      "--algo", "ecdsa",
+    ]);
+
+    const parity = Number(result.signature_v);
+
+    if (parity !== 0 && parity !== 1) {
+      throw new Error("Invalid Keycard recovery parity");
+    }
+
+    const signature = serializeSignature({
+      r: padHex(result.signature_r, { size: 32 }),
+      s: padHex(result.signature_s, { size: 32 }),
+      yParity: parity,
+    });
+
+    const recovered = await recoverAddress({
+      hash: digest,
+      signature,
+    });
+
+    if (!isAddressEqual(recovered, address)) {
+      throw new Error(
+        "Keycard signature does not match account",
+      );
+    }
+
+    return signature;
+  }
+
   return toAccount({
     address,
 
     async signMessage({ message }) {
-      const digest = hashMessage(message);
-
-      const result = command("sign", [
-        "--hex", digest,
-        "--path", path,
-        "--algo", "ecdsa",
-      ]);
-
-      const parity = Number(result.signature_v);
-
-      if (parity !== 0 && parity !== 1) {
-        throw new Error("Invalid Keycard recovery parity");
-      }
-
-      const signature = serializeSignature({
-        r: padHex(result.signature_r, { size: 32 }),
-        s: padHex(result.signature_s, { size: 32 }),
-        yParity: parity,
-      });
-
-      const recovered = await recoverMessageAddress({
-        message,
-        signature,
-      });
-
-      if (!isAddressEqual(recovered, address)) {
-        throw new Error(
-          "Keycard signature does not match account",
-        );
-      }
-
-      return signature;
+      return signDigest(hashMessage(message));
     },
 
     async signTransaction() {
@@ -92,10 +95,8 @@ export function createKeycardAccount({
       );
     },
 
-    async signTypedData() {
-      throw new Error(
-        "Keycard EIP-712 signing not implemented",
-      );
+    async signTypedData(typedData) {
+      return signDigest(hashTypedData(typedData));
     },
   });
 }
