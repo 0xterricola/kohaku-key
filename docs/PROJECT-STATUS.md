@@ -185,3 +185,23 @@ the separate `0xterricola/kohaku-cli` fork.
 5. Validate Keycard Shell independently.
 6. Implement network-backed preparation, authorization, and delegation validation.
 7. Verify testnet execution, receipt handling, and recovery before production use.
+
+<!-- v2-planning:start -->
+## V2 — Secure Hardware-Backed Ethereum Execution
+
+**Planning status:** Proposed, November 2, 2026.
+
+V1's offline hardware-signing prototype is complete.
+
+V2 carries forward the original live Sepolia transaction
+acceptance criterion and adds live Simple7702 execution,
+secure device sessions, explicit transaction approval,
+delegation validation, receipt verification, and recovery.
+
+Development begins with Iteration 0: reproducible baseline
+and security threat model.
+
+See [V2 Technical Proposal](V2-PROPOSAL.md).
+
+No V2 live network milestones have been completed.
+<!-- v2-planning:end -->

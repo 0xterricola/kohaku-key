@@ -59,3 +59,25 @@ The original proposal's live Sepolia broadcast criterion remains
 unmet. Privacy Pools signature-derived recovery was investigated
 but not established. This is not a production-ready wallet.
 <!-- kohaku-status:end -->
+
+<!-- kohaku-v2:start -->
+## V2 — Secure Hardware-Backed Ethereum Execution
+
+**Status: Proposed — Iteration 0 next.**
+
+V1 established offline hardware-backed Ethereum signing.
+V2 will focus on secure device sessions, transaction review,
+Sepolia EIP-1559 execution, live EIP-7702 Simple7702
+UserOperations, and recoverable submission.
+
+The existing offline signer remains the verified foundation.
+
+- [V2 Technical Proposal](docs/V2-PROPOSAL.md)
+- [V2 Baseline](docs/V2-BASELINE.md)
+- [V2 Security Model](docs/V2-SECURITY-MODEL.md)
+- [V2 Testnet Results](docs/V2-TESTNET-RESULTS.md)
+- [V2 Outcome](docs/V2-OUTCOME.md)
+
+V2 is planned, not implemented. No live Sepolia
+acceptance criteria have been completed.
+<!-- kohaku-v2:end -->
