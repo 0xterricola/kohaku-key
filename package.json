@@ -1,0 +1,12 @@
+{
+  "name": "kohaku-key",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:hardware": "node scripts/verify-keycard-account.mjs"
+  },
+  "dependencies": {
+    "viem": "2.55.19"
+  }
+}

@@ -8,3 +8,5 @@ coverage/
 *.key
 secrets/
 private/
+
+.local/
