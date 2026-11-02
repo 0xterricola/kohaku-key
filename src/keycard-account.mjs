@@ -12,6 +12,7 @@ import {
   padHex,
   serializeSignature,
 } from "viem";
+import { hashAuthorization } from "viem/utils";
 import { publicKeyToAddress, toAccount } from "viem/accounts";
 
 export function createKeycardAccount({
@@ -149,6 +150,40 @@ export function createKeycardAccount({
 
     async signTypedData(typedData) {
       return signDigest(hashTypedData(typedData));
+    },
+
+    async signAuthorization(authorization) {
+      const {
+        chainId,
+        nonce,
+      } = authorization;
+
+      const contractAddress = getAddress(
+        authorization.contractAddress ?? authorization.address,
+      );
+
+      if (!Number.isSafeInteger(chainId) || chainId <= 0) {
+        throw new Error("Explicit nonzero chain ID required");
+      }
+
+      if (!Number.isSafeInteger(nonce) || nonce < 0) {
+        throw new Error("Explicit valid nonce required");
+      }
+
+      const digest = hashAuthorization({
+        contractAddress,
+        chainId,
+        nonce,
+      });
+
+      const signature = await signDigest(digest);
+
+      return {
+        address: contractAddress,
+        chainId,
+        nonce,
+        ...parseSignature(signature),
+      };
     },
   });
 }
