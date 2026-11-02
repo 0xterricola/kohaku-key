@@ -38,3 +38,18 @@ An isolated build of keycard-cli using this fix produced:
 Results apply to the tested retail Keycard 3.1 and
 keycard-go v4.0.2. Keycard Shell and applet 4.0
 have not been validated in this experiment.
+
+<!-- research-update:start -->
+## Research update — November 2, 2026
+
+See [Project Status](PROJECT-STATUS.md) and
+[Security and Recovery Findings](SECURITY-AND-RECOVERY.md)
+for validated hardware signing, upstream SDK fix status,
+signature determinism findings, and current limitations.
+
+Keycard Go #20 has merged upstream. EIP-191, EIP-712,
+EIP-1559, EIP-7702 authorization, and offline Simple7702
+UserOperation signing have been verified on retail Keycard
+3.1. Signature-derived credential recovery is not
+supported by the card's randomized ECDSA signing mode.
+<!-- research-update:end -->
