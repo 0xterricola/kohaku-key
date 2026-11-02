@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test:hardware": "node scripts/verify-keycard-account.mjs",
-    "test:typed-data": "node scripts/verify-keycard-typed-data.mjs"
+    "test:typed-data": "node scripts/verify-keycard-typed-data.mjs",
+    "test:transaction": "node scripts/verify-keycard-transaction.mjs"
   },
   "dependencies": {
     "viem": "2.55.19"

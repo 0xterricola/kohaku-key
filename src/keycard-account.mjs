@@ -4,6 +4,10 @@ import {
   hashMessage,
   hashTypedData,
   recoverAddress,
+  recoverTransactionAddress,
+  parseSignature,
+  keccak256,
+  serializeTransaction,
   isAddressEqual,
   padHex,
   serializeSignature,
@@ -89,10 +93,58 @@ export function createKeycardAccount({
       return signDigest(hashMessage(message));
     },
 
-    async signTransaction() {
-      throw new Error(
-        "Keycard transaction signing not implemented",
+    async signTransaction(
+      transaction,
+      { serializer = serializeTransaction } = {},
+    ) {
+      if (transaction.type !== "eip1559") {
+        throw new Error("Only EIP-1559 transactions are supported");
+      }
+
+      if (
+        !Number.isSafeInteger(transaction.chainId) ||
+        transaction.chainId <= 0 ||
+        !Number.isSafeInteger(transaction.nonce) ||
+        transaction.nonce < 0
+      ) {
+        throw new Error("Explicit chain ID and nonce required");
+      }
+
+      if (
+        typeof transaction.gas !== "bigint" ||
+        transaction.gas <= 0n ||
+        typeof transaction.value !== "bigint" ||
+        transaction.value < 0n ||
+        typeof transaction.maxFeePerGas !== "bigint" ||
+        typeof transaction.maxPriorityFeePerGas !== "bigint" ||
+        transaction.maxPriorityFeePerGas < 0n ||
+        transaction.maxFeePerGas < transaction.maxPriorityFeePerGas
+      ) {
+        throw new Error("Invalid or missing transaction values");
+      }
+
+      if (!transaction.to) {
+        throw new Error("Explicit recipient required");
+      }
+
+      const unsigned = await serializer(transaction);
+      const digest = keccak256(unsigned);
+      const signature = await signDigest(digest);
+
+      const signed = await serializer(
+        transaction,
+        parseSignature(signature),
       );
+
+      const recovered = await recoverTransactionAddress({
+        serializedTransaction: signed,
+      });
+
+      if (!isAddressEqual(recovered, address)) {
+        throw new Error("Transaction sender mismatch");
+      }
+
+      return signed;
     },
 
     async signTypedData(typedData) {
