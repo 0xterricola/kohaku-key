@@ -46,12 +46,12 @@ Record during Iteration 0:
 - Reader model and firmware:
 - Transport:
 - Keycard CLI version:
-- Keycard Go SDK revision:
-- Host operating system:
-- Node.js version:
-- Go version:
-- viem version:
-- Kohaku CLI revision:
+- Keycard Go SDK revision: f64e791 (local patched checkout)
+- Host operating system: macOS 27.2 (arm64)
+- Node.js version: v22.23.4
+- Go version: go1.24.3 darwin/arm64
+- viem version: 2.55.19
+- Kohaku CLI revision: 4c7aa87
 
 Do not record PINs or wallet recovery secrets.
 
@@ -59,10 +59,10 @@ Do not record PINs or wallet recovery secrets.
 
 | Contribution | Verification |
 |---|---|
-| Kohaku CLI #67 | Pending baseline check |
-| Kohaku CLI #68 | Pending baseline check |
-| Kohaku CLI #69 | Pending baseline check |
-| Keycard Go #20 | Pending branch/release verification |
+| Kohaku CLI #67 | Open — November 2, 2026 |
+| Kohaku CLI #68 | Open — November 2, 2026 |
+| Kohaku CLI #69 | Open — November 2, 2026 |
+| Keycard Go #20 | Open; fix absent from upstream develop |
 
 Do not infer inclusion in an official SDK release
 from the existence of a fix commit alone.
@@ -77,12 +77,12 @@ From the Kohaku CLI implementation repository:
 
 Record:
 
-- Test count:
-- Passed:
-- Failed:
-- Build result:
-- Commit:
-- Date:
+- Test count: 538
+- Passed: 538
+- Failed: 0
+- Build result: PASS
+- Commit: 4c7aa87
+- Date: November 2, 2026
 
 Physical Keycard checks:
 
@@ -111,10 +111,10 @@ when these are verified.
 
 ## Iteration 0 Acceptance
 
-- [ ] Upstream status verified.
+- [x] Upstream status verified.
 - [ ] SDK and CLI versions recorded.
-- [ ] Existing tests pass.
-- [ ] Production build passes.
+- [x] Existing tests pass.
+- [x] Production build passes.
 - [ ] Physical signer baseline passes.
 - [ ] Threat model reviewed.
 - [ ] Sepolia dependencies identified.
@@ -122,7 +122,30 @@ when these are verified.
 
 ## Findings
 
-Not started.
+### November 2, 2026 — Software baseline
+
+- 538 regression tests passed with zero failures.
+- TypeScript typecheck passed.
+- Production build passed.
+- Research checkpoint: ca8ec61.
+- CLI checkpoint: 4c7aa87.
+- Local SDK checkout contains fix f64e791.
+- Upstream Keycard Go PR #20 remains open.
+- Upstream develop still contains the original buffer-aliasing code.
+- Kohaku CLI PRs #67, #68, and #69 remain open.
+- Official Keycard SDK/CLI release containing the fix is unverified.
+
+The existing physical-hardware tests remain valid historical
+V1 evidence. Fresh V2 hardware and device-session checks
+are still pending.
+
+### Remaining Iteration 0 work
+
+- Verify Keycard CLI binary provenance and versions.
+- Revalidate the physical Keycard signing path.
+- Review PIN and device-session implementation.
+- Finalize the threat model.
+- Verify Sepolia execution dependencies.
 
 ## Decision
 
