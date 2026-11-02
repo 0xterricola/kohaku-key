@@ -361,9 +361,26 @@ See [Project Status](PROJECT-STATUS.md) and
 for validated hardware signing, upstream SDK fix status,
 signature determinism findings, and current limitations.
 
-Keycard Go #20 has merged upstream. EIP-191, EIP-712,
+Keycard Go #20 fix commit c4cf5cc exists;
+the current upstream branch/release status needs re-verification. EIP-191, EIP-712,
 EIP-1559, EIP-7702 authorization, and offline Simple7702
 UserOperation signing have been verified on retail Keycard
 3.1. Signature-derived credential recovery is not
 supported by the card's randomized ECDSA signing mode.
 <!-- research-update:end -->
+
+## V1 implementation outcome — November 2, 2026
+
+See [V1 Outcome](V1-OUTCOME.md).
+
+Offline Keycard Ethereum signing and the Kohaku CLI integration
+were implemented and tested through upstream PRs #67, #68, and
+#69. The local milestone passed 538 tests.
+
+The original Sepolia broadcast acceptance criterion was not
+performed. Therefore, the offline signing prototype is complete
+but the proposal's original end-to-end success criterion remains open.
+
+The signature-derived Privacy Pools recovery path was not
+implemented because deterministic credential recovery has
+not been established on the tested Keycard signing mode.

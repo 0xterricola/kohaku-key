@@ -20,30 +20,42 @@ new privacy vault, or Railgun key isolation in V1.
 See docs/ for roadmap, architecture, and security boundaries.
 
 <!-- kohaku-status:start -->
-## Implementation status
+## Implementation status — November 2, 2026
 
-Hardware signing has been validated using a retail
-Keycard 3.1 and viem 2.55.19.
+**V1 offline hardware-signing prototype: complete.**
 
-EIP-191, EIP-712, EIP-1559, EIP-7702 authorization,
-and offline Simple7702 UserOperation signing are verified.
+Verified on retail Keycard 3.1:
 
-Kohaku CLI now has an experimental, offline-only
-`transact-raw --signer keycard` implementation.
+- EIP-191 message signing
+- EIP-712 typed-data signing
+- EIP-1559 transactions
+- EIP-7702 authorizations
+- Simple7702 ERC-4337 UserOperations
+
+Kohaku CLI integration provides offline EIP-1559 signing and
+two-or-more-call Simple7702 batch signing through
+`transact-raw --signer keycard`.
+
+**Validation:** 538/538 Kohaku CLI tests passing, TypeScript
+typecheck passing, production build passing, and physical
+Keycard signing verified. No RPC calls or broadcasts occurred
+in the offline hardware UserOperation test.
 
 **Upstream contributions:**
 
-- [Keycard Go #20](https://github.com/keycard-tech/keycard-go/pull/20) — merged SDK ECDSA fix
-- [Kohaku CLI #67](https://github.com/kassandraoftroy/kohaku-cli/pull/67) — external viem signer refactor
-- [Kohaku CLI #68](https://github.com/kassandraoftroy/kohaku-cli/pull/68) — hardware signing integration
+- [Kohaku CLI #67](https://github.com/kassandraoftroy/kohaku-cli/pull/67) — external viem signers
+- [Kohaku CLI #68](https://github.com/kassandraoftroy/kohaku-cli/pull/68) — Keycard EIP-1559 integration
+- [Kohaku CLI #69](https://github.com/kassandraoftroy/kohaku-cli/pull/69) — offline Simple7702 batch signing
+- [Keycard Go #20](https://github.com/keycard-tech/keycard-go/pull/20) — legacy ECDSA parser fix; upstream inclusion requires verification
 
-**Research and limitations:**
+**Research documentation:**
 
+- [V1 outcome and acceptance status](docs/V1-OUTCOME.md)
 - [Project status](docs/PROJECT-STATUS.md)
 - [Security and recovery findings](docs/SECURITY-AND-RECOVERY.md)
 - [Reproducing experiments](docs/REPRODUCIBILITY.md)
 
-The prototype is not production-ready. Live broadcasting
-and independent on-device transaction confirmation are
-not implemented.
+The original proposal's live Sepolia broadcast criterion remains
+unmet. Privacy Pools signature-derived recovery was investigated
+but not established. This is not a production-ready wallet.
 <!-- kohaku-status:end -->

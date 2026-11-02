@@ -10,6 +10,9 @@ https://github.com/0xterricola/kohaku-key
 Kohaku CLI integration:
 https://github.com/kassandraoftroy/kohaku-cli/pull/68
 
+Offline UserOperation integration:
+https://github.com/kassandraoftroy/kohaku-cli/pull/69
+
 Keycard Go fix:
 https://github.com/keycard-tech/keycard-go/pull/20
 
@@ -59,20 +62,55 @@ The hardware verification script resides at:
 
     scripts/verify-keycard-hardware.mjs
 
-The offline command is:
+Offline EIP-1559 command:
 
     transact-raw --signer keycard
 
-The CLI currently requires explicit transaction
-parameters, limits signing to development chain 31337,
-and disables broadcasting.
+Offline two-or-more-call Simple7702 mode:
+
+    transact-raw --signer keycard --keycard-userop
+
+The UserOperation command requires explicit nonce,
+call gas, verification gas, pre-verification gas, and
+fee parameters. Development chain 31337 only.
+
+The tested CLI invocation uses:
+
+    --targets ADDRESS,ADDRESS
+    --payloads 0x,0x
+    --values 0,0
+    --chain-id 31337
+    --nonce 0
+    --call-gas-limit 100000
+    --verification-gas-limit 200000
+    --pre-verification-gas 40000
+    --max-fee-per-gas 1000000000
+    --max-priority-fee-per-gas 100000000
+
+Supply the Keycard binary with `--keycard-cli` or
+`KOHAKU_KEYCARD_CLI`. The prototype supplies its
+PIN through `KEYCARD_PIN` for the test process.
+
+From the Kohaku CLI repository:
+
+    npm test
+    npm run typecheck
+    npm run build
+
+November 2 validation: 538/538 tests passed, including
+JavaScript regression tests. The physical two-call CLI
+UserOperation test produced a valid signature without
+RPC requests or bundler submission.
+
+For offline signing, all gas and nonce values are
+caller-provided fixtures, not network estimates.
 
 ## Version and release caveat
 
-Keycard Go #20 was merged into upstream develop.
-
+Keycard Go #20 has a fix commit (`c4cf5cc`), but
+upstream branch inclusion needs independent re-verification.
 A release of Keycard CLI incorporating the fixed SDK
-must be verified separately. The experiments used a
+must also be verified separately. The experiments used a
 locally compiled version with the corrected SDK.
 
 Do not assume previously installed Keycard CLI binaries

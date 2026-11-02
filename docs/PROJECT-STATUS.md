@@ -13,7 +13,7 @@ mnemonic for hardware-backed transaction execution.
 
 ## Upstream contributions
 
-### Keycard Go #20 — Merged
+### Keycard Go #20 — Fix commit verified; upstream inclusion needs recheck
 
 https://github.com/keycard-tech/keycard-go/pull/20
 
@@ -36,9 +36,11 @@ The fix was independently verified using physical Keycard
 hardware: ECDSA verification and Ethereum address recovery
 both succeeded.
 
-Merged into upstream `develop` as commit c4cf5cc.
-An official SDK/CLI release containing the fix has not
-been established by this research.
+Fix commit `c4cf5cc` exists in the upstream repository.
+A November 2 public-source check showed PR #20 as open
+and `develop/types/signature.go` retaining the old append
+expression. Confirm the current upstream branch state
+before asserting that the fix is included in a release.
 
 ### Kohaku CLI #67 — External viem signers
 
@@ -60,7 +62,7 @@ Adds a TypeScript Keycard-backed viem account, physical
 hardware integration tests, and an offline Keycard mode
 in `transact-raw`.
 
-Current CLI hardware mode:
+PR #68 hardware mode (extended by #69):
 
 - `--signer keycard`
 - EIP-1559 signing only
@@ -69,6 +71,30 @@ Current CLI hardware mode:
 - One transaction per invocation
 - No mnemonic unlock or private-key derivation
 - No RPC or broadcast in the offline signing path
+
+### Kohaku CLI #69 — Offline Simple7702 UserOperations
+
+https://github.com/kassandraoftroy/kohaku-cli/pull/69
+
+Stacked on #68, which depends on #67.
+
+Implements `transact-raw --signer keycard --keycard-userop`
+for two or more calls, with explicit nonce and gas parameters.
+
+- Reuses the Keycard-backed viem account
+- Encodes a Simple7702 batch through viem
+- Signs an ERC-4337 UserOperation on physical Keycard
+- Uses development chain 31337 only
+- Does not unlock a software mnemonic
+- Does not initialize RPC or bundler submission
+- Does not broadcast or activate delegation
+- Does not generate a delegation authorization in this CLI path
+
+Physical two-call signing, signature recovery, chain-binding
+verification, and the zero-RPC boundary were tested.
+
+Incremental branch commits:
+`9da4fdf`, `42b29e8`, `0fa841d`, `4c7aa87`.
 
 ## Tested hardware and software
 
@@ -94,6 +120,7 @@ validated in these experiments.
 | EIP-7702 authorization | PASS |
 | Simple7702 ERC-4337 UserOperation | PASS (offline) |
 | Kohaku CLI offline transaction command | PASS |
+| Kohaku CLI offline Simple7702 batch command | PASS |
 | Live transaction broadcast | NOT TESTED |
 | Live bundler execution | NOT TESTED |
 
@@ -105,8 +132,9 @@ integrated into Kohaku CLI's live UserOperation submission.
 
 Kohaku CLI:
 
-- 525 existing regression tests passing
-- 4 new CLI safety regression tests passing
+- 538 total regression tests passing
+- 525 existing TypeScript tests plus 13 JavaScript tests
+- Offline UserOperation signing and CLI safety regressions included
 - TypeScript typecheck passing
 - Production build passing
 - Physical Keycard integration passing
@@ -116,6 +144,22 @@ software-wallet options, missing chain ID, and unknown
 signer backends.
 
 No network transaction was submitted.
+
+## V1 acceptance status
+
+The offline hardware-signing research milestone is complete.
+
+The original V1 proposal required a successful
+Keycard-signed Sepolia transaction broadcast.
+That end-to-end acceptance criterion remains unmet.
+
+The original Privacy Pools credential-recovery investigation
+also did not establish deterministic signature-derived recovery.
+Randomized native ECDSA prevents relying on signature bytes
+as a persistent deterministic secret.
+
+See [V1 Outcome](V1-OUTCOME.md) for the distinction
+between completed prototype work and remaining acceptance.
 
 ## Repository structure
 
@@ -127,16 +171,17 @@ No network transaction was submitted.
 - `scripts/verify-keycard-user-operation.mjs`: Simple7702 tests
 - `docs/EXPERIMENT-002.md`: SDK defect investigation
 - `docs/V1-PROPOSAL.md`: original implementation proposal
+- `docs/V1-OUTCOME.md`: verified V1 outcome and acceptance status
 
 The Kohaku CLI TypeScript implementation lives in
 the separate `0xterricola/kohaku-cli` fork.
 
 ## Next milestones
 
-1. Address upstream review feedback on #67 and #68.
-2. Integrate Keycard into Kohaku CLI's UserOperation path.
-3. Replace prototype PIN handling with a safer workflow.
-4. Define transaction approval and device lifecycle policies.
-5. Validate Keycard Shell separately.
-6. Expand chain support and test broadcasting on a testnet.
-7. Adopt an official Keycard SDK/CLI release with #20.
+1. Address upstream review feedback on #67, #68, and #69.
+2. Verify Keycard Go #20 inclusion in upstream branch and official release.
+3. Replace environment-variable PIN handling.
+4. Add informed transaction approval and device lifecycle safeguards.
+5. Validate Keycard Shell independently.
+6. Implement network-backed preparation, authorization, and delegation validation.
+7. Verify testnet execution, receipt handling, and recovery before production use.

@@ -27,7 +27,9 @@ The corrected implementation copies R before concatenation.
 See:
 https://github.com/keycard-tech/keycard-go/pull/20
 
-The fix has merged into upstream develop.
+The fix exists as upstream commit `c4cf5cc`.
+Current `develop` inclusion and a released SDK/CLI
+containing it require re-verification.
 
 ## 3. ECDSA signature determinism
 
@@ -120,6 +122,7 @@ Verified locally:
 - Serialized transaction signatures
 - EIP-7702 authorization signatures
 - Offline Simple7702 UserOperation signatures
+- Two-call offline Kohaku CLI UserOperation integration
 
 Not established:
 - Safe live transaction broadcasting
