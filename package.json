@@ -7,7 +7,8 @@
     "test:hardware": "node scripts/verify-keycard-account.mjs",
     "test:typed-data": "node scripts/verify-keycard-typed-data.mjs",
     "test:transaction": "node scripts/verify-keycard-transaction.mjs",
-    "test:authorization": "node scripts/verify-keycard-authorization.mjs"
+    "test:authorization": "node scripts/verify-keycard-authorization.mjs",
+    "test:user-operation": "node scripts/verify-keycard-user-operation.mjs"
   },
   "dependencies": {
     "viem": "2.55.19"
