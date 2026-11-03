@@ -67,3 +67,42 @@ and note/history reconstruction against an isolated
 synthetic event provider.
 
 Preserve the frozen V2 implementation.
+
+## R5-B3B — Real SDK state recovery
+
+Test: `tests/v3-r5b-sdk-recovery.sh`
+
+Uses the actual PrivacyPoolsV1Protocol implementation
+from @kohaku-eth/privacy-pools 0.1.0-alpha.36.
+
+Verified:
+- SDK sync() ingests synthetic pool and entrypoint events.
+- Two contiguous owned deposit indexes are discovered.
+- Two partial withdrawals are reconstructed.
+- Deposit 0 balance: 1000 - 200 - 300 = 500.
+- Deposit 1 balance: 600.
+- Total recovered balance: 1100.
+- Unrelated deposits and withdrawals are excluded.
+- history() returns four owned events.
+- A fresh SDK instance reconstructs the same balances.
+
+Required event relationship:
+PoolDeposited and EntrypointDeposited must reference
+the matching commitment. Pool registration supplies
+the asset association.
+
+Limitations:
+- Events and contract state are synthetic.
+- Commitments and labels are placeholder values.
+- No proof of cryptographic commitment correctness.
+- No physical Keycard used in this test.
+- No live-chain state recovery or transactions.
+- The SDK currently stops sequential deposit discovery
+  at the first missing deposit index.
+- Full chain coverage and root verification are not
+  established by this integration test.
+- Runtime-generated derivation material is not persisted.
+
+Next:
+Validate real Privacy Pools cryptographic commitment
+construction and replacement-note lineage.
