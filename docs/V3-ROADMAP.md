@@ -51,3 +51,7 @@ Seven in-memory simulated secret-manager tests passed. The R0 regression suite a
 ## R4 cold-start recovery checkpoint
 
 [R4 cold-start recovery](V3-R4-COLD-RECOVERY.md)
+
+## R5-A recovery metadata
+
+[R5 recovery metadata contract](V3-R5-RECOVERY-CONTRACT.md)
