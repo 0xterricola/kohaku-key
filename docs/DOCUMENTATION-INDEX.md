@@ -38,3 +38,7 @@ research record. They are not current status reports.
 ## R3 hardware credential checkpoint
 
 [R3 physical credential evidence](V3-R3-HARDWARE-CREDENTIAL-EVIDENCE.md)
+
+## R4 cold-start recovery checkpoint
+
+[R4 cold-start recovery](V3-R4-COLD-RECOVERY.md)
