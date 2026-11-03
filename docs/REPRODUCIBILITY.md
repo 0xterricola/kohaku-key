@@ -1,5 +1,8 @@
 # Reproducing Kohaku Key Experiments
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical reproducibility notes may describe earlier V1/V2 experiments; consult [current project status](PROJECT-STATUS.md) for the validated final V2 checkpoint and [V3 proposal](V3-PROPOSAL.md) for new experiments.
+
 Updated: November 2, 2026
 
 ## Repositories

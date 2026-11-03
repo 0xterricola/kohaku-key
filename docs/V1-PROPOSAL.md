@@ -1,5 +1,8 @@
 # Kohaku Key — V1 Technical Proposal
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical V1 proposal. The V1 offline prototype is complete; original live Sepolia acceptance was satisfied later in V2. Current results: [V1 outcome](V1-OUTCOME.md), [V2 outcome](V2-OUTCOME.md).
+
 **Hardware-Backed Ethereum Signing & Privacy Credential Research**
 
 - **Status:** Research & Development

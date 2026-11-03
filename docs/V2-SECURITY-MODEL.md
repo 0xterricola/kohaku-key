@@ -1,5 +1,8 @@
 # Kohaku Key — V2 Security Model
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical V2 security design and threat inventory. Proposed controls were exercised to differing degrees in the Sepolia PoC; this document is not a completed audit. See [V2 outcome](V2-OUTCOME.md) and [security and recovery](SECURITY-AND-RECOVERY.md).
+
 **Status:** Draft — Iteration 0
 **Created:** November 2, 2026
 

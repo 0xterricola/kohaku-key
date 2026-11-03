@@ -1,5 +1,8 @@
 # Experiment 002 — Retail Keycard ECDSA Signing
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical experiment record. Preserve its original environment and observations; later project status and V2/V3 milestones are in [project status](PROJECT-STATUS.md).
+
 ## Hardware
 - Retail Keycard, applet 3.1
 - HID Global OMNIKEY 3x21

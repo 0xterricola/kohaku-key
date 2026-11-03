@@ -1,135 +1,26 @@
-# Security and Recovery Findings
+# Kohaku Key — Security and Recovery Findings
 
-Updated: November 2, 2026
+**Consolidated:** November 2, 2026. The earlier V1 offline prototype limitations are historical; the V2 Sepolia PoC does not imply production readiness.
 
-## 1. Hardware ECDSA signing works
+## V1 lessons
 
-The physical retail Keycard successfully signs Ethereum
-digests using its existing hardware-held private key.
+- The Keycard Go ECDSA parser initially mishandled signature-buffer aliasing; hardware verification and recovery were retested with a corrected local build. See [Keycard Go #20](https://github.com/keycard-tech/keycard-go/pull/20).
+- Native card ECDSA signatures are randomized, so identical message signing does not prove reproducible note credentials.
+- The earliest CLI prototype used environment-based PIN transport; it was not a secure device-session design.
 
-Independent ECDSA verification and public-key recovery
-matched the exported hardware account after correcting
-the Keycard Go signature parser.
+## V2 controls demonstrated
 
-This establishes cryptographic interoperability, not
-end-to-end security of a production wallet application.
+- Native Keycard interface with interactive PIN, identity verification and safe failure tests.
+- Explicit EIP-7702 authorization, UserOperation signature and final submission approvals.
+- Revalidation of chain, EOA and UserOperation nonces, delegated implementation, intended calldata and signing digest.
+- A journal written before one send attempt; same-hash duplicate submissions rejected.
+- Independent Sepolia receipt, EntryPoint event and delegation checks; actual journal reconciled to `confirmed`.
+- Mocked tests for uncertain submissions, malformed results and automatic reconciliation failures.
 
-## 2. Legacy SDK signature corruption
+## Boundaries and remaining work
 
-Keycard Go's legacy response handling originally combined
-R and S using an append operation on overlapping slices.
+The tested retail Keycard signs host-provided digests without displaying their semantic content. A compromised host can still misrepresent intent. A process restart with an uncertain submission was modeled in tests, but no real forced-crash drill was performed. Duplicate prevention applies to the same UserOperation hash; a new nonce can produce a different operation.
 
-This could overwrite the S component while calculating
-the recovery identifier.
+V3 privacy credentials require a separate recovery analysis. Neither Ethereum private-key custody nor ECDH key agreement alone demonstrates that note secrets or ZK witnesses never reach host memory. Test device loss, supported backup recovery, domain separation, context-specific key use and verifier compatibility before any funded privacy deposits.
 
-The corrected implementation copies R before concatenation.
-
-See:
-https://github.com/keycard-tech/keycard-go/pull/20
-
-The fix exists as upstream commit `c4cf5cc`.
-Current `develop` inclusion and a released SDK/CLI
-containing it require re-verification.
-
-## 3. ECDSA signature determinism
-
-The Keycard developer confirmed that native JavaCard ECDSA
-uses a random signing nonce (k).
-
-Consequently, repeated signatures over the same digest
-need not produce identical R/S values.
-
-The initial determinism experiment used the unpatched
-SDK, whose signature output was affected by the parser
-bug. That output alone should not be treated as a valid
-independent deterministic-signature test.
-
-The developer's explanation establishes that the native
-signing mode is randomized.
-
-## 4. Privacy Pools implications
-
-Signature-derived note or credential recovery requires
-a reproducible secret derivation process.
-
-The current randomized ECDSA signing mode does not provide
-reproducible signature bytes for this purpose.
-
-Therefore, do not derive persistent Privacy Pools note
-secrets from ordinary Keycard ECDSA signature bytes.
-
-The hardware signer can still authorize Ethereum
-transactions independently of privacy-note recovery.
-
-Privacy Pools, Railgun, and other ZK systems may require
-additional secret material on the host for note handling
-or proving. Hardware transaction signing does not imply
-those protocol secrets remain isolated on the card.
-
-Kohaku's privacy keystore and `deriveAt` interfaces remain
-separate from our hardware signing work.
-
-## 5. Retail Keycard blind signing
-
-The tested retail Keycard signs a host-supplied digest.
-
-It does not independently display the transaction
-recipient, value, network, or contract call.
-
-A compromised host could request a signature for a digest
-different from the transaction the user believes is being
-approved.
-
-Local signature verification proves which key signed the
-digest. It does not establish informed user approval of
-the digest's underlying transaction.
-
-## 6. Prototype PIN handling
-
-The prototype passes the PIN through KEYCARD_PIN in the
-child-process environment.
-
-Environment variables are not an appropriate production
-secret-handling mechanism.
-
-The prototype also depends on an externally built
-Keycard CLI binary. That binary is trusted code in the
-current architecture.
-
-Future work must improve secret entry, command execution,
-device selection, timeout behavior, and error handling.
-
-## 7. EIP-7702 delegation
-
-An EIP-7702 authorization can delegate account execution
-to smart-contract code.
-
-The current adapter signs authorizations but does not
-activate delegation during tests.
-
-The adapter rejects chain ID zero as a local policy.
-EIP-7702 itself permits chain-independent authorizations
-using chain ID zero.
-
-Delegation changes the account's execution security
-boundary. Delegate implementations must be assessed
-before production use.
-
-## 8. Verification versus execution
-
-Verified locally:
-- Ethereum message and typed-data signatures
-- Serialized transaction signatures
-- EIP-7702 authorization signatures
-- Offline Simple7702 UserOperation signatures
-- Two-call offline Kohaku CLI UserOperation integration
-
-Not established:
-- Safe live transaction broadcasting
-- Production UserOperation/bundler compatibility
-- User-confirmed transaction intent
-- Device-disconnection and retry handling
-- Secure unattended or multi-device operation
-
-No private key was exported and no transaction was
-broadcast in these experiments.
+See the [threat model](THREAT-MODEL.md), [V2 evidence](V2-TESTNET-RESULTS.md), and [V3 research plan](V3-PROPOSAL.md).

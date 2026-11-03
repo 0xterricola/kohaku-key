@@ -1,0 +1,25 @@
+# Kohaku Key — V3 Research Roadmap
+
+**Status:** Planned; no V3 capability validated as of November 2, 2026.
+**Governing proposal:** [V3 technical proposal](V3-PROPOSAL.md). V2 remains frozen at the published PoC tag.
+
+| Stage | Work | Exit evidence / decision |
+| --- | --- | --- |
+| **R0 — Requirements** | Inspect Kohaku Privacy Pools `EnvelopeSigner`, note creation, restore and proving flows | Exact secret/data-flow map, compatibility oracle, risk model |
+| **R1 — Applet 3.1** | Discover and test BIP-85 availability and derivation behavior | Supported/unsupported report, deterministic vectors if available, host disclosure map |
+| **R2 — Applet 4.0** | Discover and test ECDH behavior on experimental card | Supported/unsupported report, recovery and peer-key policy findings |
+| **R3 — Privacy Pools feasibility** | Compare candidate outputs against real protocol credentials and backup recovery | Explicit go/no-go on an adapter and funded testnet note experiment |
+| **R4 — Conditional prototype** | If R3 passes, implement minimal adapter and disposable testnet note lifecycle | Reproducible flow and independently verified restore / outcome |
+| **R5 — RAILGUN mapping** | Inventory distinct viewing, spending, nullifier and proving requirements | Separate feasibility decision, not implied implementation |
+
+## Non-negotiable gates
+
+Do not start R4 without stable protocol-compatible credentials and tested restart/backup recovery. Never derive persistent notes from randomized ECDSA signatures. Do not publish credentials or note secrets. A hardware-signed Ethereum transaction is not evidence of private-note key custody.
+
+## First three research questions
+
+1. What are the exact inputs, outputs, lengths, determinism and recovery semantics required by Kohaku Privacy Pools' current `EnvelopeSigner` and note implementation?
+2. What BIP-85-compatible derivation functionality, if any, does retail Keycard applet 3.1 actually expose, and what material reaches the host?
+3. What ECDH and key-derivation functionality does the experimental applet 4.0 expose, and does it enable reproducible, recoverable credentials compatible with that protocol?
+
+Record findings with versioned evidence. A negative result can close an investigation but not justify inventing unverified hardware support.

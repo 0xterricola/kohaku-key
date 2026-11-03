@@ -1,5 +1,8 @@
 # Kohaku Key — V2 Baseline
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical V2 Iteration 0 baseline snapshot. Its pending checkboxes describe the state **at the time of writing**, not the final result. See [V2 outcome](V2-OUTCOME.md) and [current project status](PROJECT-STATUS.md).
+
 **Status:** Iteration 0 — Not yet verified
 **Created:** November 2, 2026
 

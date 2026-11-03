@@ -1,5 +1,8 @@
 # Kohaku Key — V2 Technical Proposal
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical V2 implementation proposal; its future-tense milestones were subsequently completed as a **Sepolia proof of concept** at tag `kohaku-key-v2-sepolia-poc`. For actual outcomes and limitations see [V2 outcome](V2-OUTCOME.md) and [testnet evidence](V2-TESTNET-RESULTS.md).
+
 ## Secure Hardware-Backed Ethereum Execution
 
 **Status:** Proposed

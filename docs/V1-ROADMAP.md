@@ -1,5 +1,8 @@
 # V1 Roadmap
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Historical V1 roadmap, preserved for decision provenance. V1 offline signing is complete, V2 handled the live Sepolia criterion, and privacy credential recovery is V3 research. [Current status](PROJECT-STATUS.md).
+
 ## Iteration 0 — Feasibility
 Test canonical EIP-712 signature determinism on actual Keycard
 hardware. Compare r and normalized low-s across repeated signing

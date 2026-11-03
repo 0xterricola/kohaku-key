@@ -1,5 +1,8 @@
 # Kohaku Key V2 — Native Hardware Evidence
 
+<!-- kohaku-historical-context -->
+> **Historical context:** Intermediate V2 hardware checkpoint (offline). The later V2 milestone included physical Sepolia execution and receipt reconciliation; see [V2 testnet results](V2-TESTNET-RESULTS.md). Statements below about no live transactions refer **only to this earlier checkpoint**.
+
 Date: November 2, 2026
 
 ## Implementation

@@ -1,83 +1,128 @@
 # Kohaku Key
 
-Hardware-backed Ethereum signing and privacy credential research
-for Kohaku CLI.
+**A research and engineering proposal for hardware-backed Ethereum execution and recoverable privacy credentials.**
 
-## V1 goals
-1. Verify Keycard signature determinism.
-2. Refactor Kohaku CLI public signing to use viem accounts.
-3. Implement a Keycard-backed Ethereum signer.
-4. Investigate Privacy Pools EnvelopeSigner compatibility.
+**Project status (November 2, 2026):** V1 offline signing research completed; V2 Sepolia execution proof of concept completed and tagged; V3 privacy-credential research proposed and not yet validated. This is an independent research project, not a claim of an upstream Kohaku release, a security audit, or mainnet readiness.
 
-## Repositories
-- Research: kohaku-key (this repository)
-- Upstream: https://github.com/kassandraoftroy/kohaku-cli
+## Executive summary
 
-## Scope
-Existing Keycard hardware first. No custom hardware,
-new privacy vault, or Railgun key isolation in V1.
+Kohaku Key explores a specific boundary: **what can a physical cryptographic device safely authorize or protect in an Ethereum wallet that supports privacy protocols?** Ethereum transaction signing is only the first layer. A useful privacy integration also needs a coherent answer for credential generation, note ownership, proof construction, backup, and recovery.
 
-See docs/ for roadmap, architecture, and security boundaries.
+The project starts with existing Keycard hardware and the established Kohaku CLI and viem interfaces. It avoids designing a new wallet, inventing a privacy protocol, or claiming that a hardware-held Ethereum key automatically protects a privacy note. The long-term outcome is a **reusable, evidence-backed way to use hardware for Ethereum execution and—where the protocol permits it—reproducible privacy credentials**.
 
-<!-- kohaku-status:start -->
-## Implementation status — November 2, 2026
+We developed the work in three deliberately separate stages:
 
-**V1 offline hardware-signing prototype: complete.**
+| Phase | Question | Outcome or target |
+| --- | --- | --- |
+| **V1 — Signing feasibility** | Can existing Keycard hardware act as a viem-compatible Ethereum signer? | **Offline prototype completed.** Hardware signature verification, EIP-191/EIP-712/EIP-1559/EIP-7702 and offline Simple7702 UserOperation signing. Randomized ECDSA is unsuitable as a source of reproducible signature-derived privacy credentials. |
+| **V2 — Secure testnet execution** | Can a physical card safely authorize and execute a real two-call UserOperation? | **Sepolia PoC completed.** Physical signing, EIP-7702 delegation, ERC-4337 execution, guarded approvals, state checks, journaling and receipt reconciliation. |
+| **V3 — Privacy credential research** | Can hardware-backed primitives support protocol-compatible, recoverable privacy credentials or authorization? | **Research planned.** Investigate applet 3.1 BIP-85 and applet 4.0 ECDH capabilities, Privacy Pools compatibility, and then RAILGUN requirements. No positive compatibility result is assumed. |
 
-Verified on retail Keycard 3.1:
+## Motivation
 
-- EIP-191 message signing
-- EIP-712 typed-data signing
-- EIP-1559 transactions
-- EIP-7702 authorizations
-- Simple7702 ERC-4337 UserOperations
+A standard hardware wallet protects an Ethereum private key against direct export. Privacy systems typically involve *different* secrets: note preimages, viewing keys, spending credentials, nullifier material, and proving inputs. Those secrets may be generated, derived, backed up, and used differently from the public Ethereum account key.
 
-Kohaku CLI integration provides offline EIP-1559 signing and
-two-or-more-call Simple7702 batch signing through
-`transact-raw --signer keycard`.
+This creates three distinct questions:
 
-**Validation:** 538/538 Kohaku CLI tests passing, TypeScript
-typecheck passing, production build passing, and physical
-Keycard signing verified. No RPC calls or broadcasts occurred
-in the offline hardware UserOperation test.
+1. **Authorization:** Can a card authorize the exact operation the user reviewed, without exporting the Ethereum signing key?
+2. **Credential custody and recovery:** Can the same privacy credential be reproduced following application restart, device re-pairing, or supported backup recovery, without depending on randomized signatures?
+3. **Privacy and proof boundary:** Which inputs and secrets remain on a device, which necessarily reach the host or prover, and what metadata can be correlated on-chain or over the network?
 
-**Upstream contributions:**
+The project treats these as separate claims requiring separate evidence.
 
-- [Kohaku CLI #67](https://github.com/kassandraoftroy/kohaku-cli/pull/67) — external viem signers
-- [Kohaku CLI #68](https://github.com/kassandraoftroy/kohaku-cli/pull/68) — Keycard EIP-1559 integration
-- [Kohaku CLI #69](https://github.com/kassandraoftroy/kohaku-cli/pull/69) — offline Simple7702 batch signing
-- [Keycard Go #20](https://github.com/keycard-tech/keycard-go/pull/20) — legacy ECDSA parser fix; upstream inclusion requires verification
+## Design principles
 
-**Research documentation:**
+**Reuse the ecosystem.** Prefer viem account APIs, existing Keycard firmware interfaces, Kohaku's actual Privacy Pools integration and existing protocol keystores. Maintain compatibility with software-signing paths rather than replacing them.
 
-- [V1 outcome and acceptance status](docs/V1-OUTCOME.md)
-- [Project status](docs/PROJECT-STATUS.md)
-- [Security and recovery findings](docs/SECURITY-AND-RECOVERY.md)
-- [Reproducing experiments](docs/REPRODUCIBILITY.md)
+**Measure before building.** Hardware and cryptographic API support must be demonstrated with actual firmware, reproducible vectors, and negative tests before a wallet integration is proposed.
 
-The original proposal's live Sepolia broadcast criterion remains
-unmet. Privacy Pools signature-derived recovery was investigated
-but not established. This is not a production-ready wallet.
-<!-- kohaku-status:end -->
+**Keep review and signing separate.** The host prepares a structured operation; the user approves it; the card signs the digest; the CLI validates the resulting signature; submission and independent receipt verification follow. Host-side approval is not equivalent to an independent trusted-display check.
 
-<!-- kohaku-v2:start -->
-## V2 — Secure Hardware-Backed Ethereum Execution
+**Make recovery a prerequisite.** Never create persistent testnet privacy notes or promise cross-device recovery until deterministic derivation and note recovery have been independently demonstrated.
 
-**Status: Proposed — Iteration 0 next.**
+**Scope evidence precisely.** Testnet execution does not establish mainnet suitability. Ethereum signing-key isolation does not establish privacy-note key isolation, unlinkability, or safe ZK proving.
 
-V1 established offline hardware-backed Ethereum signing.
-V2 will focus on secure device sessions, transaction review,
-Sepolia EIP-1559 execution, live EIP-7702 Simple7702
-UserOperations, and recoverable submission.
+## System boundaries
 
-The existing offline signer remains the verified foundation.
+```text
+Kohaku CLI / Ethereum execution
+  transaction intent -> chain/nonce/fee checks -> human review
+      -> viem account -> Keycard bridge -> APDU signing
+      -> signature verification -> bundler / Ethereum RPC
+      -> on-chain receipt -> persistent operation journal
 
-- [V2 Technical Proposal](docs/V2-PROPOSAL.md)
-- [V2 Baseline](docs/V2-BASELINE.md)
-- [V2 Security Model](docs/V2-SECURITY-MODEL.md)
-- [V2 Testnet Results](docs/V2-TESTNET-RESULTS.md)
-- [V2 Outcome](docs/V2-OUTCOME.md)
+Kohaku privacy integrations (V3 research)
+  Privacy Pools EnvelopeSigner / credentials / note lifecycle
+      -> protocol compatibility and recovery requirements
+      -> candidate hardware derivation or agreement primitive
+      -> host/prover secret-handling assessment
+      -> test-vector and recovery verification
 
-V2 is planned, not implemented. No live Sepolia
-acceptance criteria have been completed.
-<!-- kohaku-v2:end -->
+RAILGUN (later independent feasibility track)
+  determine viewing/spending/proving key requirements first
+  no assumption that Ethereum ECDSA, BIP-85 or ECDH is sufficient
+```
+
+The card, host, RPC, bundler, privacy SDK and proving system are separate trust boundaries. [Architecture](docs/ARCHITECTURE.md) and [Threat model](docs/THREAT-MODEL.md) define those boundaries in more detail.
+
+## V1 — Offline hardware-signing research
+
+**Objective:** Prove the signing backend and determine whether ordinary Keycard signatures can be used for recoverable privacy credentials.
+
+**Evidence:** A retail Keycard with applet 3.1 and an OMNIKEY reader produced verifiable EIP-191, EIP-712, EIP-1559, EIP-7702, and Simple7702 ERC-4337 signatures through a viem-compatible signer. The V1 integration checkpoint passed **538 tests** with no RPC submission for the offline UserOperation test.
+
+**Finding:** Native ECDSA uses randomized signing nonces. Therefore, identical message digests need not yield identical signature bytes; signature-byte-derived Privacy Pools credentials were not established. Do not claim recovery from this signing mechanism.
+
+**Boundary:** The original V1 proposal also anticipated live Sepolia execution. That criterion was not completed during the offline V1 milestone and was subsequently satisfied in V2. V1's historical results are not retroactively rewritten.
+
+Read [V1 outcome](docs/V1-OUTCOME.md), [original V1 proposal](docs/V1-PROPOSAL.md), and [experimental findings](docs/RESEARCH-FINDINGS.md).
+
+## V2 — Physical hardware execution on Sepolia
+
+**Objective:** Use one physical Keycard to sign an EIP-1559 transaction and execute a two-call EIP-7702 / ERC-4337 UserOperation with intentional user approval, verified receipts and recoverable submission state.
+
+**Result: demonstrated.** A physical Keycard signed the EIP-7702 authorization and ERC-4337 operation. The two-call UserOperation succeeded on Sepolia; the EntryPoint event and installed delegation were independently checked. The journal was reconciled to `confirmed` and later integration tests verified automatic reconciliation and failure handling without sending transactions again.
+
+**Release evidence:**
+
+- Frozen implementation tag: [`kohaku-key-v2-sepolia-poc`](https://github.com/0xterricola/kohaku-cli/tree/kohaku-key-v2-sepolia-poc)
+- Final implementation commit: `b97685e` on `0xterricola/kohaku-cli:feat/v2-device-session`
+- Regression tests: **647 passing**, TypeScript typecheck and build passing at the tagged checkpoint
+- Verified Sepolia transaction: [`0xf243d837…aeed3282`](https://sepolia.etherscan.io/tx/0xf243d837e507b6b1365b3f99424d40a7e8146648cf440cac1b3f65b7aeed3282)
+- UserOperation hash: `0xea69d1531960e45aaf74709ee329a88545c6bb0f55abac820d150d3283f7e944`
+- Block: `12052649`; actual UserOperation gas cost: `418717528912422` wei
+- Implementation evidence: [`docs/KEYCARD-SEPOLIA-V2.md`](https://github.com/0xterricola/kohaku-cli/blob/kohaku-key-v2-sepolia-poc/docs/KEYCARD-SEPOLIA-V2.md)
+
+**Security scope:** Card PIN entry and identity checks, two distinct signature approvals, chain/nonce/delegation validation, calldata binding, final submission approval, journal-first transmission and receipt reconciliation were exercised. A malicious host, trusted on-device display, real crash/restart recovery and production audit remain outside the demonstrated guarantees.
+
+Read [V2 outcome](docs/V2-OUTCOME.md), [testnet evidence](docs/V2-TESTNET-RESULTS.md), and [V2 security model](docs/V2-SECURITY-MODEL.md).
+
+## V3 — Hardware-backed privacy research (active next phase)
+
+**Research goal:** Discover whether existing Keycard hardware can support *deterministically recoverable, protocol-compatible* Privacy Pools credentials, or offer a narrower but valuable hardware authorization boundary. RAILGUN is a separate feasibility track, not an assumed consequence.
+
+**Candidate investigations:**
+
+- **Retail Keycard / applet 3.1:** Determine whether a usable BIP-85 interface exists, what it outputs, which derivation and authentication rules apply, and whether outputs are stable across sessions and supported backup recovery. *Support and compatibility are not yet established.*
+- **Experimental Phonon DAO card / applet 4.0:** Determine the available ECDH functions, key-selection controls and output exposure; test repeatability and domain-separated derivation. *No privacy-note isolation claim follows from ECDH alone.*
+- **Privacy Pools:** Map the real EnvelopeSigner inputs/outputs and note lifecycle before writing an adapter. Compare candidate outputs to protocol expectations; verify restoration after restart and backup before any funding.
+- **RAILGUN:** Independently map protocol spending, viewing and ZK proof requirements. Identify whether a hardware boundary is meaningful and supported before any implementation commitment.
+
+**Acceptance:** Reproducible test vectors, explicit capability and recovery findings, a documented security boundary, and—only if a feasible, recoverable derivation is proven—a controlled testnet Privacy Pools integration. A negative feasibility result is a valid research outcome. Production claims and real-value deposits are excluded.
+
+Read the [V3 technical proposal](docs/V3-PROPOSAL.md) and [staged V3 roadmap](docs/V3-ROADMAP.md).
+
+## Repositories and collaboration
+
+- **Research and roadmap:** [`0xterricola/kohaku-key`](https://github.com/0xterricola/kohaku-key) — experiment records, architecture, findings and proposals.
+- **Implementation fork:** [`0xterricola/kohaku-cli`](https://github.com/0xterricola/kohaku-cli) — the tagged V2 proof of concept and integration tests.
+- **Upstream project:** [`kassandraoftroy/kohaku-cli`](https://github.com/kassandraoftroy/kohaku-cli) — integration decisions belong to upstream maintainers.
+- **Prior staged contributions:** [#67](https://github.com/kassandraoftroy/kohaku-cli/pull/67), [#68](https://github.com/kassandraoftroy/kohaku-cli/pull/68), [#69](https://github.com/kassandraoftroy/kohaku-cli/pull/69). Their current review/merge state must be checked separately.
+
+This repository does not assume the V2 feature branch has been accepted upstream. Research can proceed independently, with focused, reviewable contributions proposed when appropriate.
+
+## Documentation and reproducibility
+
+[Documentation index](docs/DOCUMENTATION-INDEX.md) | [Current project status](docs/PROJECT-STATUS.md) | [Hardware compatibility](docs/HARDWARE-COMPATIBILITY.md) | [Research findings](docs/RESEARCH-FINDINGS.md) | [Reproducibility](docs/REPRODUCIBILITY.md) | [Security and recovery](docs/SECURITY-AND-RECOVERY.md)
+
+No PINs, mnemonics, private keys, private notes, or credential material belong in this repository. Preserve the original V1/V2 plans as historical decisions; use outcome and status documents for current claims.
