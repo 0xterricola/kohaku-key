@@ -23,3 +23,11 @@ Do not start R4 without stable protocol-compatible credentials and tested restar
 3. What ECDH and key-derivation functionality does the experimental applet 4.0 expose, and does it enable reproducible, recoverable credentials compatible with that protocol?
 
 Record findings with versioned evidence. A negative result can close an investigation but not justify inventing unverified hardware support.
+
+## R0 contract evidence
+
+[Privacy Pools credential and recovery contract](V3-R0-PRIVACY-POOLS-CONTRACT.md)
+
+## R0 offline oracle checkpoint
+
+Eight offline reference checks passed. Deterministic credential derivation was verified across new SDK manager instances. Full note-state rediscovery and hardware recovery remain open. See [R0 contract](V3-R0-PRIVACY-POOLS-CONTRACT.md).
