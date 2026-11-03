@@ -43,3 +43,7 @@ Seven in-memory simulated secret-manager tests passed. The R0 regression suite a
 ## R2 hardware checkpoint
 
 [R2 applet 4.0 hardware evidence](V3-R2-APPLET4-HARDWARE-EVIDENCE.md)
+
+## R3 hardware credential checkpoint
+
+[R3 physical credential evidence](V3-R3-HARDWARE-CREDENTIAL-EVIDENCE.md)
