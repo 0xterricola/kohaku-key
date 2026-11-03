@@ -6,8 +6,8 @@
 | Stage | Work | Exit evidence / decision |
 | --- | --- | --- |
 | **R0 — Requirements** | Inspect Kohaku Privacy Pools `EnvelopeSigner`, note creation, restore and proving flows | Exact secret/data-flow map, compatibility oracle, risk model |
-| **R1 — Applet 3.1** | Discover and test BIP-85 availability and derivation behavior | Supported/unsupported report, deterministic vectors if available, host disclosure map |
-| **R2 — Applet 4.0** | Discover and test ECDH behavior on experimental card | Supported/unsupported report, recovery and peer-key policy findings |
+| **R1 — Applet 3.1** | Investigate EIP-1581 restricted BIP-32 key export and deterministic privacy credential derivation | Host disclosure, recovery and compatibility evidence |
+| **R2 — Applet 4.0** | Independently investigate native BIP-85 and ECDH on experimental card | Determinism, recovery, host exposure and security findings |
 | **R3 — Privacy Pools feasibility** | Compare candidate outputs against real protocol credentials and backup recovery | Explicit go/no-go on an adapter and funded testnet note experiment |
 | **R4 — Conditional prototype** | If R3 passes, implement minimal adapter and disposable testnet note lifecycle | Reproducible flow and independently verified restore / outcome |
 | **R5 — RAILGUN mapping** | Inventory distinct viewing, spending, nullifier and proving requirements | Separate feasibility decision, not implied implementation |
@@ -19,8 +19,8 @@ Do not start R4 without stable protocol-compatible credentials and tested restar
 ## First three research questions
 
 1. What are the exact inputs, outputs, lengths, determinism and recovery semantics required by Kohaku Privacy Pools' current `EnvelopeSigner` and note implementation?
-2. What BIP-85-compatible derivation functionality, if any, does retail Keycard applet 3.1 actually expose, and what material reaches the host?
-3. What ECDH and key-derivation functionality does the experimental applet 4.0 expose, and does it enable reproducible, recoverable credentials compatible with that protocol?
+2. Can applet 3.1 EIP-1581 derivation provide reproducible Privacy Pools inputs, and what secrets leave the card?
+3. Can applet 4.0 BIP-85 or ECDH produce protocol-compatible, recoverable credentials?
 
 Record findings with versioned evidence. A negative result can close an investigation but not justify inventing unverified hardware support.
 

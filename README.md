@@ -16,7 +16,7 @@ We developed the work in three deliberately separate stages:
 | --- | --- | --- |
 | **V1 — Signing feasibility** | Can existing Keycard hardware act as a viem-compatible Ethereum signer? | **Offline prototype completed.** Hardware signature verification, EIP-191/EIP-712/EIP-1559/EIP-7702 and offline Simple7702 UserOperation signing. Randomized ECDSA is unsuitable as a source of reproducible signature-derived privacy credentials. |
 | **V2 — Secure testnet execution** | Can a physical card safely authorize and execute a real two-call UserOperation? | **Sepolia PoC completed.** Physical signing, EIP-7702 delegation, ERC-4337 execution, guarded approvals, state checks, journaling and receipt reconciliation. |
-| **V3 — Privacy credential research** | Can hardware-backed primitives support protocol-compatible, recoverable privacy credentials or authorization? | **Research planned.** Investigate applet 3.1 BIP-85 and applet 4.0 ECDH capabilities, Privacy Pools compatibility, and then RAILGUN requirements. No positive compatibility result is assumed. |
+| **V3 — Privacy credential research** | Can hardware-backed primitives support protocol-compatible, recoverable privacy credentials or authorization? | **Research planned.** Investigate applet 3.1 EIP-1581 key export and applet 4.0 BIP-85/ECDH capabilities, Privacy Pools compatibility, and then RAILGUN requirements. No positive compatibility result is assumed. |
 
 ## Motivation
 
@@ -103,8 +103,8 @@ Read [V2 outcome](docs/V2-OUTCOME.md), [testnet evidence](docs/V2-TESTNET-RESULT
 
 **Candidate investigations:**
 
-- **Retail Keycard / applet 3.1:** Determine whether a usable BIP-85 interface exists, what it outputs, which derivation and authentication rules apply, and whether outputs are stable across sessions and supported backup recovery. *Support and compatibility are not yet established.*
-- **Experimental Phonon DAO card / applet 4.0:** Determine the available ECDH functions, key-selection controls and output exposure; test repeatability and domain-separated derivation. *No privacy-note isolation claim follows from ECDH alone.*
+- **Retail Keycard / applet 3.1:** Investigate EIP-1581 scoped BIP-32 private-key export, deterministic derivation, host exposure, domain separation and backup recovery. Privacy Pools compatibility is unverified.
+- **Experimental Phonon DAO card / applet 4.0:** Independently investigate native BIP-85 entropy export and ECDH shared-secret derivation, including repeatability, host exposure and recovery.
 - **Privacy Pools:** Map the real EnvelopeSigner inputs/outputs and note lifecycle before writing an adapter. Compare candidate outputs to protocol expectations; verify restoration after restart and backup before any funding.
 - **RAILGUN:** Independently map protocol spending, viewing and ZK proof requirements. Identify whether a hardware boundary is meaningful and supported before any implementation commitment.
 

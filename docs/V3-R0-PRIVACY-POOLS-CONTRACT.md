@@ -82,15 +82,16 @@ Consequences:
 
 ## Candidate hardware experiments
 
-### Keycard applet 3.1: BIP-85
+### Keycard applet 3.1: EIP-1581
 
-Determine actual API availability, output format,
-domain separation, repeatability and backup recovery.
+Investigate restricted BIP-32 private-key export,
+host exposure, domain separation, repeatability and backup recovery.
 
-### Experimental applet 4.0: ECDH
+### Experimental applet 4.0: BIP-85 and ECDH
 
-Determine key selection, peer-key validation,
-shared-secret exposure, repeatability and recovery.
+Investigate native BIP-85 entropy export and ECDH key
+agreement, including peer-key validation, output exposure,
+repeatability and recovery.
 
 Neither candidate is currently verified as compatible.
 

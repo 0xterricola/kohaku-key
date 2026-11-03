@@ -23,9 +23,9 @@ A successful V3 outcome does **not** require novel cryptography, a universal pri
 
 ## 3. Scope and hypotheses
 
-**H1 — Retail Keycard / applet 3.1 / BIP-85.** Investigate whether the available firmware/API supports an appropriate BIP-85 derivation interface and recovery model. Do not assume the function exists or supports the required output. If it exists, test version, authentication, key derivation selector, entropy length, domain separation, host visibility and repeatability.
+**H1 — Retail Keycard / applet 3.1 / EIP-1581.** Investigate restricted BIP-32 private-key export, deterministic key derivation, host exposure, domain separation and backup recovery. Exported private material is not hardware-isolated.
 
-**H2 — Experimental card / applet 4.0 / ECDH.** Identify actual ECDH commands, usable key slots, peer-key validation, private-key custody and how the resulting shared secret is exposed or derived. ECDH alone does not produce a private-note security guarantee; context-specific derivation and protocol mappings must be analyzed separately.
+**H2 — Experimental card / applet 4.0 / BIP-85 and ECDH.** Independently evaluate deterministic entropy export and key agreement, including their cryptographic boundaries and recovery requirements.
 
 **H3 — Privacy Pools integration.** Inspect the real Kohaku `EnvelopeSigner` contract and note-creation/recovery lifecycle. Define exact deterministic bytes, encodings, domain tags, wallet/account assumptions and compatibility tests before proposing an adapter.
 
@@ -41,7 +41,7 @@ Read Kohaku's actual current Privacy Pools implementation, including the `Envelo
 
 ### Stage B — Isolated hardware experiments
 
-Run applet 3.1 BIP-85 and applet 4.0 ECDH discovery separately. Record capability queries, rejection cases, stable test vectors, cross-session/restart behavior, firmware version, and device recovery. Compare determinism without publishing secret outputs. Explicitly log whether the host learns candidate secret material.
+Run applet 3.1 EIP-1581 and applet 4.0 BIP-85/ECDH investigations separately. Record capability queries, rejection cases, stable test vectors, cross-session/restart behavior, firmware version, and device recovery. Compare determinism without publishing secret outputs. Explicitly log whether the host learns candidate secret material.
 
 **Gate B:** Supported hardware primitive and deterministic, versioned derivation established. No paper-only compatibility claims.
 
@@ -70,8 +70,8 @@ Test card absent, PIN failure, reconnect, changed context, wrong derivation path
 ## 6. Deliverables
 
 - Versioned Privacy Pools protocol and credential compatibility map.
-- Applet 3.1 BIP-85 capability and risk report.
-- Applet 4.0 ECDH capability and risk report.
+- Applet 3.1 EIP-1581 derivation/export and risk report.
+- Applet 4.0 BIP-85/ECDH capability and risk report.
 - Reproducible, non-secret test fixtures and recovery evidence.
 - Go/no-go decision for a protocol-compatible hardware adapter.
 - Conditional Privacy Pools testnet experiment; separate RAILGUN feasibility report.
