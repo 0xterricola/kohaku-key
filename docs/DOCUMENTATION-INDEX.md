@@ -22,3 +22,7 @@ research record. They are not current status reports.
 - [Original project status](V1-PROJECT-STATUS-ARCHIVE.md)
 - [Original security and recovery findings](V1-SECURITY-FINDINGS-ARCHIVE.md)
 - [Original V1 outcome](V1-OUTCOME-ARCHIVE.md)
+
+## V3 hardware evidence
+
+- [R1 — EIP-1581 public derivation](V3-R1-EIP1581-PUBLIC-EVIDENCE.md)

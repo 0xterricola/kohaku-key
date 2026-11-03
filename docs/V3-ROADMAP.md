@@ -31,3 +31,7 @@ Record findings with versioned evidence. A negative result can close an investig
 ## R0 offline oracle checkpoint
 
 Eight offline reference checks passed. Deterministic credential derivation was verified across new SDK manager instances. Full note-state rediscovery and hardware recovery remain open. See [R0 contract](V3-R0-PRIVACY-POOLS-CONTRACT.md).
+
+## R1 public derivation checkpoint
+
+Physical Keycard 3.1 EIP-1581 public derivation passed across reconnects. The original V2 Ethereum address was unchanged. Private export and credential recovery remain untested. See [R1 hardware evidence](V3-R1-EIP1581-PUBLIC-EVIDENCE.md).
