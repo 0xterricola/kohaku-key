@@ -35,3 +35,7 @@ Eight offline reference checks passed. Deterministic credential derivation was v
 ## R1 public derivation checkpoint
 
 Physical Keycard 3.1 EIP-1581 public derivation passed across reconnects. The original V2 Ethereum address was unchanged. Private export and credential recovery remain untested. See [R1 hardware evidence](V3-R1-EIP1581-PUBLIC-EVIDENCE.md).
+
+## R1 deterministic derivation compatibility
+
+Seven in-memory simulated secret-manager tests passed. The R0 regression suite also passed eight checks. This establishes SDK interface compatibility, not hardware-backed credential recovery. See [R1 compatibility evidence](V3-R1-SECRET-MANAGER-COMPAT.md).

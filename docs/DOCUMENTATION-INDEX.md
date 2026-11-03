@@ -26,3 +26,7 @@ research record. They are not current status reports.
 ## V3 hardware evidence
 
 - [R1 — EIP-1581 public derivation](V3-R1-EIP1581-PUBLIC-EVIDENCE.md)
+
+## V3 software compatibility evidence
+
+[R1 simulated secret-manager compatibility](V3-R1-SECRET-MANAGER-COMPAT.md)

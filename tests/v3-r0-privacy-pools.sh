@@ -11,15 +11,15 @@ cd "$cli"
 node --import tsx --input-type=module <<'JS'
 import assert from "node:assert/strict";
 import { SignatureSecretManager } from "@kohaku-eth/privacy-pools";
-import { privateKeyToAccount } from "viem/accounts";
+import { privateKeyToAccount, generatePrivateKey } from "viem/accounts";
 import {
   concat, hexToBigInt, keccak256, parseSignature,
   slice, stringToHex, toHex
 } from "viem";
 
 // Synthetic test keys only. Never use for real funds.
-const owner = privateKeyToAccount("0x" + "11".repeat(32));
-const alternate = privateKeyToAccount("0x" + "22".repeat(32));
+const owner = privateKeyToAccount(generatePrivateKey());
+const alternate = privateKeyToAccount(generatePrivateKey());
 
 const inputs = {
   chainId: 11155111n,
