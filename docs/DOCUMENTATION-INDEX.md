@@ -46,3 +46,7 @@ research record. They are not current status reports.
 ## R5-A recovery metadata
 
 [R5 recovery metadata contract](V3-R5-RECOVERY-CONTRACT.md)
+
+## R5-B note-discovery checkpoint
+
+[R5-B note discovery](V3-R5B-NOTE-DISCOVERY.md)
