@@ -39,3 +39,7 @@ Physical Keycard 3.1 EIP-1581 public derivation passed across reconnects. The or
 ## R1 deterministic derivation compatibility
 
 Seven in-memory simulated secret-manager tests passed. The R0 regression suite also passed eight checks. This establishes SDK interface compatibility, not hardware-backed credential recovery. See [R1 compatibility evidence](V3-R1-SECRET-MANAGER-COMPAT.md).
+
+## R2 hardware checkpoint
+
+[R2 applet 4.0 hardware evidence](V3-R2-APPLET4-HARDWARE-EVIDENCE.md)

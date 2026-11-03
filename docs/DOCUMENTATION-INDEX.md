@@ -30,3 +30,7 @@ research record. They are not current status reports.
 ## V3 software compatibility evidence
 
 [R1 simulated secret-manager compatibility](V3-R1-SECRET-MANAGER-COMPAT.md)
+
+## R2 hardware checkpoint
+
+[R2 applet 4.0 hardware evidence](V3-R2-APPLET4-HARDWARE-EVIDENCE.md)
