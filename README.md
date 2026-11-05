@@ -126,3 +126,8 @@ This repository does not assume the V2 feature branch has been accepted upstream
 [Documentation index](docs/DOCUMENTATION-INDEX.md) | [Current project status](docs/PROJECT-STATUS.md) | [Hardware compatibility](docs/HARDWARE-COMPATIBILITY.md) | [Research findings](docs/RESEARCH-FINDINGS.md) | [Reproducibility](docs/REPRODUCIBILITY.md) | [Security and recovery](docs/SECURITY-AND-RECOVERY.md)
 
 No PINs, mnemonics, private keys, private notes, or credential material belong in this repository. Preserve the original V1/V2 plans as historical decisions; use outcome and status documents for current claims.
+
+## Research checkpoints
+
+- [V3 research checkpoint — November 4, 2026](docs/V3-2026-11-04-RESEARCH-CHECKPOINT.md)
+- [Keycard Shell architecture draft](docs/V4-KEYCARD-SHELL-ARCHITECTURE-DRAFT.md)
