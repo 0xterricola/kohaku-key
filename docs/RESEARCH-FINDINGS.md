@@ -1,25 +1,48 @@
 # Kohaku Key — Research Findings and Open Questions
 
-**Last consolidated:** November 2, 2026. These statements distinguish validated evidence from proposed experiments.
+**Updated:** November 5, 2026
 
-## Verified
+## Verified findings
 
-1. A physical Keycard can supply valid Ethereum signatures through a viem-compatible account without exporting its private key (V1).
-2. EIP-7702 and two-call ERC-4337 authorization and execution were demonstrated with physical hardware and independently verified on Sepolia (V2).
-3. Native Keycard ECDSA uses randomized signing nonces. Its signatures do **not** provide the reproducible byte stream needed by a naïve signature-derived privacy credential scheme (V1).
-4. A legacy Keycard Go ECDSA parser issue affected initial recovery experiments; corrected signing/recovery behavior was tested locally. Current official SDK incorporation must be verified separately.
-5. Host review controls do not create an independently trusted hardware display. Card-held Ethereum keys do not mean host-side privacy secrets remain isolated.
+1. **V1:** Physical Keycard supports the tested viem-compatible Ethereum signing interfaces.
+2. **V1:** Native retail Keycard ECDSA signatures are randomized and cannot be treated as stable note-secret derivation material.
+3. **V2:** Physical hardware signing, EIP-7702/ERC-4337 execution, approval controls and Sepolia receipt verification succeeded.
+4. **V3 — Privacy Pools V1:** Keycard applet 4.0 supplied reproducible BIP-85-derived credential material across authenticated sessions.
+5. **V3:** A real Privacy Pools deposit and hardware-signed partial withdrawal were confirmed on Sepolia.
+6. **V3:** Fresh hardware sessions independently recovered the resulting change-note commitment.
+7. **V3:** The updated LeanIMT witness passed verification against the pool state.
+8. **V3:** A second Groth16 withdrawal proof passed independent verification and two-provider EVM simulation without broadcasting.
+
+The original Keycard Go parser issue was investigated and corrected locally. Official upstream incorporation must be checked independently.
+
+## Credential interoperability
+
+V3 uses a versioned BIP-85/HMAC adapter with the legacy Privacy Pools V1 SecretManager.
+
+The newer signature-derived SignatureSecretManager and legacy HD-derived credentials have different derivation contracts.
+
+V3 results do not establish interchangeable recovery between these schemes.
+
+The tested retail Keycard's randomized ECDSA behavior is incompatible with credential recovery that requires identical canonical ECDSA signature bytes across sessions.
+
+ECDH remains a separate hardware capability and research question. No ECDH-derived Privacy Pools note lifecycle was demonstrated.
+
+## Security findings
+
+The experimental credential root and private witness material entered host memory.
+
+A hardware-held Ethereum signing key does not isolate host-derived privacy credentials.
+
+The demonstrated direct withdrawal exposed public account linkage.
 
 ## Not yet established
 
-- Whether Keycard applet 3.1 exposes a usable and safely scoped BIP-85 mechanism for Privacy Pools credential construction.
-- Whether the experimental applet 4.0 card exposes ECDH with repeatable and appropriately isolated key agreement semantics.
-- Whether outputs from either primitive match Privacy Pools `EnvelopeSigner` and note recovery requirements.
-- Whether backup/replacement reproduces the same credential without risky host exposure.
-- Whether RAILGUN's actual spending, viewing and proof requirements admit a useful hardware boundary.
+- Tornado Cash hardware-backed note recovery or execution.
+- RAILGUN hardware spending/viewing credential integration.
+- Privacy Pools V2 compatibility.
+- Replacement-device recovery and arbitrary historical note discovery guarantees.
+- Host-compromise resistance or unlinkable direct withdrawal execution.
+- Shell-contained credential derivation or Groth16 proving.
+- Independent security audit or supported mainnet deployment.
 
-## Decision rule
-
-No funded privacy-note experiment before successful deterministic vectors, restart and backup recovery, and protocol-compatibility checks. A negative finding is useful; document the unsupported boundary instead of changing cryptographic assumptions to fit a narrative.
-
-See [V3 proposal](V3-PROPOSAL.md), [hardware matrix](HARDWARE-COMPATIBILITY.md), and [V1 outcome](V1-OUTCOME.md).
+[Project status](PROJECT-STATUS.md) | [V3 report](V3-FINAL-RESEARCH-REPORT.md) | [Hardware compatibility](HARDWARE-COMPATIBILITY.md)

@@ -1,8 +1,10 @@
 # Kohaku Key — V3 Technical Research Proposal
 
+> **Historical proposal (November 2, 2026).** The scoped Privacy Pools V1 research was subsequently completed. See the [V3 final report](V3-FINAL-RESEARCH-REPORT.md) and [current project status](PROJECT-STATUS.md). RAILGUN remains a separate future research track.
+
 ## Hardware-Backed Privacy Credentials and Protocol Authorization
 
-**Status:** Proposed research — experiments not yet accepted.
+**Original status (November 2, 2026):** Proposed research — experiments not yet accepted.
 **Created:** November 2, 2026.
 **Prerequisites:** Frozen V2 Sepolia PoC [`kohaku-key-v2-sepolia-poc`](https://github.com/0xterricola/kohaku-cli/tree/kohaku-key-v2-sepolia-poc).
 **Primary protocol:** Kohaku Privacy Pools integration. **Secondary track:** RAILGUN requirements mapping.

@@ -1,8 +1,8 @@
 # Kohaku Key
 
-**A research and engineering proposal for hardware-backed Ethereum execution and recoverable privacy credentials.**
+**Independent research into hardware-backed Ethereum execution, recoverable privacy credentials and stronger hardware isolation.**
 
-**Project status (November 2, 2026):** V1 offline signing research completed; V2 Sepolia execution proof of concept completed and tagged; V3 privacy-credential research proposed and not yet validated. This is an independent research project, not a claim of an upstream Kohaku release, a security audit, or mainnet readiness.
+**Project status (November 5, 2026):** V1 hardware signing, V2 Sepolia execution and V3 Privacy Pools V1 research are complete within their defined scopes. V3 Tornado Cash and RAILGUN are separate future protocol tracks; V4 investigates Keycard Shell. See [current project status](docs/PROJECT-STATUS.md). This independent research does not imply upstream acceptance, a security audit or mainnet readiness.
 
 ## Executive summary
 
@@ -10,13 +10,16 @@ Kohaku Key explores a specific boundary: **what can a physical cryptographic dev
 
 The project starts with existing Keycard hardware and the established Kohaku CLI and viem interfaces. It avoids designing a new wallet, inventing a privacy protocol, or claiming that a hardware-held Ethereum key automatically protects a privacy note. The long-term outcome is a **reusable, evidence-backed way to use hardware for Ethereum execution and—where the protocol permits it—reproducible privacy credentials**.
 
-We developed the work in three deliberately separate stages:
+The work is organized into completed milestones and separate future research tracks:
 
 | Phase | Question | Outcome or target |
 | --- | --- | --- |
-| **V1 — Signing feasibility** | Can existing Keycard hardware act as a viem-compatible Ethereum signer? | **Offline prototype completed.** Hardware signature verification, EIP-191/EIP-712/EIP-1559/EIP-7702 and offline Simple7702 UserOperation signing. Randomized ECDSA is unsuitable as a source of reproducible signature-derived privacy credentials. |
-| **V2 — Secure testnet execution** | Can a physical card safely authorize and execute a real two-call UserOperation? | **Sepolia PoC completed.** Physical signing, EIP-7702 delegation, ERC-4337 execution, guarded approvals, state checks, journaling and receipt reconciliation. |
-| **V3 — Privacy credential research** | Can hardware-backed primitives support protocol-compatible, recoverable privacy credentials or authorization? | **Research planned.** Investigate applet 3.1 EIP-1581 key export and applet 4.0 BIP-85/ECDH capabilities, Privacy Pools compatibility, and then RAILGUN requirements. No positive compatibility result is assumed. |
+| **V1 — Hardware Signer Integration** | Can Keycard sign through a viem-compatible interface? | **Complete.** Physical signing and randomized ECDSA findings. |
+| **V2 — Hardware Transaction Execution** | Can Keycard authorize real Sepolia transactions? | **Complete.** EIP-1559 and EIP-7702/ERC-4337 execution. |
+| **V3 — Privacy Pools V1** | Can Keycard support recoverable privacy notes? | **Complete.** Deposit, withdrawal, recovered change note and second verified simulation. |
+| **V3 — Tornado Cash** | Can hardware-derived credentials support Tornado notes? | **Planned.** |
+| **V3 — RAILGUN** | Can hardware support RAILGUN's distinct key model? | **Future research.** |
+| **V4 — Keycard Shell** | Can sensitive privacy operations be isolated from a computer? | **Planned feasibility research.** |
 
 ## Motivation
 
@@ -51,21 +54,22 @@ Kohaku CLI / Ethereum execution
       -> signature verification -> bundler / Ethereum RPC
       -> on-chain receipt -> persistent operation journal
 
-Kohaku privacy integrations (V3 research)
-  Privacy Pools EnvelopeSigner / credentials / note lifecycle
-      -> protocol compatibility and recovery requirements
-      -> candidate hardware derivation or agreement primitive
-      -> host/prover secret-handling assessment
-      -> test-vector and recovery verification
+V3 — Privacy Pools V1 (verified)
+  Keycard 4.0 -> BIP-85 -> volatile host credential derivation
+      -> Privacy Pools V1 -> Groth16 -> Sepolia
+      -> hardware recovery -> second proof simulation
 
-RAILGUN (later independent feasibility track)
-  determine viewing/spending/proving key requirements first
-  no assumption that Ethereum ECDSA, BIP-85 or ECDH is sufficient
+V3 — Tornado Cash / RAILGUN (not implemented)
+  independent credential, recovery and protocol research
+
+V4 — Keycard Shell (planned)
+  Shell-contained derivation and controlled outputs
+  witness isolation and ZK proving remain unverified
 ```
 
 The card, host, RPC, bundler, privacy SDK and proving system are separate trust boundaries. [Architecture](docs/ARCHITECTURE.md) and [Threat model](docs/THREAT-MODEL.md) define those boundaries in more detail.
 
-## V1 — Offline hardware-signing research
+## V1 — Hardware Signer Integration (complete)
 
 **Objective:** Prove the signing backend and determine whether ordinary Keycard signatures can be used for recoverable privacy credentials.
 
@@ -77,7 +81,7 @@ The card, host, RPC, bundler, privacy SDK and proving system are separate trust 
 
 Read [V1 outcome](docs/V1-OUTCOME.md), [original V1 proposal](docs/V1-PROPOSAL.md), and [experimental findings](docs/RESEARCH-FINDINGS.md).
 
-## V2 — Physical hardware execution on Sepolia
+## V2 — Hardware Transaction Execution (complete)
 
 **Objective:** Use one physical Keycard to sign an EIP-1559 transaction and execute a two-call EIP-7702 / ERC-4337 UserOperation with intentional user approval, verified receipts and recoverable submission state.
 
@@ -97,20 +101,25 @@ Read [V1 outcome](docs/V1-OUTCOME.md), [original V1 proposal](docs/V1-PROPOSAL.m
 
 Read [V2 outcome](docs/V2-OUTCOME.md), [testnet evidence](docs/V2-TESTNET-RESULTS.md), and [V2 security model](docs/V2-SECURITY-MODEL.md).
 
-## V3 — Hardware-backed privacy research (active next phase)
+## V3 — Privacy Pools V1 (complete)
 
-**Research goal:** Discover whether existing Keycard hardware can support *deterministically recoverable, protocol-compatible* Privacy Pools credentials, or offer a narrower but valuable hardware authorization boundary. RAILGUN is a separate feasibility track, not an assumed consequence.
+Physical Keycard 4.0 BIP-85 credentials supported a real Sepolia deposit, independently verified Groth16 withdrawal, hardware-signed partial withdrawal, fresh change-note recovery and a second verified withdrawal simulation.
 
-**Candidate investigations:**
+The second withdrawal was not broadcast. The BIP-85 root and private proving inputs entered host memory; this does not demonstrate host isolation or withdrawal unlinkability.
 
-- **Retail Keycard / applet 3.1:** Investigate EIP-1581 scoped BIP-32 private-key export, deterministic derivation, host exposure, domain separation and backup recovery. Privacy Pools compatibility is unverified.
-- **Experimental Phonon DAO card / applet 4.0:** Independently investigate native BIP-85 entropy export and ECDH shared-secret derivation, including repeatability, host exposure and recovery.
-- **Privacy Pools:** Map the real EnvelopeSigner inputs/outputs and note lifecycle before writing an adapter. Compare candidate outputs to protocol expectations; verify restoration after restart and backup before any funding.
-- **RAILGUN:** Independently map protocol spending, viewing and ZK proof requirements. Identify whether a hardware boundary is meaningful and supported before any implementation commitment.
+**Evidence:** [V3 — Privacy Pools V1 final research report](docs/V3-FINAL-RESEARCH-REPORT.md).
 
-**Acceptance:** Reproducible test vectors, explicit capability and recovery findings, a documented security boundary, and—only if a feasible, recoverable derivation is proven—a controlled testnet Privacy Pools integration. A negative feasibility result is a valid research outcome. Production claims and real-value deposits are excluded.
+## V3 — Additional privacy protocols
 
-Read the [V3 technical proposal](docs/V3-PROPOSAL.md) and [staged V3 roadmap](docs/V3-ROADMAP.md).
+**Tornado Cash (planned):** Hardware-derived note credentials, independent recovery and Pedersen commitment verification, starting with offline tests.
+
+**RAILGUN (future):** Separate spending/viewing credentials, recovery and proving feasibility. Privacy Pools compatibility cannot be assumed.
+
+## V4 — Keycard Shell (planned)
+
+Evaluate Shell-contained credential derivation, stateless recovery and private computation limits. Shell-isolated witnesses and Groth16 proving remain unverified.
+
+[Shell architecture draft](docs/V4-KEYCARD-SHELL-ARCHITECTURE-DRAFT.md).
 
 ## Repositories and collaboration
 

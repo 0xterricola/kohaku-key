@@ -1,12 +1,15 @@
 # Kohaku Key — Documentation Index
 
-The [README](../README.md) is the consolidated project proposal and public overview. [Project status](PROJECT-STATUS.md) and *outcome* documents state current results. Original proposals, baselines and experiment notes remain valuable **historical snapshots**, not live status dashboards.
+The [README](../README.md) is the public overview. [Project status](PROJECT-STATUS.md) is authoritative for current milestones; final reports and outcome documents establish accepted results. Original proposals, baselines and experiment notes remain valuable **historical snapshots**, not live status dashboards.
 
 ## Current milestones
 
 - **V1 (completed offline prototype):** [Outcome](V1-OUTCOME.md) | [Original proposal](V1-PROPOSAL.md) | [Original roadmap](V1-ROADMAP.md)
 - **V2 (completed Sepolia PoC):** [Outcome](V2-OUTCOME.md) | [Testnet results](V2-TESTNET-RESULTS.md) | [Original proposal](V2-PROPOSAL.md) | [Baseline snapshot](V2-BASELINE.md) | [Security model](V2-SECURITY-MODEL.md) | [Intermediate hardware evidence](V2-HARDWARE-EVIDENCE.md)
-- **V3 (proposed research):** [Technical proposal](V3-PROPOSAL.md) | [Research roadmap](V3-ROADMAP.md)
+- **V3 — Privacy Pools V1 (complete):** [Final report](V3-FINAL-RESEARCH-REPORT.md) | [Original proposal](V3-PROPOSAL.md) | [Research roadmap](V3-ROADMAP.md)
+- **V3 — Tornado Cash (planned):** Separate protocol-specific research.
+- **V3 — RAILGUN (future):** Separate feasibility research.
+- **V4 — Keycard Shell (planned):** [Architecture draft](V4-KEYCARD-SHELL-ARCHITECTURE-DRAFT.md)
 
 ## Cross-cutting research
 

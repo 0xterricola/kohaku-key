@@ -1,7 +1,8 @@
 # Kohaku Key V4 — Keycard Shell Architecture Draft
 
 **Date:** November 4, 2026
-**Status:** Research proposal. Not implemented.
+
+**Status:** Feasibility research proposal. No Kohaku-specific Shell implementation verified as of November 5, 2026.
 
 ## Goal
 
@@ -93,4 +94,4 @@ If proving cannot run securely inside Shell, the architecture needs a separate e
 
 ## Relationship to V3
 
-V3 should first establish an approved Sepolia deposit and independently recoverable note. Shell development can then use that evidence as its compatibility oracle.
+V3 — Privacy Pools V1 has now demonstrated a mined Sepolia deposit, a hardware-signed partial withdrawal, independently recovered change-note credentials and a subsequent verified withdrawal simulation. These results provide the compatibility reference for V4. Shell-contained derivation, witness handling and Groth16 proving remain unverified.

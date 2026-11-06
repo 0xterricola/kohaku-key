@@ -1,44 +1,67 @@
 # Kohaku Key — Architecture and Trust Boundaries
 
-**Status:** V1/V2 verified PoC; V3 cryptographic and protocol interfaces under investigation.
+**Updated:** November 5, 2026
 
-## Existing Ethereum execution path (V2)
+**Status:** V1, V2 and V3 Privacy Pools V1 research milestones complete. V4 Shell isolation remains proposed.
 
-```text
-Human transaction intent
-  -> Kohaku CLI review, chain/fee/nonce/delegation verification
-  -> viem-compatible Keycard LocalAccount
-  -> native Keycard bridge -> card-held Ethereum signing key
-  -> recover and verify signer / bind approved payload
-  -> ERC-4337 bundler / Ethereum RPC
-  -> Ethereum receipt and EntryPoint event checks
-  -> durable journal + on-chain reconciliation
-```
+## V1/V2 — Ethereum signing and execution
 
-V2 proves one real two-call Sepolia execution. The `kohaku-cli` fork owns this implementation. The original V2 release tag is immutable in this research process.
+The tested flow is:
 
-## Proposed privacy-credential path (V3)
+1. Kohaku CLI prepares transaction intent and validates chain, nonce, fees and delegation.
+2. A viem-compatible Keycard interface requests physical signing.
+3. The host recovers and verifies the signer and approved payload.
+4. Submission follows explicit user authorization.
+5. Ethereum receipts and events are checked and the operation journal is reconciled.
 
-```text
-Privacy Pools note/credential specification
-  -> audit EnvelopeSigner / wallet recovery contract
-  -> capability-tested hardware derivation or ECDH candidate
-  -> deterministic, domain-separated test vectors
-  -> restart / backup / replacement recovery checks
-  -> explicit host/prover data-flow analysis
-  -> only then: a protocol-compatible adapter / testnet flow
+V2 demonstrated real EIP-1559 and EIP-7702/ERC-4337 execution on Sepolia.
 
-RAILGUN protocol analysis is separate: do not reuse a credential
-scheme without validating spending/viewing/proving requirements.
-```
+Host-side approval is not a trusted device display.
 
-## Distinct secrets
+## V3 — Privacy Pools V1 (verified)
 
-| Material | Where the project is today | V3 question |
+The demonstrated architecture is:
+
+1. **Keycard 4.0:** Authenticated BIP-85 entropy derivation.
+2. **Go hardware bridge:** Volatile anonymous-pipe transfer of derived root material.
+3. **Host credential provider:** Frozen, versioned HMAC derivation and Privacy Pools V1 legacy SecretManager integration.
+4. **Host prover:** Private witness calculation, Groth16 proving and independent proof verification.
+5. **Ethereum execution:** Physical Keycard signing, explicit broadcast approval and receipt verification.
+6. **Recovery:** Fresh authenticated hardware sessions, change-note reconstruction and updated LeanIMT witness.
+7. **Subsequent spendability:** A second verified proof and successful two-provider EVM simulation.
+
+The BIP-85-derived root **enters host memory**. Credential derivation and proving are not hardware-contained.
+
+The adapter is not automatically compatible with Kohaku's newer signature-derived note scheme or legacy HD-derived notes.
+
+[Full V3 evidence](V3-FINAL-RESEARCH-REPORT.md)
+
+## V3 — Additional protocols
+
+Tornado Cash and RAILGUN have different credential, commitment, recovery and proving requirements.
+
+Neither has a completed Keycard integration in this project.
+
+## V4 — Proposed Shell isolation
+
+The proposed architecture moves private credential derivation from the computer into Keycard Shell firmware.
+
+The Keycard master seed would remain inside the secure element, while derived material would enter Shell RAM.
+
+Shell firmware and MCU memory would become part of the trusted computing base.
+
+Shell-contained witness generation and Groth16 proving have **not** been demonstrated.
+
+## Verified trust boundaries
+
+| Operation | Verified boundary | Remaining limitation |
 | --- | --- | --- |
-| Ethereum account signing key | Keycard-held during verified V2 signing | Can continue as authorization backend |
-| Privacy Pools credential / note secrets | No hardware isolation or recovery demonstrated | Can a supported primitive reproduce required protocol material safely? |
-| RAILGUN spending/viewing material | No hardware implementation demonstrated | Are key requirements compatible with device primitives? |
-| ZK proof witnesses / inputs | Host/prover isolation is **not** established | What leaves the device and who can observe it? |
+| Ethereum signing key | Held by Keycard during tested signing | No independent trusted transaction display |
+| BIP-85 root | Derived by Keycard 4.0 | Exported into host memory in V3 |
+| Note credentials | Reproduced across authenticated sessions | Host-based derivation |
+| Groth16 witness | Calculated in host memory | No Shell-contained prover |
+| Change-note recovery | Reconstructed from physical hardware | Versioned derivation and metadata must be preserved |
+| Tornado Cash / RAILGUN | No hardware integration verified | Separate feasibility research |
+| Keycard Shell | Proposed research target | Firmware isolation and computation limits unverified |
 
-Keycard Shell QR and trusted-display claims require separate validation. Avoid inventing a new universal privacy keystore or altering upstream protocol contracts before compatibility tests.
+[Project status](PROJECT-STATUS.md) | [Security and recovery](SECURITY-AND-RECOVERY.md) | [Threat model](THREAT-MODEL.md)

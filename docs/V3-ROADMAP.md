@@ -1,7 +1,14 @@
-# Kohaku Key — V3 Research Roadmap
+# Kohaku Key — V3 Privacy Pools V1 Research Roadmap
 
-**Status:** Planned; no V3 capability validated as of November 2, 2026.
-**Governing proposal:** [V3 technical proposal](V3-PROPOSAL.md). V2 remains frozen at the published PoC tag.
+**Current status (November 5, 2026):** The scoped Privacy Pools V1 research PoC is complete.
+
+**Final evidence:** [V3 — Privacy Pools V1 research report](V3-FINAL-RESEARCH-REPORT.md).
+
+**Additional tracks:** Tornado Cash planned; RAILGUN future. Neither is included in the completed Privacy Pools V1 milestone.
+
+> The original staged plan and interim observations below are preserved as historical research context. Earlier statements about pending hardware recovery or Sepolia execution no longer represent the current project status.
+
+**Original governing proposal:** [V3 technical proposal](V3-PROPOSAL.md). V2 remains frozen at the published PoC tag.
 
 | Stage | Work | Exit evidence / decision |
 | --- | --- | --- |

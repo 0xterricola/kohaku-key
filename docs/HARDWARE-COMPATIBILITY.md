@@ -1,18 +1,38 @@
 # Kohaku Key — Hardware Compatibility and Research Targets
 
-**As of:** November 2, 2026. Proven Ethereum signing is distinct from proposed privacy derivation.
+**Updated:** November 5, 2026
 
-| Hardware | Tested functionality | Not yet established |
+| Hardware | Verified functionality | Not established |
 | --- | --- | --- |
-| Retail Keycard, applet 3.1, OMNIKEY reader | EIP-191, EIP-712, EIP-1559, EIP-7702, Simple7702/ERC-4337 signing; V2 Sepolia execution | EIP-1581 key export, deterministic recoverable Privacy Pools note derivation, trusted on-device display |
-| Experimental Phonon DAO card, Keycard applet 4.0 | Card available for V3 investigation; not part of the V2 on-chain proof | BIP-85 and ECDH API behavior, key lifecycle, output exposure, derivation determinism, recovery and privacy-protocol compatibility |
-| Keycard Shell | Separate potential QR / air-gapped signing track | Matching signing semantics and trusted display / private-note credential support |
-| YubiKey and other devices | Longer-term candidate only | No V1/V2/V3 integration accepted or demonstrated |
+| Retail Keycard, applet 3.1 (OMNIKEY reader) | Viem-compatible EIP-191/EIP-712/EIP-1559/EIP-7702 signing; ERC-4337 execution; EIP-1581 public derivation across reconnects; randomized native ECDSA | Reproducible signature-derived privacy credentials, independent trusted hardware display |
+| Experimental Phonon DAO card, Keycard applet 4.0 | Authenticated BIP-85 derivation, reproducible Privacy Pools V1 credentials, deposit, withdrawal signing and change-note recovery | Shell-contained credentials, general V2 protocol compatibility |
+| Keycard Shell | Existing hardware and custom-firmware research target | Kohaku-specific derivation, witness isolation, native ZK proving |
+| YubiKey / other devices | No Kohaku Key integration demonstrated | Credential compatibility, recovery and ZK capabilities |
 
-## Evidence and experiments
+## Verified evidence
 
-V2 utilized `m/44'/60'/0'/0/0` on retail Keycard applet 3.1, with native interactive PIN entry and a Go bridge. The independent Sepolia proof and 647-test checkpoint are in [V2 testnet results](V2-TESTNET-RESULTS.md).
+- [V1 outcome](V1-OUTCOME.md)
+- [V2 Sepolia results](V2-TESTNET-RESULTS.md)
+- [V3 Privacy Pools V1 report](V3-FINAL-RESEARCH-REPORT.md)
+- [V3 applet 4.0 evidence](V3-R2-APPLET4-HARDWARE-EVIDENCE.md)
+- [V4 Shell architecture](V4-KEYCARD-SHELL-ARCHITECTURE-DRAFT.md)
 
-V1 established randomized native ECDSA signatures. **Do not feed raw ECDSA signature bytes to a persistent note-secret derivation workflow.** EIP-1581 scoped export is documented for 3.1; native BIP-85 and ECDH were introduced in 4.0. Privacy Pools compatibility and recovery remain unverified.
+## Hardware derivation and capability boundaries
 
-Any V3 device experiment must log applet version, derivation path/key selector, supported APDUs, context input, output length, reproducibility, re-pairing behavior, backup limitations and which secrets become visible to the host—without recording the secrets themselves.
+The tested V2 Ethereum account path was `m/44'/60'/0'/0/0`.
+
+Applet 3.1 EIP-1581 public derivation was tested separately from private credential export and recovery. Public derivation does not establish safe private-key export.
+
+Applet 4.0 exposes BIP-85 and ECDH capabilities. The completed V3 integration uses BIP-85; it does not demonstrate an ECDH-derived privacy protocol.
+
+## Cryptographic distinctions
+
+The retail Keycard's native ECDSA signatures were observed to be randomized. Valid signatures do not necessarily reproduce identical signature bytes.
+
+V3 used an experimental Keycard 4.0 BIP-85/HMAC credential contract, not deterministic ECDSA signature bytes.
+
+The V3 root entered host memory. This is distinct from keeping all privacy credentials inside a secure element.
+
+Do not mix derivation schemes or silently change existing recovery paths and indexes.
+
+Hardware tests must identify actual applet capabilities, transports, derivation coordinates, recovery behavior and secret-exposure boundaries without recording secret material.

@@ -1,4 +1,4 @@
-# Kohaku Key V3 — Final Research Report
+# Kohaku Key V3 — Privacy Pools V1 Final Research Report
 
 **Hardware-backed Privacy Pools V1: deposit, withdrawal, change-note recovery, and subsequent spendability**
 

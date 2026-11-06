@@ -1,26 +1,70 @@
 # Kohaku Key — Security and Recovery Findings
 
-**Consolidated:** November 2, 2026. The earlier V1 offline prototype limitations are historical; the V2 Sepolia PoC does not imply production readiness.
+**Updated:** November 5, 2026
 
-## V1 lessons
+## V1 — Signing
 
-- The Keycard Go ECDSA parser initially mishandled signature-buffer aliasing; hardware verification and recovery were retested with a corrected local build. See [Keycard Go #20](https://github.com/keycard-tech/keycard-go/pull/20).
-- Native card ECDSA signatures are randomized, so identical message signing does not prove reproducible note credentials.
-- The earliest CLI prototype used environment-based PIN transport; it was not a secure device-session design.
+The tested retail Keycard produced randomized ECDSA signatures.
 
-## V2 controls demonstrated
+An earlier Keycard Go signature-parser issue was investigated and corrected locally. The initial environment-based PIN transport was replaced during later research.
 
-- Native Keycard interface with interactive PIN, identity verification and safe failure tests.
-- Explicit EIP-7702 authorization, UserOperation signature and final submission approvals.
-- Revalidation of chain, EOA and UserOperation nonces, delegated implementation, intended calldata and signing digest.
-- A journal written before one send attempt; same-hash duplicate submissions rejected.
-- Independent Sepolia receipt, EntryPoint event and delegation checks; actual journal reconciled to `confirmed`.
-- Mocked tests for uncertain submissions, malformed results and automatic reconciliation failures.
+[Keycard Go investigation](https://github.com/keycard-tech/keycard-go/pull/20)
 
-## Boundaries and remaining work
+## V2 — Execution controls
 
-The tested retail Keycard signs host-provided digests without displaying their semantic content. A compromised host can still misrepresent intent. A process restart with an uncertain submission was modeled in tests, but no real forced-crash drill was performed. Duplicate prevention applies to the same UserOperation hash; a new nonce can produce a different operation.
+The V2 Sepolia experiments demonstrated:
 
-V3 privacy credentials require a separate recovery analysis. Neither Ethereum private-key custody nor ECDH key agreement alone demonstrates that note secrets or ZK witnesses never reach host memory. Test device loss, supported backup recovery, domain separation, context-specific key use and verifier compatibility before any funded privacy deposits.
+- Physical Keycard signing and identity verification.
+- Explicit transaction and authorization approvals.
+- Chain, nonce, delegation, calldata and signer validation.
+- Journal-first transaction submission.
+- Independent receipt and on-chain event reconciliation.
+- Failure and uncertain-submission regression tests.
 
-See the [threat model](THREAT-MODEL.md), [V2 evidence](V2-TESTNET-RESULTS.md), and [V3 research plan](V3-PROPOSAL.md).
+These controls do not establish a trusted on-device display or resistance to a malicious host.
+
+The V2 journal was written before a send attempt, and duplicate submission checks applied to the same UserOperation hash. A different nonce can create a distinct operation; exactly-once execution is not guaranteed.
+
+Uncertain-submission and automatic-reconciliation cases were exercised in mocked regression tests. The actual Sepolia journal was manually reconciled. No physical forced-process-crash recovery drill was performed.
+
+## V3 — Privacy Pools V1
+
+The verified research demonstrated:
+
+- Reproducible BIP-85-derived credentials across authenticated hardware sessions.
+- Versioned HMAC-based credential derivation and note lineage.
+- Host-memory witness calculation and independently verified Groth16 proofs.
+- Separate SIGN and BROADCAST approvals for the real withdrawal.
+- Verification of the mined nullifier and change commitment.
+- Fresh hardware recovery of the on-chain change note.
+- Updated Merkle inclusion and a second valid withdrawal simulation.
+
+Private witness and credential material was not intentionally persisted to research evidence files.
+
+This does not prove complete erasure from host memory or protection against side channels.
+
+Actual on-chain Groth16 proof calldata is publicly observable.
+
+## Recovery constraints
+
+Successful recovery depends on preserving:
+
+- The BIP-85 derivation path and device-root availability.
+- The versioned HMAC domain and derivation contract.
+- Chain, entrypoint, account and deposit indexes.
+- Withdrawal indexes and note lineage.
+- The note label, value and relevant historical chain state.
+
+Fresh-session recovery was demonstrated. Complete replacement-card recovery was not.
+
+Changing derivation schemes or reassigning indexes can make historical notes unrecoverable.
+
+## Remaining security boundaries
+
+The V3 root, private credentials and Groth16 computation entered the host environment.
+
+The tested direct withdrawal exposed public account linkage.
+
+V4 investigates keeping sensitive credential operations inside Shell, but no Kohaku-specific Shell isolation guarantee has been verified.
+
+[Threat model](THREAT-MODEL.md) | [V3 report](V3-FINAL-RESEARCH-REPORT.md) | [Current status](PROJECT-STATUS.md)
