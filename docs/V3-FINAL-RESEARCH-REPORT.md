@@ -10,10 +10,10 @@
 | Hardware | Physical experimental Keycard, applet 4.0 |
 | Protocol tested | Privacy Pools **V1** |
 | Implementation | `kohaku-cli`, branch `research/v3-r5e5b9k-deposit-integration` |
-| Implementation checkpoint | `9a2a285` — maintainer-facing findings committed locally |
+| Implementation checkpoint | [`9a2a285`](https://github.com/0xterricola/kohaku-cli/commit/9a2a285) — implementation published on personal fork |
 | Report destination | `kohaku-key/docs/V3-FINAL-RESEARCH-REPORT.md` |
 
-> **Disclosure note:** This report deliberately includes public testnet addresses, transaction hashes, and their relationship to a recovered note. Although that information is on-chain, collecting it in one place makes the relationship easier to discover. Review before pushing to a public repository. No PINs, private keys, BIP-85 output, derived credentials, witness inputs, or proofs are included here.
+> **Disclosure note:** This report deliberately includes public testnet addresses, transaction hashes, and their relationship to a recovered note. Although that information is on-chain, collecting it in one place makes the relationship easier to discover. These public links are intentionally disclosed for research verification. No PINs, private keys, BIP-85 output, derived credentials, witness inputs, or proofs are included here.
 
 ## 1. Executive summary
 
@@ -226,6 +226,21 @@ The local checkpoints were designed not to persist private keys, BIP-85 root mat
 
 ## 7. Source code and evidence provenance
 
+**Published V3 source and contribution status**
+
+| Component | Source | Status |
+| --- | --- | --- |
+| Complete V3 CLI implementation | [Research branch](https://github.com/0xterricola/kohaku-cli/tree/research/v3-r5e5b9k-deposit-integration) | Public on personal fork; research only |
+| Verified V3 source revision | [Commit `9a2a285`](https://github.com/0xterricola/kohaku-cli/commit/9a2a285) | Published; not merged upstream |
+| Full V3 commit history | [Research commits](https://github.com/0xterricola/kohaku-cli/commits/research/v3-r5e5b9k-deposit-integration) | Publicly reviewable |
+| Privacy Pools V1 SDK changes | `kohaku-sdk-research`, `feat/ppv1-explicit-deposit-index`, commit `6b4db4f` | Local research branch; upstream PR not submitted |
+| Existing CLI contributions | [PR #67](https://github.com/kassandraoftroy/kohaku-cli/pull/67), [PR #68](https://github.com/kassandraoftroy/kohaku-cli/pull/68), [PR #69](https://github.com/kassandraoftroy/kohaku-cli/pull/69) | Separate hardware-signing contributions |
+| Keycard Go signature fix | [Commit `f64e791`](https://github.com/0xterricola/keycard-go/commit/f64e791) | Published on personal fork |
+
+**Compatibility checkpoint (November 6, 2026):** The V3 CLI research was merged into an isolated test branch against Kohaku CLI v0.1.7, passing 789 tests, TypeScript validation, and build. The separate SDK patch was merged into an isolated test branch against Privacy Pools SDK alpha.38, passing 240 unit tests, type tests, and build. These were software compatibility checks; physical hardware transactions were not repeated against the updated dependencies.
+
+The full V3 CLI branch contains historical experiments, including scripts capable of signing or broadcasting transactions. It is shared for technical review, **not as a supported release or a replayable transaction procedure**.
+
 ### 7.1 Implementation checkpoints (`kohaku-cli`)
 
 | Checkpoint | Commit | Demonstrated result |
@@ -240,17 +255,19 @@ The local checkpoints were designed not to persist private keys, BIP-85 root mat
 | K39-C | `a7bea83` | Second hardware-derived withdrawal proof; two-provider simulation |
 | K40-C | `9a2a285` | Sanitized maintainer-facing V1 findings document |
 
-The named Git commits refer to **`kohaku-cli`**. This report is intended for the separate **`kohaku-key`** research repository; it does not imply that the CLI branch has been merged, pushed, or released.
+The named Git commits refer to **`kohaku-cli`**. The research branch has been published to the `0xterricola/kohaku-cli` fork, but has **not been merged upstream or released**. This report remains in the separate `kohaku-key` research repository.
 
 ### 7.2 Representative implementation files (`kohaku-cli`)
 
-- `src/utils/keycard-r3-credentials.ts` — research credential adapter and coordinate separation.
-- `experiments/v3-r5e5b9k35e-state-witness.mjs` — historical on-chain state-tree reconstruction.
-- `experiments/v3-r5e5b9k37d-live-withdrawal.mjs` — reviewed signing/broadcast flow and mined-event checks; **do not replay an already completed live withdrawal**.
-- `experiments/v3-r5e5b9k38b-change-note-recovery.mjs` — fresh authenticated hardware recovery.
-- `experiments/v3-r5e5b9k39b-change-state-witness.mjs` — updated LeanIMT inclusion proof.
-- `experiments/v3-r5e5b9k39c-change-withdraw-simulation.mjs` — subsequent withdrawal proof and read-only `eth_call` simulation.
-- `docs/research/KEYCARD-PRIVACY-POOLS-V1-FINDINGS.md` — shorter maintainer-facing account without linked transaction identifiers.
+- [`src/utils/keycard-r3-credentials.ts`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/src/utils/keycard-r3-credentials.ts) — research credential adapter and coordinate separation.
+- [`experiments/v3-r5e5b9k32-broadcaster.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k32-broadcaster.mjs) — public evidence journal, guarded deposit broadcast, and mined receipt verification.
+- [`experiments/v3-r5e5b9k35g-hardware-withdraw-proof.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k35g-hardware-withdraw-proof.mjs) — hardware-derived withdrawal witness and Groth16 proof verification.
+- [`experiments/v3-r5e5b9k35e-state-witness.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k35e-state-witness.mjs) — historical on-chain state-tree reconstruction.
+- [`experiments/v3-r5e5b9k37d-live-withdrawal.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k37d-live-withdrawal.mjs) — reviewed signing/broadcast flow and mined-event checks; **do not replay an already completed live withdrawal**.
+- [`experiments/v3-r5e5b9k38b-change-note-recovery.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k38b-change-note-recovery.mjs) — fresh authenticated hardware recovery.
+- [`experiments/v3-r5e5b9k39b-change-state-witness.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k39b-change-state-witness.mjs) — updated LeanIMT inclusion proof.
+- [`experiments/v3-r5e5b9k39c-change-withdraw-simulation.mjs`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/experiments/v3-r5e5b9k39c-change-withdraw-simulation.mjs) — subsequent withdrawal proof and read-only `eth_call` simulation.
+- [`docs/research/KEYCARD-PRIVACY-POOLS-V1-FINDINGS.md`](https://github.com/0xterricola/kohaku-cli/blob/9a2a285/docs/research/KEYCARD-PRIVACY-POOLS-V1-FINDINGS.md) — shorter maintainer-facing account without linked transaction identifiers.
 
 ### 7.3 Local evidence inventory (not committed)
 
