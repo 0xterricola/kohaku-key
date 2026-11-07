@@ -47,9 +47,58 @@ This establishes a practical experimental firmware workflow, subject to maintain
 
 No Kohaku-specific Shell implementation has yet been verified.
 
+## V4 research tracks and checkpoints
+
+V4 contains two complementary but independently evaluated research tracks.
+Full Privacy Pools Groth16 proving on Shell is not a prerequisite for
+credential integration.
+
+### Track A — Privacy Pools credential integration
+
+Goal: preserve the verified V3 Privacy Pools V1 credential and recovery
+contract while reducing private material exposed to Kohaku CLI.
+
+- A1: Confirm the documented Keycard 4.0 BIP-85 APDU contract.
+- A2: Define ownership and cleanup of decrypted APDU and derived buffers.
+- A3: Reproduce frozen V3 derivation using independent synthetic vectors.
+- A4: Validate authenticated Keycard-to-Shell derivation and recovery.
+- A5: Integrate Shell transport and approvals into Kohaku CLI.
+- A6: Evaluate deposit, withdrawal, recovery and remaining host-secret exposure.
+
+Each checkpoint must distinguish demonstrated isolation from intended
+isolation. Host-side private witness generation remains an unresolved
+security boundary, even when the BIP-85 root stays on Shell.
+
+### Track B — Groth16 feasibility on Keycard Shell
+
+Goal: determine which zero-knowledge cryptographic operations are
+feasible within Shell's embedded memory and execution constraints.
+
+- B1: Study the existing host test harness and CI conventions.
+- B2: Select independently verified field and pairing test vectors.
+- B3: Evaluate minimal Groth16 verification experiments.
+- B4: Explore minimal proving configurations only when feasible.
+- B5: Measure memory, execution time and embedded compatibility.
+- B6: Document which capabilities, if any, are useful for Privacy Pools.
+
+Full Privacy Pools proof generation is not claimed or targeted as an
+initial Shell milestone.
+
+### Research baseline and evidence policy
+
+- Research repository: kohaku-key.
+- Shell firmware worktree: keycard-shell-v4.
+- Shell baseline: upstream/master at 7e38e45.
+- V3 CLI compatibility reference: 9a2a285.
+- Follow Keycard Shell AGENTS.md, CLAUDE.md and host-test conventions.
+- Use synthetic, non-secret test vectors before physical hardware tests.
+- Do not persist private keys, BIP-85 entropy, credentials or witnesses.
+- Record successful and failed checkpoints without overstating results.
+- Do not flash hardware or broadcast transactions during design review.
+
 ## First Shell proof of concept
 
-Reproduce the V3 Privacy Pools deposit precommitment on Shell without exposing BIP-85 entropy to macOS.
+First reproduce the V3 domain-separated credential derivation using synthetic test vectors. Then validate authenticated BIP-85 transport and secret-buffer cleanup on Shell. Computing Privacy Pools deposit precommitments entirely on Shell is a subsequent feasibility checkpoint.
 
 Implementation stages:
 
