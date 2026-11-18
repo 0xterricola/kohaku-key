@@ -10,3 +10,5 @@ secrets/
 private/
 
 .local/
+
+.venv/

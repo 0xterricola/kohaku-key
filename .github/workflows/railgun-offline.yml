@@ -1,0 +1,24 @@
+name: RAILGUN offline verification
+
+on:
+  push:
+    paths:
+      - 'RAILGUN/**'
+      - '.github/workflows/railgun-offline.yml'
+  pull_request:
+    paths:
+      - 'RAILGUN/**'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify published research
+        run: python -B RAILGUN/scripts/benchmark.py
+      - name: Check PCSC preflight syntax
+        run: python RAILGUN/scripts/hardware_preflight.py --help
