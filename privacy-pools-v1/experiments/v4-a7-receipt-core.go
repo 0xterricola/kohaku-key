@@ -64,6 +64,27 @@ func selfTest() error {
 		return errors.New("tampered receipt accepted")
 	}
 
+	expected[0] ^= 1 // Restore valid tag.
+
+	wrongChallenge := challenge
+	wrongChallenge[0] ^= 1
+	if verify(&root, wrongChallenge[:], expected) {
+		return errors.New("modified challenge accepted")
+	}
+
+	wrongRoot := root
+	wrongRoot[0] ^= 1
+	if verify(&wrongRoot, challenge[:], expected) {
+		return errors.New("incorrect root accepted")
+	}
+
+	if verify(&root, challenge[:15], expected) ||
+		verify(&root, challenge[:], expected[:31]) {
+		return errors.New("malformed receipt accepted")
+	}
+
+	fmt.Println("PASS: Invalid challenge, root, and lengths rejected")
+
 	fmt.Println("PASS: Synthetic V3-to-V4 receipt compatibility")
 	fmt.Println("PASS: Tampered receipt rejected")
 	return nil
