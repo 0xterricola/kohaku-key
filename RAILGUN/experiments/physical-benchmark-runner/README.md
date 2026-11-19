@@ -49,3 +49,53 @@ Keep installation instructions separate and require manual review.
 
 Do not install experimental applets on cards holding valuable keys.
 Never treat a successful applet SELECT as a verified benchmark.
+
+## Published PACE-GM APDU contract
+
+Experimental applet AID: `F0424E3235343C01`.
+
+Instruction `0x77` requires initialization stage 11.
+
+Command: `80 77 00 00 41` followed by a 65-byte
+uncompressed ANSI X9.62 point.
+
+The command is exactly 70 bytes:
+
+- CLA: 80
+- INS: 77
+- P1/P2: 00/00
+- Lc: 41 (65 bytes)
+- Data: 04 || X (32 bytes) || Y (32 bytes)
+
+The experimental applet computes H + sG using a fixed
+public scalar s=1 and a host-supplied public point H.
+
+X9.62 Weierstrass coordinates must not be confused with
+the separate BabyJubJub Edwards coordinates in the fixture.
+
+The published expected response is a 65-byte
+uncompressed point.
+
+## Offline adversarial verification
+
+Run from the repository root:
+
+    python3 -B RAILGUN/scripts/benchmark.py
+    python3 -B -m unittest discover -s RAILGUN/tests -p 'test_*.py' -v
+
+The tests cover artifact integrity, public curve points,
+group-law equations, APDU header and length validation,
+point encodings, duplicate indices, invalid multipliers,
+and mismatched public payloads.
+
+Negative tests mutate temporary copies of public artifacts.
+They never transmit malformed APDUs to physical hardware.
+
+The verifier does not perform physical cryptographic
+execution. The hardware preflight tool supports only reader
+discovery and explicitly authorized applet SELECT.
+
+Physical APDU replay, response comparison, and JCOP3/JCOP4
+timing measurements remain future milestones.
+
+No wallet keys, installation, or reprovisioning are required.

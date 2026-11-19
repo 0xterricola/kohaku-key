@@ -20,5 +20,7 @@ jobs:
           python-version: '3.12'
       - name: Verify published research
         run: python -B RAILGUN/scripts/benchmark.py
+      - name: Run offline adversarial tests
+        run: python -B -m unittest discover -s RAILGUN/tests -p 'test_*.py' -v
       - name: Check PCSC preflight syntax
         run: python RAILGUN/scripts/hardware_preflight.py --help

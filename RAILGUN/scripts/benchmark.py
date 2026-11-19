@@ -84,6 +84,15 @@ def main():
     require(integer(fixture["field_modulus"]) == P,
             "Unexpected BabyJubJub field modulus")
 
+    require(fixture["applet_aid"].upper() ==
+            "F0424E3235343C01",
+            "Unexpected PACE applet AID")
+    require(str(fixture["instruction"]).lower() == "0x77",
+            "Unexpected PACE instruction")
+    require(fixture["expected_encoding"] ==
+            "uncompressed ANSI X9.62",
+            "Unexpected point encoding metadata")
+
     vectors = fixture["vectors"]
     require(len(vectors) == 10, "Expected 10 PACE vectors")
 
@@ -96,6 +105,25 @@ def main():
         for key in ("input_hex", "expected_hex", "apdu_hex"):
             raw = hex_bytes(v[key])
             require(bool(raw), f"Empty {key}: {index}")
+
+        # Published PACE-GM command:
+        # 80 77 00 00 41 || 65-byte X9.62 input point.
+        # The X9.62 coordinates are Weierstrass coordinates,
+        # not the Edwards coordinates recorded separately.
+        for key in ("input_hex", "expected_hex"):
+            encoded = hex_bytes(v[key])
+            require(len(encoded) == 65 and encoded[0] == 4,
+                    f"Invalid {key} point encoding: {index}")
+
+        command = hex_bytes(v["apdu_hex"])
+        require(len(command) == 70,
+                f"Invalid APDU length: {index}")
+        require(command[:4] == bytes.fromhex("80770000"),
+                f"Unexpected APDU header: {index}")
+        require(command[4] == 65,
+                f"Invalid APDU Lc: {index}")
+        require(command[5:] == hex_bytes(v["input_hex"]),
+                f"APDU input mismatch: {index}")
 
         for prefix in ("input_edwards", "expected_edwards"):
             x = int(str(v[prefix + "_x"]), 16)
@@ -129,6 +157,13 @@ def main():
             q = add(q, q)
             n >>= 1
         return result
+
+    # Validate scalar metadata before locating the base point.
+    # Otherwise an invalid multiplier can be misreported as a
+    # missing base-point vector.
+    for v in vectors:
+        require(integer(v["h_multiplier"]) > 0,
+                "Invalid H multiplier")
 
     base = next(
         (point(v, "input_edwards") for v in vectors
