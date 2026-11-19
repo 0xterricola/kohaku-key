@@ -99,3 +99,63 @@ Physical APDU replay, response comparison, and JCOP3/JCOP4
 timing measurements remain future milestones.
 
 No wallet keys, installation, or reprovisioning are required.
+
+## M3.6b physical benchmark runner
+
+An opt-in Python runner now replays all 10 published
+PACE-GM vectors against an already-installed research
+applet on a dedicated test card.
+
+### Prerequisites
+
+- Compatible experimental JCOP3 card
+- Research applet AID F0424E3235343C01 installed
+- Research initialization stage 11
+- PC/SC reader and Python with pyscard
+- Published artifact integrity checks passing
+
+Use a Python environment with pyscard installed.
+
+### Offline verification
+
+    python3 -B RAILGUN/scripts/benchmark.py
+    python3 -B -m unittest discover -s RAILGUN/tests -p 'test_*.py' -v
+
+These checks require no connected smart card.
+
+### Physical execution
+
+From the repository root, on a dedicated test card:
+
+    python3 -B RAILGUN/scripts/physical_pace.py --reader "EXACT PCSC READER NAME" --confirm-test-card --execute-public-vectors --report pace-results.json
+
+This command explicitly authorizes 10 public PACE APDUs.
+
+The runner performs SELECT, verifies stage 11, then
+transmits all 10 published vectors.
+
+It requires SW 9000 and byte-for-byte matching responses.
+Execution stops on the first mismatch.
+
+The JSON report records individual PC/SC transmit latency,
+SELECT latency, stage-query latency, and median latency.
+
+Reports are not overwritten automatically.
+
+The runner does not install applets, initialize the card,
+provision credentials, or perform wallet signing.
+
+### Security and measurement boundaries
+
+The benchmark uses the research applet's fixed public
+scalar s=1. It does not establish secret-scalar isolation
+for RAILGUN signing.
+
+Latency covers individual PC/SC transmit calls, excluding
+SELECT, stage query, CLI startup and reader discovery.
+
+Mock transport tests verify success, stage rejection,
+incorrect response rejection, and non-success status
+handling without a physical card.
+
+JCOP4/4.5 compatibility is not established.

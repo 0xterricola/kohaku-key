@@ -32,3 +32,22 @@ test vectors, initialization state, and APDU timing method.
 
 Do not compare simulator projections with physical card
 measurements as if they were equivalent.
+
+## M3.6b verified JCOP3 replay — 2026-11-18
+
+- Hardware: experimental JCOP3 Keycard
+- Transport: HID Global OMNIKEY 3x21, PC/SC
+- Applet: PACE-GM research applet, stage 11
+- Public vectors: 10/10 exact response matches
+- Status words: 10/10 SW 9000
+- Median PC/SC transmit latency: 222.923 ms
+- SELECT latency: 48.946 ms
+- Stage query latency: 5.875 ms
+- Offline regression tests: 22/22 passed
+- No wallet signing, installation or reprovisioning
+
+Timing is host-observed PC/SC transmit latency,
+not isolated secure-element computation time.
+
+The physical runner and mock tests are published under
+RAILGUN/scripts and RAILGUN/tests.
