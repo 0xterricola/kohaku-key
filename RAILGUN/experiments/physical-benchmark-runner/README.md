@@ -159,3 +159,33 @@ incorrect response rejection, and non-success status
 handling without a physical card.
 
 JCOP4/4.5 compatibility is not established.
+
+## M3.7 offline trace reconciliation
+
+The offline trace reconciler verifies previously recorded physical
+PACE-GM APDUs against the published public vector fixture.
+
+From the repository root:
+
+    python3 -B RAILGUN/scripts/reconcile_trace.py --trace PATH_TO_APDU_JSONL
+
+The input is a JSONL file or a directory containing `apdu.jsonl`.
+Each public PACE record must have a label `pace-01` through
+`pace-10`, plus `apdu_hex`, `response_hex`, `sw`, and `elapsed_ms`.
+
+All ten commands must match the published APDUs exactly. Every
+status word must equal `9000`, and every response must match
+its expected 65-byte public point. Duplicate or missing PACE
+records, malformed timings, and mismatches cause failure.
+
+The tool does not access a smart card. It only validates
+previously captured evidence. Recorded timing is not a fresh
+hardware measurement.
+
+Run regression tests with:
+
+    python3 -B -m unittest discover -s RAILGUN/tests -p 'test_*.py' -v
+
+The M3.6b physical runner remains the authoritative tool for
+new PC/SC measurements. Its JSON summary is not the JSONL
+trace format required by this reconciler.
