@@ -43,15 +43,22 @@ for that experimental Shell integration in its present architecture.
 ## RAILGUN hardware testing
 
 - [Physical benchmark results](RAILGUN/benchmarks/RESULTS.md)
+- [JCOP3 vs. JCOP4 comparison](RAILGUN/benchmarks/JCOP3-VS-JCOP4.md)
+- [Independent JCOP4 results](RAILGUN/benchmarks/JCOP4-2026-11-19.md)
+- [Developer setup](RAILGUN/DEVELOPER-SETUP.md)
+- [Physical card safety](RAILGUN/HARDWARE-SAFETY.md)
+- [JavaCard error diagnostics](RAILGUN/JAVACARD-ERRORS.md)
 - [JavaCard sources and CAPs](RAILGUN/applets/README.md)
 - [Portable JavaCard build instructions](RAILGUN/applets/BUILDING.md)
 - [Public PACE test vectors](RAILGUN/vectors/PUBLIC-PACE-VECTORS.json)
 - [Offline verification script](RAILGUN/scripts/benchmark.py)
 - [Hardware developer setup](RAILGUN/experiments/physical-benchmark-runner/README.md)
 
-JCOP3 physical results are recorded. JCOP4 and JCOP4.5 performance and
-applet compatibility remain unverified. Published CAPs are experimental
-research artifacts, not firmware releases or universal installations.
+JCOP3 physical results are recorded. Mikkoph independently reproduced
+PACE-GM on JCOP4 using a provider-specific `K=1` workaround. Our separate
+`4E00/4E01` compatibility variant has passed offline validation but has not
+been physically tested on JCOP4. JCOP4.5 remains unverified.
+Published CAPs are experimental research artifacts, not firmware releases.
 
 ## Development workflow
 

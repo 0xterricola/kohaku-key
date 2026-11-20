@@ -67,6 +67,47 @@ implementation.
 This does not demonstrate arbitrary field multiplication
 at equivalent speed.
 
+## JCOP3 and JCOP4 compatibility
+
+The JCOP3 physical experiments establish native ECC, PACE-GM,
+BN254 arithmetic, and Poseidon research capabilities. The
+measurements are not evidence of complete hardware-isolated
+RAILGUN EdDSA-Poseidon signing.
+
+Mikkoph independently reproduced the PACE-GM operation on JCOP4.
+The tested JCOP4 provider required `key.setK((short)1)` at
+initialization step 7. This is a provider compatibility setting,
+not the BabyJubJub curve's mathematical cofactor (8).
+
+| Research result | JCOP3 | JCOP4 |
+| --- | --- | --- |
+| PACE-GM public vectors | 10/10 physical PASS | 50/50 physical PASS, independently reported |
+| PACE-GM median PC/SC transmit | 222.923 ms | 150.046 ms |
+| Native ECDH | Physically demonstrated | Independently demonstrated |
+| Local K=1 `4E00/4E01` CAP | Not physically tested | Offline verified; physical test pending |
+| Complete RAILGUN hardware signing | Not demonstrated | Not demonstrated |
+
+The reported JCOP4 PACE-GM median is 32.69% lower than the
+JCOP3 replay median. Different readers, hosts, and applet
+configurations prevent attributing this difference solely to
+JCOP4 silicon. CLI-inclusive and PC/SC transmit measurements
+must not be mixed.
+
+JCOP4.5 performance and compatibility remain unverified.
+
+### Reproduction and evidence
+
+- [JCOP3 physical replay](benchmarks/RESULTS.md)
+- [JCOP4 independent reproduction](benchmarks/JCOP4-2026-11-19.md)
+- [Cross-generation comparison](benchmarks/JCOP3-VS-JCOP4.md)
+- [K=1 applet compatibility experiment](experiments/physical-benchmark-runner/applets/pace-gm-k1/JCOP4-COMPATIBILITY.md)
+- [Developer setup](DEVELOPER-SETUP.md)
+- [Hardware safety](HARDWARE-SAFETY.md)
+- [JavaCard error diagnostics](JAVACARD-ERRORS.md)
+
+The original JCOP4 machine-readable benchmark files are still
+pending import. No synthetic per-sample records are used.
+
 ## Current objectives
 
 1. Physical BabyJubJub EdDSA-Poseidon signing
