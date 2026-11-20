@@ -14,6 +14,23 @@ ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "RAILGUN/vectors/PUBLIC-PACE-VECTORS.json"
 AID = "F0424E3235343C01"
 
+APPLET_CONFIGS = {
+    "published": AID,
+    "jcop4-k1": "F0424E3235344E01",
+}
+
+
+def status_detail(sw):
+    if sw == "6F02":
+        return (
+            "6F02: CryptoException reason 2 "
+            "(UNINITIALIZED_KEY on the tested JCOP4 provider). "
+            "Check curve initialization and cofactor configuration. "
+            "The published applet leaves step 7 unset; "
+            "the experimental K=1 variant sets it explicitly."
+        )
+    return f"status: {sw}"
+
 
 class BenchmarkError(Exception):
     pass
@@ -67,8 +84,11 @@ def transmit(connection, command):
     return bytes(response), f"{sw1:02X}{sw2:02X}", duration
 
 
-def replay(connection, vectors):
-    aid = bytes.fromhex(AID)
+def replay(connection, vectors, applet="published"):
+    require(applet in APPLET_CONFIGS,
+            f"Unknown applet configuration: {applet}")
+    selected_aid = APPLET_CONFIGS[applet]
+    aid = bytes.fromhex(selected_aid)
     select = bytes([0, 0xA4, 4, 0, len(aid)]) + aid
 
     response, sw, select_ms = transmit(connection, select)
@@ -85,7 +105,7 @@ def replay(connection, vectors):
     for index, command, expected in vectors:
         actual, sw, elapsed = transmit(connection, command)
         require(sw == "9000",
-                f"Vector {index} status: {sw}")
+                f"Vector {index} {status_detail(sw)}")
         require(actual == expected,
                 f"Vector {index} response mismatch; "
                 f"expected_sha256={hashlib.sha256(expected).hexdigest()} "
@@ -103,7 +123,8 @@ def replay(connection, vectors):
     return {
         "status": "PASS",
         "mode": "physical-public-vectors",
-        "applet_aid": AID,
+        "applet_aid": selected_aid,
+        "applet_configuration": applet,
         "vectors_verified": len(results),
         "select_ms": round(select_ms, 3),
         "stage_query_ms": round(stage_ms, 3),
@@ -116,6 +137,11 @@ def replay(connection, vectors):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--applet", choices=tuple(APPLET_CONFIGS),
+        default="published",
+        help="Explicit installed research applet configuration"
+    )
     parser.add_argument("--reader", required=True,
                         help="Exact PC/SC reader name")
     parser.add_argument("--confirm-test-card", action="store_true")
@@ -138,11 +164,13 @@ def main():
     connection = matches[0].createConnection()
     connection.connect()
     try:
-        report = replay(connection, vectors)
+        report = replay(connection, vectors, applet=args.applet)
     finally:
         connection.disconnect()
 
     report["reader"] = args.reader
+    report["generation_attested"] = False
+    report["applet_selection_is_generation_detection"] = False
     print(f"PASS {report['vectors_verified']}/10 physical PACE vectors")
     print(f"Median PC/SC transmit: {report['median_transmit_ms']} ms")
 

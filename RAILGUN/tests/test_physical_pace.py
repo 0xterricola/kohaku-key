@@ -22,10 +22,12 @@ VECTORS = [
 
 
 class FakeConnection:
-    def __init__(self, stage=11, bad_index=None, bad_sw=None):
+    def __init__(self, stage=11, bad_index=None, bad_sw=None,
+                 bad_status=(0x6A, 0x80)):
         self.stage = stage
         self.bad_index = bad_index
         self.bad_sw = bad_sw
+        self.bad_status = bad_status
         self.commands = []
 
     def transmit(self, command):
@@ -49,7 +51,7 @@ class FakeConnection:
             response = bytes([response[0] ^ 1]) + response[1:]
 
         if position == self.bad_sw:
-            return list(response), 0x6A, 0x80
+            return list(response), *self.bad_status
 
         return list(response), 0x90, 0x00
 
@@ -88,6 +90,59 @@ class PhysicalPaceMockTests(unittest.TestCase):
         ):
             pace.replay(fake, VECTORS)
         self.assertEqual(len(fake.commands), 3)
+
+
+    def test_05_jcop4_k1_select_and_vectors(self):
+        fake = FakeConnection()
+        result = pace.replay(fake, VECTORS, applet="jcop4-k1")
+        self.assertEqual(result["vectors_verified"], 10)
+        self.assertEqual(
+            result["applet_aid"], "F0424E3235344E01"
+        )
+        self.assertEqual(
+            result["applet_configuration"], "jcop4-k1"
+        )
+        self.assertEqual(
+            fake.commands[0],
+            bytes.fromhex("00A4040008F0424E3235344E01")
+        )
+
+    def test_06_default_published_select(self):
+        fake = FakeConnection()
+        result = pace.replay(fake, VECTORS)
+        self.assertEqual(
+            result["applet_aid"], "F0424E3235343C01"
+        )
+        self.assertEqual(
+            fake.commands[0],
+            bytes.fromhex("00A4040008F0424E3235343C01")
+        )
+
+    def test_07_reject_unknown_applet_before_apdu(self):
+        fake = FakeConnection()
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "Unknown applet"
+        ):
+            pace.replay(fake, VECTORS, applet="unknown")
+        self.assertEqual(fake.commands, [])
+
+    def test_08_explain_jcop4_uninitialized_key(self):
+        fake = FakeConnection(
+            bad_sw=0, bad_status=(0x6F, 0x02)
+        )
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "UNINITIALIZED_KEY"
+        ):
+            pace.replay(fake, VECTORS, applet="jcop4-k1")
+        self.assertEqual(len(fake.commands), 3)
+
+    def test_09_jcop4_reject_uninitialized_stage(self):
+        fake = FakeConnection(stage=0)
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "stage 11"
+        ):
+            pace.replay(fake, VECTORS, applet="jcop4-k1")
+        self.assertEqual(len(fake.commands), 2)
 
 
 if __name__ == "__main__":
