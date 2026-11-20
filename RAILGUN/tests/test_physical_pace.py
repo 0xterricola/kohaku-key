@@ -210,5 +210,57 @@ class PhysicalPaceMockTests(unittest.TestCase):
         self.assertEqual(fake.commands, [])
 
 
+
+    def test_15_missing_algorithm(self):
+        self.assertIn(
+            "NO_SUCH_ALGORITHM",
+            pace.status_detail("6F03")
+        )
+
+    def test_16_uninitialized_key(self):
+        message = pace.status_detail("6F02")
+        self.assertIn("UNINITIALIZED_KEY", message)
+        self.assertIn("cofactor", message)
+
+    def test_17_install_conditions(self):
+        message = pace.status_detail(
+            "6985", operation="install"
+        )
+        self.assertIn("GlobalPlatform INSTALL", message)
+        self.assertIn("does not identify", message)
+
+    def test_18_standard_status_words(self):
+        for sw in ("6700", "6A80", "6A86", "6A88"):
+            with self.subTest(sw=sw):
+                self.assertIn(
+                    sw, pace.status_detail(sw)
+                )
+
+    def test_19_crypto_initialization_step(self):
+        message = pace.status_detail(
+            "6F72", operation="initialization"
+        )
+        self.assertIn("step 7", message)
+        self.assertIn("UNINITIALIZED_KEY", message)
+
+    def test_20_system_initialization_step(self):
+        message = pace.status_detail(
+            "6E72", operation="initialization"
+        )
+        self.assertIn("step 7", message)
+        self.assertIn("SystemException reason 2", message)
+
+    def test_21_no_step_in_vector_context(self):
+        message = pace.status_detail(
+            "6F72", operation="vector"
+        )
+        self.assertIn("unclassified", message)
+        self.assertNotIn("step 7", message)
+
+    def test_22_unknown_status(self):
+        self.assertIn(
+            "unclassified", pace.status_detail("6FFF")
+        )
+
 if __name__ == "__main__":
     unittest.main()

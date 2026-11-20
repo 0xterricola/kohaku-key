@@ -20,16 +20,91 @@ APPLET_CONFIGS = {
 }
 
 
-def status_detail(sw):
-    if sw == "6F02":
+def status_detail(sw, operation="vector"):
+    sw = str(sw).upper()
+
+    if len(sw) != 4 or any(
+        c not in "0123456789ABCDEF" for c in sw
+    ):
+        return f"status: {sw} (invalid encoding)"
+
+    reasons = {
+        1: "ILLEGAL_VALUE",
+        2: "UNINITIALIZED_KEY",
+        3: "NO_SUCH_ALGORITHM",
+        4: "INVALID_INIT",
+        5: "ILLEGAL_USE",
+    }
+
+    if sw == "9000":
+        return "status: 9000 (success)"
+
+    # Only initialization APDUs encode a step number.
+    if operation == "initialization" and sw[:2] in ("6F", "6E"):
+        value = int(sw[2:], 16)
+        step = value >> 4
+        reason = value & 15
+
+        if 1 <= step <= 11:
+            if sw.startswith("6F"):
+                name = reasons.get(reason, "UNKNOWN_REASON")
+                return (
+                    f"status: {sw} - initialization step {step}, "
+                    f"CryptoException.{name} (reason {reason})"
+                )
+
+            return (
+                f"status: {sw} - initialization step {step}, "
+                f"SystemException reason {reason}"
+            )
+
+    # Research applet maps ordinary CryptoException
+    # reasons to 6F01 through 6F05.
+    if operation == "vector" and sw[:3] == "6F0":
+        reason = int(sw[-1], 16)
+        name = reasons.get(reason)
+
+        if name:
+            detail = (
+                f"status: {sw} - CryptoException.{name} "
+                f"(reason {reason})"
+            )
+
+            if reason == 2:
+                detail += (
+                    "; check key initialization and "
+                    "provider cofactor configuration"
+                )
+            elif reason == 3:
+                detail += "; check algorithm availability"
+
+            return detail
+
+    if sw == "6985":
+        if operation == "install":
+            return (
+                "status: 6985 - GlobalPlatform INSTALL "
+                "conditions not satisfied; does not identify "
+                "a specific constructor failure"
+            )
         return (
-            "6F02: CryptoException reason 2 "
-            "(UNINITIALIZED_KEY on the tested JCOP4 provider). "
-            "Check curve initialization and cofactor configuration. "
-            "The published applet leaves step 7 unset; "
-            "the experimental K=1 variant sets it explicitly."
+            "status: 6985 - conditions of use not satisfied; "
+            "inspect applet state and command prerequisites"
         )
-    return f"status: {sw}"
+
+    iso = {
+        "6700": "wrong length",
+        "6A80": "incorrect command data",
+        "6A86": "incorrect P1/P2",
+        "6A88": "referenced data not found",
+        "6D00": "instruction not supported",
+        "6E00": "CLA not supported",
+    }
+
+    if sw in iso:
+        return f"status: {sw} - {iso[sw]}"
+
+    return f"status: {sw} - unclassified for this operation"
 
 
 class BenchmarkError(Exception):
