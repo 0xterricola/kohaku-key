@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="poseidon-optimized-split" default="cap" basedir=".">
+  <property environment="env"/>
+  <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="${env.ANT_JAVACARD_JAR}"/>
+  <target name="cap">
+    <javacard jckit="${env.KEYCARD_JC_SDK}">
+      <cap package="im.status.keycard.railgun.nativeecprobe" aid="F0424E3235344E00" version="1.0" sources="${basedir}/src/main/java" classes="${basedir}/classes" output="${basedir}/pace-gm-k1.cap" verify="true">
+        <applet class="im.status.keycard.railgun.nativeecprobe.NativeEcProbeApplet" aid="F0424E3235344E01"/>
+        <import jar="${env.KEYCARD_MATH_HOME}/keycard-math.jar" exps="${env.KEYCARD_MATH_HOME}"/>
+      </cap>
+    </javacard>
+  </target>
+</project>

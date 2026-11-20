@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        maven { url 'http://releases.marmeladburk.fidesmo.com/' }
+        mavenCentral()
+        maven { url 'https://mvn.javacard.pro/maven/' }
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        classpath 'com.fidesmo:gradle-javacard:0.2.7'
+    }
+}
+
+apply plugin: 'javacard'
+
+project.ext.set(
+    "com.fidesmo.gradle.javacard.home",
+    (System.getenv("KEYCARD_JC_SDK") ?: file("../sdks/jc304_kit").canonicalPath)
+)
+
+javacard {
+    sdkVersion = "3.0.4"
+
+    cap {
+        aid = '0xF0:0x42:0x4E:0x32:0x35:0x34:0x4E:0x00'
+        packageName = 'im.status.keycard.railgun.nativeecprobe'
+
+        applet {
+            aid = '0xF0:0x42:0x4E:0x32:0x35:0x34:0x4E:0x01'
+            className = 'NativeEcProbeApplet'
+        }
+
+        version = '0.1'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(files(new File((System.getenv("KEYCARD_MATH_HOME") ?: file("../keycard-math").canonicalPath), "keycard-math.jar")))
+    javacardExport(files((System.getenv("KEYCARD_MATH_HOME") ?: file("../keycard-math").canonicalPath)))
+}
+
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
+project.ext.set("com.fidesmo.gradle.javacard.home", (System.getenv("KEYCARD_JC_SDK") ?: file("../sdks/jc304_kit").canonicalPath))
