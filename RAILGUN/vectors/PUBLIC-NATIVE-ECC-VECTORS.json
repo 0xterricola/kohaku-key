@@ -1,0 +1,63 @@
+{
+  "schema": "kohaku-key.native-ecc.public-vectors.v1",
+  "purpose": "Public scalar native ECC correctness and transmit timing",
+  "platform": "JCOP3 research applet",
+  "applet_aid": "F0424E3235343701",
+  "source_sha256": "c51d825963ed44e5076383c5b0e598c08a31b6df1b5ac25fd03e57ca28ce8df5",
+  "cap_sha256": "a1b6dd093c4fefa9642b6ad614f9613d0052dfe200276d90303d6f69b7f14763",
+  "instruction": "0x75",
+  "algorithm": "ALG_EC_SVDP_DH_PLAIN",
+  "required_stage": 11,
+  "timing_scope": "single PC/SC connection.transmit() call",
+  "card_execution_performed": false,
+  "vectors": [
+    {
+      "index": 0,
+      "scalar_hex": "0000000000000000000000000000000000000000000000000000000000000002",
+      "scalar_bits": 2,
+      "command_hex": "8075000000",
+      "expected_x_hex": "2D60F0A2D01345661B0662F4F8F603BADFECE890FBC9A07FA00B1F1A34328855",
+      "expected_length_bytes": 32
+    },
+    {
+      "index": 1,
+      "scalar_hex": "0000000000000000000000000000000000000000000000000000000000000003",
+      "scalar_bits": 2,
+      "command_hex": "8075010000",
+      "expected_x_hex": "0227B8CCF44DB907AA0B626D1E5FC40926A40A9374EB0F4F41A9F656A21CA6D0",
+      "expected_length_bytes": 32
+    },
+    {
+      "index": 2,
+      "scalar_hex": "0000000000000000000000000000000000000000000000000000000000000011",
+      "scalar_bits": 5,
+      "command_hex": "8075020000",
+      "expected_x_hex": "161332C43C7A894BBCA74DCA81327A9F1DBB40614EC6D7CCBE9EFFD25F1853B3",
+      "expected_length_bytes": 32
+    },
+    {
+      "index": 3,
+      "scalar_hex": "0000000000000000000000000000000080000000000000000000000000013579",
+      "scalar_bits": 128,
+      "command_hex": "8075030000",
+      "expected_x_hex": "1C91E4E1A3914F3B1E93E45B64D7839A2CBE21571C3D78E4CD5C350EA151686B",
+      "expected_length_bytes": 32
+    },
+    {
+      "index": 4,
+      "scalar_hex": "0100000000000000000000000000000000000000000000000000000000012345",
+      "scalar_bits": 249,
+      "command_hex": "8075040000",
+      "expected_x_hex": "12A3EE61589E2E75DA95F2951E846E94788DE20AEA952EC1B233C455F345035B",
+      "expected_length_bytes": 32
+    },
+    {
+      "index": 5,
+      "scalar_hex": "060C89CE5C263405370A08B6D0302B0BAB3EEDB83920EE0A677297DC392126F0",
+      "scalar_bits": 251,
+      "command_hex": "8075050000",
+      "expected_x_hex": "1FDE0A3CAC7CB46B36C79F4C0A7A732E38C2C7EE9AC41F44392A07B748A0869F",
+      "expected_length_bytes": 32
+    }
+  ]
+}
