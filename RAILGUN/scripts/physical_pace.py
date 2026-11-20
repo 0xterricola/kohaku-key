@@ -77,7 +77,36 @@ def published_vectors():
     return vectors
 
 
-def transmit(connection, command):
+def public_allowlist(vectors, selected_aid):
+    # Validate the complete vector set before any card transmission.
+    fixture = json.loads(FIXTURE.read_text())
+    canonical = [
+        (
+            v["index"],
+            bytes.fromhex(v["apdu_hex"]),
+            bytes.fromhex(v["expected_hex"]),
+        )
+        for v in fixture["vectors"]
+    ]
+
+    require(
+        len(canonical) == 10 and list(vectors) == canonical,
+        "Public vector set differs from published fixture"
+    )
+
+    aid = bytes.fromhex(selected_aid)
+    select = bytes([0, 0xA4, 4, 0, len(aid)]) + aid
+    stage = bytes.fromhex("80710000")
+    return frozenset(
+        [select, stage] + [command for _, command, _ in canonical]
+    )
+
+
+def transmit(connection, command, allowed):
+    require(
+        isinstance(command, bytes) and command in allowed,
+        "Blocked APDU outside explicit public allowlist"
+    )
     start = time.perf_counter_ns()
     response, sw1, sw2 = connection.transmit(list(command))
     duration = (time.perf_counter_ns() - start) / 1_000_000
@@ -88,14 +117,15 @@ def replay(connection, vectors, applet="published"):
     require(applet in APPLET_CONFIGS,
             f"Unknown applet configuration: {applet}")
     selected_aid = APPLET_CONFIGS[applet]
+    allowed = public_allowlist(vectors, selected_aid)
     aid = bytes.fromhex(selected_aid)
     select = bytes([0, 0xA4, 4, 0, len(aid)]) + aid
 
-    response, sw, select_ms = transmit(connection, select)
+    response, sw, select_ms = transmit(connection, select, allowed)
     require(sw == "9000", f"SELECT failed: {sw}")
 
     stage_response, sw, stage_ms = transmit(
-        connection, bytes.fromhex("80710000")
+        connection, bytes.fromhex("80710000"), allowed
     )
     require(sw == "9000", f"Stage query failed: {sw}")
     require(stage_response == b"\x0b",
@@ -103,7 +133,7 @@ def replay(connection, vectors, applet="published"):
 
     results = []
     for index, command, expected in vectors:
-        actual, sw, elapsed = transmit(connection, command)
+        actual, sw, elapsed = transmit(connection, command, allowed)
         require(sw == "9000",
                 f"Vector {index} {status_detail(sw)}")
         require(actual == expected,

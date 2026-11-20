@@ -127,6 +127,13 @@ def main():
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
 
+    if args.live:
+        parser.error(
+            "Legacy live mode disabled. Use "
+            "RAILGUN/scripts/physical_pace.py with explicit "
+            "test-card authorization instead."
+        )
+
     if args.live and not (
         args.reader and args.generation and args.confirm_dedicated_test_card
     ):

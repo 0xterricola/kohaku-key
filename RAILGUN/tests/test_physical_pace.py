@@ -145,5 +145,70 @@ class PhysicalPaceMockTests(unittest.TestCase):
         self.assertEqual(len(fake.commands), 2)
 
 
+
+    def test_10_block_unknown_apdu_before_transmission(self):
+        fake = FakeConnection()
+        allowed = pace.public_allowlist(
+            VECTORS, pace.APPLET_CONFIGS["published"]
+        )
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "Blocked APDU"
+        ):
+            pace.transmit(fake, bytes.fromhex("80E4000000"), allowed)
+        self.assertEqual(fake.commands, [])
+
+    def test_11_reject_modified_vector_before_select(self):
+        fake = FakeConnection()
+        mutated = list(VECTORS)
+        index, command, expected = mutated[0]
+        mutated[0] = (
+            index, command[:-1] + bytes([command[-1] ^ 1]),
+            expected
+        )
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "differs from published fixture"
+        ):
+            pace.replay(fake, mutated)
+        self.assertEqual(fake.commands, [])
+
+    def test_12_reject_truncated_vector_set(self):
+        fake = FakeConnection()
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "differs from published fixture"
+        ):
+            pace.replay(fake, VECTORS[:-1])
+        self.assertEqual(fake.commands, [])
+
+
+
+    def test_13_block_install_apdu(self):
+        fake = FakeConnection()
+        allowed = pace.public_allowlist(
+            VECTORS, pace.APPLET_CONFIGS["published"]
+        )
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "Blocked APDU"
+        ):
+            pace.transmit(
+                fake, bytes.fromhex("80E6020000"), allowed
+            )
+        self.assertEqual(fake.commands, [])
+
+    def test_14_block_wrong_applet_select(self):
+        fake = FakeConnection()
+        allowed = pace.public_allowlist(
+            VECTORS, pace.APPLET_CONFIGS["published"]
+        )
+        with self.assertRaisesRegex(
+            pace.BenchmarkError, "Blocked APDU"
+        ):
+            pace.transmit(
+                fake,
+                bytes.fromhex("00A4040008F0424E3235344E01"),
+                allowed
+            )
+        self.assertEqual(fake.commands, [])
+
+
 if __name__ == "__main__":
     unittest.main()
