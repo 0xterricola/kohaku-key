@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-21  
 **Milestones:** M3.42g.3d, M3.42h.4, M3.42i.2, M3.42i.3a, M3.42i.4  
-**Status:** Physical execution verified, 3/3 canonical final states PASS
+**Status:** Physical execution verified, 5/5 canonical final states PASS
 
 ## Objective
 
@@ -76,7 +76,7 @@ No PIN operations, key exports or wallet modification occurred.
 - Full rounds: 0–3, 61–64
 - Partial rounds: 4–60
 
-Indices tested: zero=0, mixed=3, boundary=4.
+Indices tested: zero=0, one-two=1, three-five=2, mixed=3, boundary=4.
 
 Round timings are host-side `perf_counter_ns()` elapsed times
 around PC/SC transmissions, so they include communication overhead.
@@ -84,11 +84,11 @@ around PC/SC transmissions, so they include communication overhead.
 ## Evidence files
 
 - [RESULTS.md](RESULTS.md): correctness and performance summary
-- [round-times.csv](round-times.csv): all 195 individual round timings
+- [round-times.csv](round-times.csv): all 325 individual round timings
 - [artifacts.json](artifacts.json): structured measurements, AIDs,
   SHA-256 fingerprints and provenance
 
-The 195 timing values were transcribed from the displayed terminal
+The first 195 timing values were transcribed from the displayed terminal
 results of M3.42i.3a and M3.42i.4, not recovered from raw PC/SC
 traces. The runner was generated ephemerally during testing.
 
@@ -100,8 +100,8 @@ traces. The runner was generated ephemerally during testing.
 
 ## Limitations
 
-Physical results cover three canonical public vectors and one complete
-execution of each. The historical t3 baseline was measured separately,
+Physical results cover five canonical public vectors with one complete
+execution per vector. The historical t3 baseline was measured separately,
 not in an interleaved controlled benchmark. This is not a private-key
 signing benchmark, nor evidence of production-ready RAILGUN integration.
 
@@ -130,3 +130,23 @@ the full canonical final state.
 The runner sends only research applet SELECT, public-vector
 initialization and Poseidon round APDUs. It contains no
 installation, deletion, wallet or PIN operations.
+
+
+## Completed five-vector hardware validation — M3.42i.7
+
+**All 5/5 canonical vectors and 325/325 physical rounds PASS.**
+
+The previously archived zero, mixed and boundary vectors were
+supplemented by one-two and three-five using the preserved
+`physical_poseidon_t3.py` runner. All five final 96-byte states
+matched the pinned canonical fixtures.
+
+Mean physical execution time: **230.520 seconds**.
+Historical-to-current ratio: **1.572×**.
+
+The master [`round-times.csv`](round-times.csv) now contains
+all 325 measurements. The two new executions also have
+independent JSON and CSV records in [`runs/`](runs/).
+
+See [`RESULTS.md`](RESULTS.md) for the complete hardware timing
+table, hashes, and source provenance.
