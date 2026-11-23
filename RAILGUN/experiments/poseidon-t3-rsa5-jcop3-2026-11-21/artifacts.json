@@ -1,0 +1,107 @@
+{
+  "experiment": "poseidon-t3-rsa5-jcop3-2026-11-21",
+  "date": "2026-11-21",
+  "hardware": "NXP JCOP3 experimental Keycard",
+  "reader": "HID Global OMNIKEY 3x21 Smart Card Reader",
+  "transport": "PC/SC T=1",
+  "applet_aid": "F0424E3235347E01",
+  "package_aid": "F0424E3235347E00",
+  "cap_component_bytes": 16409,
+  "historical_t3_ms": 362363.0,
+  "physical_rounds": 325,
+  "physical_hashes_passed": 5,
+  "vectors": {
+    "zero": {
+      "milestone": "M3.42i.3a",
+      "index": 0,
+      "total_ms": "230342.289",
+      "init_ms": "32.343",
+      "full_median_ms": "5749.785",
+      "partial_median_ms": "3235.379",
+      "final_sha256": "7d5dc71981bb3ca593c233b3aad1ef44e4c5b6961c70700b7a4535d808a1c12b"
+    },
+    "one-two": {
+      "milestone": "M3.42i.7",
+      "index": 1,
+      "total_ms": "230716.374",
+      "init_ms": "32.340",
+      "full_median_ms": "5763.380",
+      "partial_median_ms": "3246.927",
+      "final_sha256": "c5b5f2594cfc02fadfd69805667e461f14e26da62bae230d73383a6541d7edbf"
+    },
+    "three-five": {
+      "milestone": "M3.42i.7",
+      "index": 2,
+      "total_ms": "230569.210",
+      "init_ms": "32.375",
+      "full_median_ms": "5689.713",
+      "partial_median_ms": "3246.466",
+      "final_sha256": "021f99e20af0ce33f408a9c3eb165d8b13cb46336e5546475b0de005c96a06ed"
+    },
+    "mixed": {
+      "milestone": "M3.42i.4",
+      "index": 3,
+      "total_ms": "230436.850",
+      "init_ms": "32.398",
+      "full_median_ms": "5723.312",
+      "partial_median_ms": "3234.925",
+      "final_sha256": "ab4f182cd4611a056d1c1b335823fd166fcd2bf8c196330b5e07dbbc6502f698"
+    },
+    "boundary": {
+      "milestone": "M3.42i.4",
+      "index": 4,
+      "total_ms": "230535.036",
+      "init_ms": "42.184",
+      "full_median_ms": "5707.474",
+      "partial_median_ms": "3236.602",
+      "final_sha256": "f1fdd5d92257160f153780de5255bbe7903fdbe3377c1d5bfc6e73f3007cfc15"
+    }
+  },
+  "individual_rounds": "round-times.csv",
+  "round_data_origin": "First 195 measurements transcribed from M3.42i.3a and M3.42i.4; remaining 130 captured by physical_poseidon_t3.py in M3.42i.7",
+  "artifacts": {
+    "~/Developer/keycard-railgun-poseidon-fullhash/research-t3-rsa-square/deferred-rsa5-dictionary-source/build/m342h4/poseidonoptrsa5dict.cap": "da9329e4682ffb132d092b128d283e3a50f0d461fd6a7bddda9cdaf564bfdfe6",
+    "~/Developer/keycard-railgun-poseidon-fullhash/research-t3-rsa-square/deferred-rsa5-dictionary-source/src/main/java/im/status/keycard/railgun/poseidonoptrsa5dict/Bn254UnifiedMath.java": "f380750807c7abd7a49759a1f72cafd55743cd26097a1c1c83aec708b50bdfc6",
+    "~/Developer/keycard-railgun-poseidon-fullhash/research-t3-rsa-square/deferred-rsa5-dictionary-source/src/main/java/im/status/keycard/railgun/poseidonoptrsa5dict/PoseidonSparseA.java": "a0121ab11c985d4025904daf6c2eb0e9bc02ccf13baee075c40cc3731e03c645",
+    "~/Developer/keycard-railgun-poseidon-fullhash/research-t3-rsa-square/deferred-rsa5-dictionary-source/src/main/java/im/status/keycard/railgun/poseidonoptrsa5dict/PoseidonSparseB.java": "6e6d187f1be6041a71a42a86fcc802135efd38e338a3395ddee3e74b4094cef9",
+    "~/Developer/keycard-railgun-poseidon-fullhash/research-t3-rsa-square/deferred-rsa5-dictionary-source/src/main/java/im/status/keycard/railgun/poseidonoptrsa5dict/PoseidonT3Rsa5DictionaryApplet.java": "eee33a6a70ad08fce7b03f3544b1d4a2e6419d20ac57b13916d8ea7d30a3f611",
+    "~/Developer/keycard-railgun-poseidon-fullhash/fixtures/poseidon-t3-rounds.json": "9055080ad906b5fe73c83aa21e01303cfcf6d1137d3ab2f435ead179283ab5fe"
+  },
+  "simulator": {
+    "rsa5_vs_two_square_sbox_speedup": 1.22,
+    "dictionary_vs_rsa5_speedup": 1.001,
+    "rsa5_dictionary_cap_bytes_saved": 1369
+  },
+  "wallet_operations": 0,
+  "pin_operations": 0,
+  "new_run_evidence": [
+    {
+      "vector": "one-two",
+      "file": "runs/20261121T233700210857Z-one-two.json",
+      "sha256": "84a37ed7bff0b1fdb834a82105fd6910fbda1b643b363df181ef3bc2256ab7bb"
+    },
+    {
+      "vector": "one-two",
+      "file": "runs/20261121T233700210857Z-one-two.csv",
+      "sha256": "382e785a0e99c30cceeef6ae84d4174ab613a0e8087e959fc851b7333c6ea13c"
+    },
+    {
+      "vector": "three-five",
+      "file": "runs/20261121T234050909184Z-three-five.json",
+      "sha256": "1ca1e0cefd7de2a1fdea059ebaf4181a3923f91266185c55d6525f01a1380864"
+    },
+    {
+      "vector": "three-five",
+      "file": "runs/20261121T234050909184Z-three-five.csv",
+      "sha256": "67a4c277d8e37a7d0a11a0a0445151713eb18c86b5c968889bad07319b3f64a7"
+    }
+  ],
+  "hardware_summary": {
+    "vector_count": 5,
+    "round_count": 325,
+    "mean_total_ms": "230519.952",
+    "historical_t3_reference_ms": "362363.000",
+    "historical_to_current_mean_speedup": "1.572",
+    "comparison_type": "separately measured historical baseline"
+  }
+}

@@ -1,0 +1,14 @@
+name: RAILGUN Poseidon 7F offline regression
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify canonical vectors and benchmark evidence
+        run: |
+          python3 -B -m unittest discover -s RAILGUN/tests -p 'test_poseidon_t3_7f.py' -v
