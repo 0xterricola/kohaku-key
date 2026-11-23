@@ -18,3 +18,7 @@ on separate JavaCard SDKs and build-time libraries.
 ## Poseidon T3 RSA-5
 
 [7E physical reference applet](poseidon-t3-rsa5-7e/README.md)
+
+## Poseidon T3 RSA-5 Barrett
+
+[7F research applet](poseidon-t3-rsa5-7f/README.md)

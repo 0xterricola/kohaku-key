@@ -21,3 +21,7 @@ See [hardware developer setup](../experiments/physical-benchmark-runner/README.m
 ## Poseidon T3 RSA-5 regression
 
 Run `python3 -B RAILGUN/scripts/poseidon_t3_7e.py --self-test` from the repository root. See [7E hardware reproduction](../applets/poseidon-t3-rsa5-7e/README.md).
+
+## Poseidon T3 — 7F Barrett
+
+Run `python3 -B RAILGUN/scripts/poseidon_t3_7f.py --self-test` to verify all five canonical vectors.

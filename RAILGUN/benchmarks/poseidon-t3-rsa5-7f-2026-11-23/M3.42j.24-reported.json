@@ -1,0 +1,19 @@
+{
+  "experiment": "M3.42j.24",
+  "date": "2026-11-23",
+  "source": "sanitized physical terminal summary",
+  "raw_timing_trace_available": false,
+  "implementation": "7F Barrett",
+  "package_aid": "F0424E3235347F00",
+  "applet_aid": "F0424E3235347F01",
+  "cap_sha256": "be1c0cb797624ba50235e9b26086f8f2c18b6c1e0917a8d28335634182ac71f0",
+  "vector": "one-two",
+  "physical_rounds_verified": 65,
+  "canonical_final": "PASS",
+  "host_elapsed_ms": 255289.453,
+  "7e_reference_ms": 230716.374,
+  "host_elapsed_ratio": 1.1065,
+  "physical_repetitions": 1,
+  "wallet_operations": 0,
+  "note": "Single-run comparison, not repeated-trial median"
+}
