@@ -17,3 +17,7 @@ selects an already-installed ECC or PACE research applet.
 
 It does not install applets or run benchmark APDUs.
 See [hardware developer setup](../experiments/physical-benchmark-runner/README.md).
+
+## Poseidon T3 RSA-5 regression
+
+Run `python3 -B RAILGUN/scripts/poseidon_t3_7e.py --self-test` from the repository root. See [7E hardware reproduction](../applets/poseidon-t3-rsa5-7e/README.md).

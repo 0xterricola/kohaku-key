@@ -51,3 +51,7 @@ not isolated secure-element computation time.
 
 The physical runner and mock tests are published under
 RAILGUN/scripts and RAILGUN/tests.
+
+## Poseidon T3 RSA-5 — JCOP3 7E
+
+Five canonical vectors and 325 physical round checkpoints passed. Reported latency: approximately 230.5 seconds/hash. See the [archived evidence](poseidon-t3-rsa5-7e-2026-11-21/README.md).
