@@ -13,10 +13,15 @@ export KEYCARD_MATH_HOME=/path/to/keycard-math
 KEYCARD_MATH_HOME must contain keycard-math.jar
 and its JavaCard export files.
 
-Run Gradle from each applet directory.
+The `native-ec` and `pace-gm` applet directories use Gradle.
+The separate `4E01` compatibility applet documents an Ant-based
+`build-offline.sh` workflow under
+[`experiments/physical-benchmark-runner/applets/pace-gm-k1/`](../experiments/physical-benchmark-runner/applets/pace-gm-k1/JCOP4-COMPATIBILITY.md).
 
-The verified CAP files in this repository are
-physical JCOP3 research artifacts.
+Some compiled native ECC and PACE research CAPs are included as
+fingerprint-verified JCOP3 artifacts. The original Poseidon 7E/7F
+CAPs are **not** redistributed; offline arithmetic fixtures and
+physical measurement evidence are documented separately.
 
 Rebuilding may produce different CAP hashes.
 Do not replace the verified artifacts without

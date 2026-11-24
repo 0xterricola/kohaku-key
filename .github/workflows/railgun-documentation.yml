@@ -1,0 +1,19 @@
+name: RAILGUN documentation consistency
+
+on:
+  push:
+    paths:
+      - 'RAILGUN/**'
+      - '.github/workflows/railgun-documentation.yml'
+  pull_request:
+    paths:
+      - 'RAILGUN/**'
+      - '.github/workflows/railgun-documentation.yml'
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check headings, Markdown formatting and internal links
+        run: python3 -B RAILGUN/scripts/check_documentation.py

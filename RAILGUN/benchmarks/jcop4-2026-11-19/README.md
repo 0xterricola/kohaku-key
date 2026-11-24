@@ -1,6 +1,6 @@
 # Original JCOP4 physical benchmark JSON — Nov 19, 2026
 
-Contributor: **Mikkoph (bitgamma), Keycard developer**. Original methodology and report: https://gist.github.com/bitgamma/18bed236b7073b8b951f26ba68e76515 . JSON files were supplied in the Nov 23 research conversation and archived here **byte-for-byte**, without synthesized samples or edits. Import/validation date: Nov 23, 2026. These are independently reported experiments on the developer's JCOP4 setup, *not* runs performed on this repository owner's JCOP3 or future JCOP4 hardware.
+Contributor: **Mikkoph (bitgamma), Keycard developer**. Original methodology and report: [bitgamma's JCOP4 report](https://gist.github.com/bitgamma/18bed236b7073b8b951f26ba68e76515). JSON files were supplied in the Nov 23 research conversation and archived here **byte-for-byte**, without synthesized samples or edits. Import/validation date: Nov 23, 2026. These are independently reported experiments on the developer's JCOP4 setup, *not* runs performed on this repository owner's JCOP3 or future JCOP4 hardware.
 
 | Raw file | SHA-256 | Outcome |
 | --- | --- | --- |

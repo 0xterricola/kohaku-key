@@ -3,6 +3,11 @@
 Independent investigation of BabyJubJub, Poseidon,
 BN254 arithmetic, and hardware-assisted EdDSA signing.
 
+The [hardware performance index](benchmarks/HARDWARE-LEADERBOARD.md)
+records the fastest **measured** implementations within each workload
+and timing method. The [research roadmap](docs/ROADMAP.md)
+identifies the active two-phase signing work and JCOP4 compatibility checks.
+
 ## Current physical accomplishments
 
 ### Native BabyJubJub scalar multiplication
@@ -111,13 +116,17 @@ Four original machine-readable JCOP4 benchmark files supplied by Mikkoph are now
 3. Evaluate Shell approval, host challenge binding, and progressive hardening with Keycard/Railgun developers
 4. Keep on-card Poseidon RSA-5 as a documented, paused performance track
 
-See [Research Roadmap](docs/ROADMAP.md) and
-[Physical Benchmarks](benchmarks/RESULTS.md).
+See the [research roadmap](docs/ROADMAP.md),
+[benchmark history](benchmarks/RESULTS.md), and
+[documentation conventions](docs/DOCUMENTATION-STYLE.md).
 
 ## Reproducibility
 
-Compiled JavaCard CAPs and source are included when their
-original physical-test fingerprints can be verified.
+Some native ECC/PACE research CAPs and source are included with
+verified fingerprints. The original Poseidon 7E/7F CAP binaries
+and reconstructed arithmetic source are **not** redistributed
+pending dependency provenance and licensing review. Offline
+reference verification remains available without those binaries.
 
 CAPs are experimental. Do not install them on a wallet
 containing valuable credentials.

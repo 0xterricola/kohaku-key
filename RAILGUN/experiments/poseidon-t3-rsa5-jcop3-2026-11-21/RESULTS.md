@@ -1,9 +1,9 @@
 # JCOP3 physical Poseidon RSA-5 benchmark results
 
-Date: 2026-11-21  
-Experiment milestones: M3.42i.3a, M3.42i.4, M3.42i.7  
-Applet: `F0424E3235347E01`  
-Package: `F0424E3235347E00`
+- **Date:** 2026-11-21
+- **Experiment milestones:** M3.42i.3a, M3.42i.4, M3.42i.7
+- **Applet AID:** `F0424E3235347E01`
+- **Package AID:** `F0424E3235347E00`
 
 ## Five canonical physical vectors
 
@@ -17,9 +17,9 @@ Package: `F0424E3235347E00`
 
 **All 325 physical rounds passed (SW `9000`). All five final 96-byte states match canonical fixtures.**
 
-Mean execution time: **230.520 seconds**.  
-Historical t3 reference: **362.363 seconds**.  
-Historical-to-current execution ratio: **1.572×**.
+- **Mean execution time:** 230.520 seconds
+- **Historical Poseidon T3 reference:** 362.363 seconds
+- **Historical-to-current execution ratio:** 1.572×
 
 These values include PC/SC round-trip overhead but exclude SELECT
 and vector initialization. The comparison uses separately measured

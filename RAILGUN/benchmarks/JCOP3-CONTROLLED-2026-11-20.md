@@ -93,9 +93,10 @@ provider behavior, and potentially applet implementation.
 An isolated chip-generation speedup has therefore
 not been established.
 
-The JCOP4 original result JSON files are pending.
-Our separately built JCOP4 `K=1` applet remains
-physically unverified.
+Four independently supplied JCOP4 JSON reports have since been
+[imported and SHA-256-pinned](jcop4-2026-11-19/README.md).
+Our separately built JCOP4 `4E01` K=1 applet remains physically
+unverified; Mikkoph's successful physical result used `4D01`.
 
 See [JCOP3 vs. JCOP4](JCOP3-VS-JCOP4.md) and
 [JCOP4 independent results](JCOP4-2026-11-19.md).

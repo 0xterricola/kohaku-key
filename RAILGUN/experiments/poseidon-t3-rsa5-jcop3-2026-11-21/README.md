@@ -1,12 +1,12 @@
-# JCOP3 Poseidon t3 — RSA-5 dictionary experiment
+# JCOP3 Poseidon T3 — RSA-5 dictionary experiment
 
-**Date:** 2026-11-21  
-**Milestones:** M3.42g.3d, M3.42h.4, M3.42i.2, M3.42i.3a, M3.42i.4  
-**Status:** Physical execution verified, 5/5 canonical final states PASS
+- **Date:** 2026-11-21
+- **Milestones:** M3.42g.3d, M3.42h.4, M3.42i.2, M3.42i.3a, M3.42i.4
+- **Status:** Physical execution verified; 5/5 canonical final states PASS
 
 ## Objective
 
-Accelerate BN254 Poseidon t3 on NXP JCOP3 by using the native RSA
+Accelerate BN254 Poseidon T3 on NXP JCOP3 by using the native RSA
 engine for exponent-5 S-box computation and exponent-2 arithmetic
 for matrix multiplication, while reducing applet installation size.
 

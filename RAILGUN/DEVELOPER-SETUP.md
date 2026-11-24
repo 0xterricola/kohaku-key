@@ -26,11 +26,11 @@ or proprietary SDK components through this repository.
     git clone https://github.com/0xterricola/kohaku-key.git
     cd kohaku-key
 
-    python3 -B RAILGUN/scripts/check_developer_setup.py
-
-    python3 -B -m unittest discover -s RAILGUN/tests       -p test_physical_pace.py -v
-
-    python3 -B RAILGUN/scripts/benchmark.py
+```sh
+python3 -B RAILGUN/scripts/check_developer_setup.py
+python3 -B -m unittest discover -s RAILGUN/tests -p 'test_physical_pace.py' -v
+python3 -B RAILGUN/scripts/benchmark.py
+```
 
 All three commands are offline.
 
@@ -38,15 +38,19 @@ All three commands are offline.
 
 Set your local dependency paths:
 
-    export JAVA_HOME=/path/to/jdk-11
-    export PATH="$JAVA_HOME/bin:$PATH"
-    export ANT_JAVACARD_JAR=/path/to/ant-javacard.jar
-    export KEYCARD_JC_SDK=/path/to/jc304_kit
-    export KEYCARD_MATH_HOME=/path/to/keycard-math
+```sh
+export JAVA_HOME=/path/to/jdk-11
+export PATH="$JAVA_HOME/bin:$PATH"
+export ANT_JAVACARD_JAR=/path/to/ant-javacard.jar
+export KEYCARD_JC_SDK=/path/to/jc304_kit
+export KEYCARD_MATH_HOME=/path/to/keycard-math
+```
 
 Then run:
 
-    RAILGUN/experiments/physical-benchmark-runner/applets/pace-gm-k1/build-offline.sh
+```sh
+RAILGUN/experiments/physical-benchmark-runner/applets/pace-gm-k1/build-offline.sh
+```
 
 The experimental applet uses:
 
@@ -75,11 +79,20 @@ It does not install or initialize applets.
 
 View available options:
 
-    python3 -B RAILGUN/scripts/physical_pace.py --help
+```sh
+python3 -B RAILGUN/scripts/physical_pace.py --help
+```
 
 On a separately prepared dedicated research card only:
 
-    python3 -B RAILGUN/scripts/physical_pace.py       --reader "READER_NAME"       --applet jcop4-k1       --confirm-test-card       --execute-public-vectors       --report RAILGUN/benchmarks/local-pace-run.json
+```sh
+python3 -B RAILGUN/scripts/physical_pace.py \
+  --reader "READER_NAME" \
+  --applet jcop4-k1 \
+  --confirm-test-card \
+  --execute-public-vectors \
+  --report RAILGUN/benchmarks/local-pace-run.json
+```
 
 This final command TRANSMITS APDUs. Do not run it during
 offline setup or on an unverified wallet card.

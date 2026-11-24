@@ -3,7 +3,7 @@
 The native ECC and PACE probes are independent research applets.
 
 - Native ECC: BabyJubJub-compatible Weierstrass multiplication
-- PACE GM: native public-point addition with scalar s=1
+- PACE-GM: native public-point addition with scalar s=1
 
 Imported CAP files are fingerprint-verified against physical
 JCOP3 test artifacts.

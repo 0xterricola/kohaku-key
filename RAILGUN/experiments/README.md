@@ -1,6 +1,8 @@
-# Active RAILGUN experiments
+# RAILGUN research experiments
 
-This is the working area for unverified or in-progress research.
+This directory includes historical validated experiments and ongoing
+research. A dated experiment record is not necessarily an active task.
+The [research roadmap](../docs/ROADMAP.md) identifies current priorities.
 
 Every experiment should document its hypothesis, hardware and applet
 versions, commands, measured results, negative tests, and limitations.

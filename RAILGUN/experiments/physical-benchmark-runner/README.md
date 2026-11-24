@@ -1,7 +1,11 @@
 # Physical JavaCard benchmark runner
 
-Status: **hardware preflight implemented; physical ECC/PACE benchmark
-replay not yet implemented**.
+**Current status:** offline vector validation, SELECT-only hardware
+preflight, and opt-in PACE-GM physical vector replay are implemented.
+An opt-in native ECC physical runner also exists. Historical milestones
+below describe the progression from preflight to physical testing.
+See [developer setup](../../DEVELOPER-SETUP.md) and
+[hardware safety](../../HARDWARE-SAFETY.md).
 
 ## Requirements
 
@@ -41,14 +45,18 @@ requests a PIN, or executes cryptographic benchmark APDUs.
 A missing applet may return `6A82`. SELECT success proves only
 that the AID is selectable, not hardware/algorithm compatibility.
 
-## Next research milestone
+## Benchmark availability
 
-Publish an explicit opt-in physical benchmark runner using verified
-public setup commands and test vectors, with per-card timing reports.
-Keep installation instructions separate and require manual review.
+The opt-in physical PACE-GM runner (`RAILGUN/scripts/physical_pace.py`)
+and native ECC runner (`RAILGUN/scripts/physical_native_ecc.py`)
+are implemented. The former was used for verified JCOP3 PACE-GM
+replay; independently supplied JCOP4 results are archived in
+[the JCOP4 evidence index](../../benchmarks/jcop4-2026-11-19/README.md).
 
-Do not install experimental applets on cards holding valuable keys.
-Never treat a successful applet SELECT as a verified benchmark.
+The local `4E01` K=1 variant still lacks physical validation.
+Keep installation instructions separate from benchmark execution.
+Do not install experimental applets on cards holding valuable keys;
+SELECT success alone is not proof of cryptographic compatibility.
 
 ## Published PACE-GM APDU contract
 
@@ -91,12 +99,14 @@ and mismatched public payloads.
 Negative tests mutate temporary copies of public artifacts.
 They never transmit malformed APDUs to physical hardware.
 
-The verifier does not perform physical cryptographic
-execution. The hardware preflight tool supports only reader
+The offline verifier does not perform physical cryptographic
+execution. The separate hardware preflight tool supports only reader
 discovery and explicitly authorized applet SELECT.
 
-Physical APDU replay, response comparison, and JCOP3/JCOP4
-timing measurements remain future milestones.
+Physical APDU replay and response comparison were subsequently
+implemented as described in the M3.6b section below. Independent
+JCOP4 `4D01` results are archived; local `4E01` physical testing
+remains pending.
 
 No wallet keys, installation, or reprovisioning are required.
 
@@ -127,7 +137,13 @@ These checks require no connected smart card.
 
 From the repository root, on a dedicated test card:
 
-    python3 -B RAILGUN/scripts/physical_pace.py --reader "EXACT PCSC READER NAME" --confirm-test-card --execute-public-vectors --report pace-results.json
+```sh
+python3 -B RAILGUN/scripts/physical_pace.py \
+  --reader "EXACT PCSC READER NAME" \
+  --confirm-test-card \
+  --execute-public-vectors \
+  --report pace-results.json
+```
 
 This command explicitly authorizes 10 public PACE APDUs.
 
@@ -158,7 +174,10 @@ Mock transport tests verify success, stage rejection,
 incorrect response rejection, and non-success status
 handling without a physical card.
 
-JCOP4/4.5 compatibility is not established.
+The original published `3C01` applet's XY and PACE-GM paths failed
+on Mikkoph's JCOP4 setup with `6F02`; his separate K=1 `4D01`
+variant passed 50/50 PACE-GM samples. Our `4E01` remains untested
+on JCOP4, and JCOP4.5 compatibility remains unverified.
 
 ## M3.7 offline trace reconciliation
 

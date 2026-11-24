@@ -2,11 +2,9 @@
 
 Experimental JCOP3 JavaCard Poseidon implementation.
 
-Package AID: `F0424E3235347F00`
-
-Applet AID: `F0424E3235347F01`
-
-CAP SHA-256: `be1c0cb797624ba50235e9b26086f8f2c18b6c1e0917a8d28335634182ac71f0`
+- **Package AID:** `F0424E3235347F00`
+- **Applet AID:** `F0424E3235347F01`
+- **CAP SHA-256:** `be1c0cb797624ba50235e9b26086f8f2c18b6c1e0917a8d28335634182ac71f0`
 
 ## Protocol
 
@@ -27,11 +25,13 @@ Each round returns 96 bytes representing three canonical
 
 Vector indices:
 
-0 = zero  
-1 = one-two  
-2 = three-five  
-3 = mixed  
-4 = boundary
+| Index | Vector |
+| ---: | --- |
+| 0 | `zero` |
+| 1 | `one-two` |
+| 2 | `three-five` |
+| 3 | `mixed` |
+| 4 | `boundary` |
 
 ## Offline reference verification
 

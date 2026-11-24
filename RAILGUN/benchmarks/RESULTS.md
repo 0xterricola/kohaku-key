@@ -8,12 +8,18 @@ Reader: HID OMNIKEY 3x21 over PC/SC.
 
 | Experiment | Verified | Result |
 | --- | ---: | --- |
-| Native ECC regression | 20/20 | PASS |
-| PACE addition | 10/10 | PASS |
-| Warm interleaved APDUs | 50/50 | PASS |
-| Historic BN254 RSA square APDUs | 120/120 | PASS |
-| Full two-input Poseidon hashes | 2/2 | PASS |
-| Poseidon intermediate round states | 130/130 | PASS |
+| Native ECC initial regression | 20/20 full-point results | PASS |
+| PACE-GM public addition | 10/10 vectors | PASS |
+| Warm interleaved ECC/PACE replay | 50/50 APDUs | PASS |
+| Historical BN254 RSA square tests | 120/120 APDUs | PASS |
+| Historical Poseidon T3 implementation | 2/2 hashes, 130/130 round states | PASS |
+| **RSA-5 7E Poseidon T3** | **5/5 hashes, 325/325 round states** | **PASS** |
+| Barrett 7F Poseidon T3 | 1/1 hash, 65/65 round states | PASS |
+
+The two historical Poseidon hashes are **not** the 7E result. Current
+fastest measured Poseidon T3 is 7E; the 7F result covers one vector.
+The 7F host-elapsed timing boundary is not identical to the original
+7E 65-round timing boundary.
 
 ## Warm-session medians
 

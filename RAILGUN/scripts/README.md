@@ -1,14 +1,13 @@
 # Benchmark Scripts
 
-The original physical benchmark evidence is preserved in the
-local research validation workspace.
+Validated JCOP3 physical evidence and independently supplied JCOP4
+results are indexed in the [hardware leaderboard](../benchmarks/HARDWARE-LEADERBOARD.md).
+The [experiment archive](../experiments/README.md) distinguishes
+historical captures from portable reproduction tools.
 
-Portable JCOP3/JCOP4/JCOP4.5 benchmarking is the next
-publication task. Any installer must be separate from the
-benchmark runner, require explicit authorization, and verify
-card compatibility before modifying installed applets.
-
-No test script should provision or expose wallet keys.
+No benchmark runner should provision or expose wallet keys.
+Applet installation and lifecycle management are separate, explicitly
+authorized operations; benchmark scripts must not perform them.
 
 ## Hardware preflight
 
@@ -16,7 +15,20 @@ No test script should provision or expose wallet keys.
 selects an already-installed ECC or PACE research applet.
 
 It does not install applets or run benchmark APDUs.
-See [hardware developer setup](../experiments/physical-benchmark-runner/README.md).
+The opt-in `physical_native_ecc.py` and `physical_pace.py` runners
+can transmit public test APDUs to separately verified research cards.
+See [hardware developer setup](../DEVELOPER-SETUP.md) and
+[hardware safety](../HARDWARE-SAFETY.md).
+
+## Offline validation
+
+```sh
+python3 -B RAILGUN/scripts/check_developer_setup.py
+python3 -B RAILGUN/scripts/benchmark.py
+python3 -B -m unittest discover -s RAILGUN/tests -p 'test_*.py' -v
+```
+
+These commands do not access a card.
 
 ## Poseidon T3 RSA-5 regression
 

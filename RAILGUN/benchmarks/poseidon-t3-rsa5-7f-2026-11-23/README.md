@@ -1,6 +1,6 @@
 # Physical JCOP3 Poseidon T3 — Barrett 7F
 
-Date: 2026-11-23
+**Date:** 2026-11-23
 
 ## Artifact identity
 

@@ -76,7 +76,7 @@ This is strong evidence that shared reduction work is the
 principal performance bottleneck, but RSA execution and reduction
 have not been independently timed.
 
-Replacing four general modular squarings inside BabyJubjub
+Replacing four general modular squarings inside BabyJubJub
 doubling may save approximately 0.33 seconds for comparable dense
 operands. This is an extrapolation, not a measured doubling result.
 
@@ -87,5 +87,7 @@ operands. This is an extrapolation, not a measured doubling result.
 - No constant-time or side-channel safety claims.
 - No full RAILGUN scalar multiplication was benchmarked.
 - No changes to the wallet or other installed research applets.
-- Next candidate: independently validated BN254-specific modular
-  reduction before physical performance comparison.
+- Historical next candidate at this checkpoint: independently validated
+  BN254-specific reduction. Subsequent Poseidon T3 Barrett research was
+  physically measured as the [7F variant](poseidon-t3-rsa5-7f-2026-11-23/README.md)
+  and did not improve full-hash latency relative to 7E.

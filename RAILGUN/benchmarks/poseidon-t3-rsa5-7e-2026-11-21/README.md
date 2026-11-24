@@ -1,12 +1,12 @@
 # JCOP3 Poseidon T3 RSA-5 — 7E Physical Baseline
 
-**Status:** Physically verified research baseline  
-**Device:** Experimental JCOP3 Keycard  
-**Reader:** HID OMNIKEY 3x21, PC/SC  
-**Package AID:** `F0424E3235347E00`  
-**Applet AID:** `F0424E3235347E01`  
-**CAP SHA-256:** `da9329e4682ffb132d092b128d283e3a50f0d461fd6a7bddda9cdaf564bfdfe6`  
-**Physical runner SHA-256:** `2e89eaf498f1a2516996a8c3a097684a86ea85469de520e0bf1312665d8d1c7b`
+- **Status:** Physically verified research baseline
+- **Device:** Experimental JCOP3 Keycard
+- **Reader:** HID OMNIKEY 3x21, PC/SC
+- **Package AID:** `F0424E3235347E00`
+- **Applet AID:** `F0424E3235347E01`
+- **CAP SHA-256:** `da9329e4682ffb132d092b128d283e3a50f0d461fd6a7bddda9cdaf564bfdfe6`
+- **Physical runner SHA-256:** `2e89eaf498f1a2516996a8c3a097684a86ea85469de520e0bf1312665d8d1c7b`
 
 ## Results
 

@@ -2,6 +2,11 @@
 
 **Source snapshot:** `keycard-shell-railgun-upstream`, `research/railgun-upstream-v1`, commit `e9cccc7d354727d2d4675f10d4386e0d74c5e664`; compare the RAILGUN commit sequence after common ancestor `7e38e45` with `upstream/master`. **Research context:** `kohaku-key` at `710beec` when this guide was prepared. **Status:** experimental computation and diagnostics, with no physical Shell results in the material inspected and no secure RAILGUN wallet implementation.
 
+**Snapshot boundary:** this guide analyzes a specific Keycard Shell branch
+as of its source snapshot. Its statements about unmeasured physical Shell
+operations are historical and do not supersede the independently verified
+JCOP3/JCOP4 card benchmarks or the [current RAILGUN roadmap](ROADMAP.md).
+
 This is a *study guide*, not a code audit or a promise of wallet security. Read the equations, trace the functions, and answer the exercises before relying on the model answers. Source references prefixed **S** are paths relative to the Shell repository at `e9cccc7`; **K** are relative to `kohaku-key`. A range such as `S:app/crypto/railgun_babyjubjub.c:185–269` names exact source lines. **[T]** means established mathematics or cryptography, **[P]** a protocol or reference-implementation claim, **[I]** an implementation observation, **[V]** a verified test result, and **[?]** an unmeasured or unresolved point. A passing host test proves only the properties that its assertions check.
 
 ## Executive architecture map
@@ -10,14 +15,14 @@ This is a *study guide*, not a code audit or a promise of wallet security. Read 
 flowchart LR
   H[Host / RAILGUN client<br/>chain data, candidate witness, proving?] -->|untrusted input / public data| Sh[Shell firmware<br/>STM32H573 Cortex-M33]
   Sh -->|existing ISO 7816 APDUs| K[Keycard secure element<br/>existing key operations]
-  Sh --> C[Research primitives<br/>BabyJubjub public mul<br/>Poseidon t6]
+  Sh --> C[Research primitives<br/>BabyJubJub public mul<br/>Poseidon T6]
   Sh --> B[BLAKE-512 software module]
   C --> HAL[hal_bn_* abstraction] --> PKA[STM32 PKA]
   Sh --> D[Diagnostic runner<br/>results + stack mark] --> UI[display / optional JSON QR]
   K -. no RAILGUN signing APDU established .-> C
 ```
 
-The solid computational path is in the PR. The dashed relationship is *absent*: the diagnostic never asks Keycard to derive, hold, or sign with a RAILGUN spending key. The firmware source list includes BabyJubjub, Poseidon, and BLAKE-512; the firmware diagnostic invokes modular multiplication, Poseidon, and public BabyJubjub multiplication. BLAKE-512 is covered by native tests and could be removed from a linked image if unused. `S:app/core/core_railgun_diagnostics.c:265–435`; `S:app/crypto/railgun_babyjubjub.h:1–34`; `S:app/crypto/railgun_poseidon_t6.h:1–24`; `S:tests/CMakeLists.txt:329–340`.
+The solid computational path is in the PR. The dashed relationship is *absent*: the diagnostic never asks Keycard to derive, hold, or sign with a RAILGUN spending key. The firmware source list includes BabyJubJub, Poseidon, and BLAKE-512; the firmware diagnostic invokes modular multiplication, Poseidon, and public BabyJubJub multiplication. BLAKE-512 is covered by native tests and could be removed from a linked image if unused. `S:app/core/core_railgun_diagnostics.c:265–435`; `S:app/crypto/railgun_babyjubjub.h:1–34`; `S:app/crypto/railgun_poseidon_t6.h:1–24`; `S:tests/CMakeLists.txt:329–340`.
 
 ### Five claims to keep separate
 
@@ -66,7 +71,7 @@ flowchart LR
 
 ### 1.1 Ethereum account versus RAILGUN private account
 
-An Ethereum externally owned account has a secp256k1 private key and public address; a transaction signature authorizes an EVM transaction and pays gas. A RAILGUN private balance is represented by encrypted notes and commitments in its privacy system. A RAILGUN spending credential authorizes spending those notes in the private circuit; viewing material supports finding/decrypting relevant notes. These are distinct credentials with distinct encodings and threat boundaries. A Keycard ECDSA signature over an Ethereum transaction cannot by itself satisfy a BabyJubjub EdDSA-Poseidon constraint. [R1][R2][R3] `K:docs/V3-PROPOSAL.md:10–34` correctly treats RAILGUN as a separate research track.
+An Ethereum externally owned account has a secp256k1 private key and public address; a transaction signature authorizes an EVM transaction and pays gas. A RAILGUN private balance is represented by encrypted notes and commitments in its privacy system. A RAILGUN spending credential authorizes spending those notes in the private circuit; viewing material supports finding/decrypting relevant notes. These are distinct credentials with distinct encodings and threat boundaries. A Keycard ECDSA signature over an Ethereum transaction cannot by itself satisfy a BabyJubJub EdDSA-Poseidon constraint. [R1][R2][R3] `K:docs/V3-PROPOSAL.md:10–34` correctly treats RAILGUN as a separate research track.
 
 Think of the data flow in two stages. To *receive*, a wallet determines note data, encrypts information for the recipient, and places a commitment on-chain. A commitment hides the underlying note values while binding them cryptographically. To *spend*, the prover privately supplies note secrets and Merkle authentication paths. The public statement includes an accepted Merkle root, output commitments, nullifiers, and bound transaction data; the circuit checks that the input notes exist, their owner can authorize the spend, and value rules hold. A nullifier marks a note as spent without revealing which commitment it corresponds to. Merkle roots commit to a set of leaves; the witness path proves inclusion by hashing siblings in order. The exact hash functions and field packing are version-specific, so inspect the circuit rather than using these generic words as a byte-level recipe. [R2][R4]
 
@@ -74,13 +79,13 @@ A zero-knowledge proof establishes the circuit relation without publishing the p
 
 ### 1.2 The trust and threat model
 
-Consider five adversarial surfaces: malicious host input; compromised Shell firmware; extraction from Shell RAM, debug or side channels; a malicious or replaced card; and tampered chain/relay data. A design must decide which component checks amounts, recipients, chain IDs, Merkle roots, contract addresses, fees, and proof-bound data before approval. If a private spending scalar never leaves a secure element, the Shell may perform public arithmetic without possessing it. If the scalar is exported to Shell RAM, Shell firmware, its update path, physical access, and any DMA/interrupt exposure become part of the secret's trusted computing base. No C implementation of arithmetic can undo that boundary change. A secure-element APDU that merely signs an Ethereum digest is insufficient unless the RAILGUN circuit accepts the resulting authorization; the cited Keycard `SIGN` page lists `P2=0x00` secp256k1 ECDSA and, since applet 4.0, `P2=0x03` BIP-340 Schnorr, but no BabyJubjub EdDSA-Poseidon capability. [R3] `S:AGENTS.md` prohibits inventing APDUs.
+Consider five adversarial surfaces: malicious host input; compromised Shell firmware; extraction from Shell RAM, debug or side channels; a malicious or replaced card; and tampered chain/relay data. A design must decide which component checks amounts, recipients, chain IDs, Merkle roots, contract addresses, fees, and proof-bound data before approval. If a private spending scalar never leaves a secure element, the Shell may perform public arithmetic without possessing it. If the scalar is exported to Shell RAM, Shell firmware, its update path, physical access, and any DMA/interrupt exposure become part of the secret's trusted computing base. No C implementation of arithmetic can undo that boundary change. A secure-element APDU that merely signs an Ethereum digest is insufficient unless the RAILGUN circuit accepts the resulting authorization; the cited Keycard `SIGN` page lists `P2=0x00` secp256k1 ECDSA and, since applet 4.0, `P2=0x03` BIP-340 Schnorr, but no BabyJubJub EdDSA-Poseidon capability. [R3] `S:AGENTS.md` prohibits inventing APDUs.
 
 **Possible future architecture, conditional:** Keycard might retain a suitably derived RAILGUN spending key and implement the required authorization primitive; Shell could compute public field operations, display a review, and exchange bounded data; a host or another prover could perform heavy proving under an explicit witness-sharing policy. This would require a documented Keycard applet/interface change, derivation and recovery design, input validation, constant-time secret arithmetic, display binding, and physical measurement. The PR decides none of those. The experiment answers a narrower question: *can this MCU/HAL perform useful compatible computations with acceptable device cost?*
 
 ### 1.3 A concrete V2 JoinSplit reading
 
-The inspected RAILGUN **V2** JoinSplit circuit makes `merkleRoot`, `boundParamsHash`, input nullifiers, and output commitments public. Its witness includes a BabyJubjub spending public key and EdDSA-Poseidon signature, nullifying key, input note randomness/value/leaf index/Merkle siblings, and output note data. The circuit hashes its public signals for signature authorization; derives a master public key from spending-public-key coordinates and nullifying key; derives each input note public key from that master key and note randomness; checks note commitments and Merkle inclusion; derives each nullifier as `Poseidon(nullifyingKey,leafIndex)`; checks output commitments and balances input/output value for the constrained token. This is a more useful mental model than “the card signs a private transaction”: the signature, witness and proof have distinct roles and data. [R2][R21][R22]
+The inspected RAILGUN **V2** JoinSplit circuit makes `merkleRoot`, `boundParamsHash`, input nullifiers, and output commitments public. Its witness includes a BabyJubJub spending public key and EdDSA-Poseidon signature, nullifying key, input note randomness/value/leaf index/Merkle siblings, and output note data. The circuit hashes its public signals for signature authorization; derives a master public key from spending-public-key coordinates and nullifying key; derives each input note public key from that master key and note randomness; checks note commitments and Merkle inclusion; derives each nullifier as `Poseidon(nullifyingKey,leafIndex)`; checks output commitments and balances input/output value for the constrained token. This is a more useful mental model than “the card signs a private transaction”: the signature, witness and proof have distinct roles and data. [R2][R21][R22]
 
 The inspected engine derives spending and viewing nodes from separate hardened paths (`m/44'/1984'/0'/0'/index'` and `m/420'/1984'/0'/0'/index'` in the current source), builds note data and paths, asks the wallet to sign public inputs, and only then calls the prover with private inputs. The viewing key supports scanning/decryption and is therefore privacy-sensitive even though it cannot spend. These are **versioned implementation facts**, not a proposal to reuse Keycard's Ethereum derivation path. Current engine code also has V3 branches; the cited hand-written JoinSplit is specifically V2, so do not project its exact wire format onto every RAILGUN version. [R13][R14][R23][R25]
 
@@ -88,11 +93,11 @@ The inspected engine derives spending and viewing nodes from separate hardened p
 
 ### 2.1 Components and security boundary
 
-A JavaCard secure element executes applets inside a chip designed to keep key material within its security boundary. The host speaks to applets through APDUs (command and response byte sequences); the physical Shell provides smartcard transport and UI. An APDU is an interface, not proof that a particular key type or algorithm is supported. The cited Keycard `SIGN` page says the applet supports `P2=0x00` secp256k1 ECDSA and, since 4.0, `P2=0x03` BIP-340 Schnorr; neither is BabyJubjub EdDSA-Poseidon. Any proposal for BabyJubjub EdDSA would need a separately specified, reviewed applet command or a different custody design. [R3][R5] `S:app/iso7816/smartcard.c`; `S:app/keycard/`; `S:AGENTS.md:166–174`.
+A JavaCard secure element executes applets inside a chip designed to keep key material within its security boundary. The host speaks to applets through APDUs (command and response byte sequences); the physical Shell provides smartcard transport and UI. An APDU is an interface, not proof that a particular key type or algorithm is supported. The cited Keycard `SIGN` page says the applet supports `P2=0x00` secp256k1 ECDSA and, since 4.0, `P2=0x03` BIP-340 Schnorr; neither is BabyJubJub EdDSA-Poseidon. Any proposal for BabyJubJub EdDSA would need a separately specified, reviewed applet command or a different custody design. [R3][R5] `S:app/iso7816/smartcard.c`; `S:app/keycard/`; `S:AGENTS.md:166–174`.
 
-A command APDU has a class byte (`CLA`), instruction byte (`INS`), parameters (`P1`,`P2`), optional data/length, and an optional expected response length; the response carries data and status words. For example, the *existing* Keycard `SIGN` reference describes a 32-byte hash and derivation path, requires an opened secure channel and verified PIN, and lists ECDSA and applet-4.0 Schnorr choices. It does not describe BabyJubjub EdDSA-Poseidon. This illustrates why a proposal cannot simply label a new byte sequence a “RAILGUN APDU.” [R3][R5][R28] `S:AGENTS.md:166–174`.
+A command APDU has a class byte (`CLA`), instruction byte (`INS`), parameters (`P1`,`P2`), optional data/length, and an optional expected response length; the response carries data and status words. For example, the *existing* Keycard `SIGN` reference describes a 32-byte hash and derivation path, requires an opened secure channel and verified PIN, and lists ECDSA and applet-4.0 Schnorr choices. It does not describe BabyJubJub EdDSA-Poseidon. This illustrates why a proposal cannot simply label a new byte sequence a “RAILGUN APDU.” [R3][R5][R28] `S:AGENTS.md:166–174`.
 
-The Shell targets STM32H573VITX, a Cortex-M33 MCU with 2 MiB flash and 640 KiB RAM per this repository's development guide. It has a PKA, RNG, HASH, and AES peripherals. Cortex-M33 can execute ordinary C arithmetic; the PKA accelerates the modular operations exposed by the HAL. This is not a generic BabyJubjub or Poseidon engine: modular additions, multiplications, and inversions in the Poseidon and projective formulas cross the `hal_bn_*` boundary, which has setup and polling overhead. `S:AGENTS.md:6–24`; `S:app/crypto/railgun_poseidon_t6.c:34–113`; `S:app/crypto/railgun_babyjubjub.c:42–96`.
+The Shell targets STM32H573VITX, a Cortex-M33 MCU with 2 MiB flash and 640 KiB RAM per this repository's development guide. It has a PKA, RNG, HASH, and AES peripherals. Cortex-M33 can execute ordinary C arithmetic; the PKA accelerates the modular operations exposed by the HAL. This is not a generic BabyJubJub or Poseidon engine: modular additions, multiplications, and inversions in the Poseidon and projective formulas cross the `hal_bn_*` boundary, which has setup and polling overhead. `S:AGENTS.md:6–24`; `S:app/crypto/railgun_poseidon_t6.c:34–113`; `S:app/crypto/railgun_babyjubjub.c:42–96`.
 
 Shell firmware uses FreeRTOS static allocation; the repository forbids `malloc` and uses fixed globals, stack, and static pools. The flash map allocates each 1 MiB bank as 32 KiB write-protected bootloader, 608 KiB application, and 384 KiB data. The PR author reports an unsigned ELF with 642,576 bytes of static data/BSS and 12,784 bytes of unallocated static RAM at that build; those figures were not independently reproduced here and are not measured runtime stack headroom. `S:docs/FLASHMAP.md:13–25`; [R8]. The app's task split matters: the core task runs the diagnostic while UI interaction is mediated through the UI task. “640 KiB RAM” is device capacity, not available diagnostic stack. A high-water mark gives the *minimum remaining words observed so far in that task*, and conversion to bytes multiplies by `sizeof(StackType_t)`; it is not a full memory profile, a guarantee against future inputs, or a peak stack trace for another task. `S:AGENTS.md:26–61`; `S:app/core/core_railgun_diagnostics.c:212–217`; `S:app/FreeRTOSConfig.h`.
 
@@ -101,8 +106,8 @@ Firmware authenticity and boot behavior must be discussed at the level actually 
 | Work item | Keycard secure element | Shell | Host / other prover |
 |---|---|---|---|
 | Existing Ethereum secp256k1 authorization | Supported through documented Keycard operations [R3] | Transport, review, and orchestration | Prepare/broadcast transaction |
-| RAILGUN BabyJubjub private signing | No documented current Keycard API established here | No signing in this PR; secret use would change trust model | Software can compute it, exposing key in its trust domain |
-| Public BabyJubjub multiplication / Poseidon | Constrained by applet API, memory, and performance | Experimental HAL-backed code exists | Reference computation and testing |
+| RAILGUN BabyJubJub private signing | No documented current Keycard API established here | No signing in this PR; secret use would change trust model | Software can compute it, exposing key in its trust domain |
+| Public BabyJubJub multiplication / Poseidon | Constrained by applet API, memory, and performance | Experimental HAL-backed code exists | Reference computation and testing |
 | BLAKE-512 | No current APDU established | C implementation compiled; native tests | Reference implementation |
 | Merkle witness / proof generation | Likely beyond present applet interface; measure rather than assume | Unimplemented and unmeasured | Existing RAILGUN client/prover path; private witness exposure must be stated |
 
@@ -116,18 +121,18 @@ If a proposed flow says “derive the spending scalar on Keycard, then send it t
 
 For a prime `p`, the field `F_p` contains `0,...,p−1`; operations reduce modulo `p`. With `p=17`, `15+7=22≡5`, `3−8=−5≡12`, and `5×7=35≡1`. Thus `5^{-1}=7` because `5×7≡1`. Division by nonzero `b` means multiplying by `b^{-1}`. Zero has no inverse. The “canonical” integer representative is the unique member of `0,...,p−1`; byte strings at or above `p` need either explicit rejection or a documented reduction rule. Reducing where a protocol expects rejection can create alternate encodings of the same mathematical value.
 
-A 256-bit integer is just 32 bytes plus an agreed byte order. `0x0102` is bytes `01 02` in big-endian and `02 01` in little-endian. The RAILGUN module APIs pass 32-byte *big-endian* field elements to `hal_bn_*`; BabyJubjub converts them into `bignum256` with `bn_read_be` and writes them with `bn_write_be`. Its curve point API rejects `x≥Fr` or `y≥Fr`; Poseidon instead reduces each public input modulo `Fr` in a repeated-subtraction loop. The synthetic signing test explicitly packs a small message in little-endian for BLAKE nonce hashing and big-endian for Poseidon field input. Mixing those conventions changes a signature. `S:app/crypto/railgun_babyjubjub.c:42–59,185–214`; `S:app/crypto/railgun_poseidon_t6.c:17–32,64–77`; `S:tests/test_railgun_babyjubjub.c:760–790`.
+A 256-bit integer is just 32 bytes plus an agreed byte order. `0x0102` is bytes `01 02` in big-endian and `02 01` in little-endian. The RAILGUN module APIs pass 32-byte *big-endian* field elements to `hal_bn_*`; BabyJubJub converts them into `bignum256` with `bn_read_be` and writes them with `bn_write_be`. Its curve point API rejects `x≥Fr` or `y≥Fr`; Poseidon instead reduces each public input modulo `Fr` in a repeated-subtraction loop. The synthetic signing test explicitly packs a small message in little-endian for BLAKE nonce hashing and big-endian for Poseidon field input. Mixing those conventions changes a signature. `S:app/crypto/railgun_babyjubjub.c:42–59,185–214`; `S:app/crypto/railgun_poseidon_t6.c:17–32,64–77`; `S:tests/test_railgun_babyjubjub.c:760–790`.
 
 ### 3.2 BN254 has two different large primes
 
-The code's modulus is BN254's scalar field `Fr` (also the coordinate field of BabyJubjub):
+The code's modulus is BN254's scalar field `Fr` (also the coordinate field of BabyJubJub):
 
 ```text
 Fr = 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
    = 21888242871839275222246405745257275088548364400416034343698204186575808495617
 ```
 
-Do not confuse this with the BN254 base field `Fq` used for points on the pairing curve; their moduli are different. BabyJubjub is an Edwards curve *over `Fr`*. The modular HAL accepts the explicit modulus argument, which is why the modulus bytes matter at every call. [R6] `S:app/crypto/railgun_babyjubjub.c:18–23`; `S:app/crypto/railgun_poseidon_t6.c:10–15`; `S:app/core/core_railgun_diagnostics.c:16–18`.
+Do not confuse this with the BN254 base field `Fq` used for points on the pairing curve; their moduli are different. BabyJubJub is an Edwards curve *over `Fr`*. The modular HAL accepts the explicit modulus argument, which is why the modulus bytes matter at every call. [R6] `S:app/crypto/railgun_babyjubjub.c:18–23`; `S:app/crypto/railgun_poseidon_t6.c:10–15`; `S:app/core/core_railgun_diagnostics.c:16–18`.
 
 For 256-bit inputs, addition may require a 257th carry bit and multiplication a 512-bit intermediate before reduction. Modular subtraction with `a<b` adds the modulus after the borrow; inversion must reject zero. The existing `bignum256` type is a storage/conversion vehicle here, not the field engine: the test source warns its direct modular routines assume moduli nearer 256 bits, while `Fr` is a 254-bit modulus. The explicit-modulus HAL avoids that mismatch. `S:tests/test_railgun_babyjubjub.c:66–90`; `S:app/crypto/railgun_babyjubjub.c:42–96`.
 
@@ -143,13 +148,13 @@ A toy check with `p=17`, `R=32`, and `R^{-1}≡8`: `5̄=5·32 mod17=7`, `7̄=7·
 
 Useful test boundaries are `0`, `1`, `p−1`, `p−2`, and the largest 256-bit input. In the actual branch `(Fr−1)²≡1`, `2(Fr−1)≡Fr−2`, and `0·(Fr−1)=0` are three target diagnostic vectors. These cover high limbs and reduction behaviors that `7×11=77` does not. `S:app/core/core_railgun_diagnostics.c:20–49,265–342`.
 
-A function can be mathematically correct and still leak a secret through time, power, cache, branches, or fault behavior. The public BabyJubjub scalar loop skips leading zero bits and conditionally adds on set bits; Poseidon input reduction takes a data-dependent number of subtractions; an inversion may also be variable time. Such behavior is acceptable only after classifying the operands as genuinely public and guarding their path to the function. Secret signing would require a separate constant-time review, subgroup/point policy, key erasure, nonce correctness, and fault resistance. `S:app/crypto/railgun_babyjubjub.c:228–255`; `S:app/crypto/railgun_poseidon_t6.c:17–32`.
+A function can be mathematically correct and still leak a secret through time, power, cache, branches, or fault behavior. The public BabyJubJub scalar loop skips leading zero bits and conditionally adds on set bits; Poseidon input reduction takes a data-dependent number of subtractions; an inversion may also be variable time. Such behavior is acceptable only after classifying the operands as genuinely public and guarding their path to the function. Secret signing would require a separate constant-time review, subgroup/point policy, key erasure, nonce correctness, and fault resistance. `S:app/crypto/railgun_babyjubjub.c:228–255`; `S:app/crypto/railgun_poseidon_t6.c:17–32`.
 
-## Part 4 — BabyJubjub
+## Part 4 — BabyJubJub
 
 ### 4.1 The group, from equation to subgroup
 
-BabyJubjub is the twisted Edwards curve over `Fr`
+BabyJubJub is the twisted Edwards curve over `Fr`
 
 `168700·x² + y² = 1 + 168696·x²y² (mod Fr)`.
 
@@ -161,7 +166,7 @@ Scalar multiplication `[n]P` repeats this group operation; doubling is `P+P`. Th
 
 The order-two point `T=(0,Fr−1)=(0,−1)` is on the curve: with `x=0`, both sides become `y²=1`. Its square under the group law is `T+T=(0,(−1)(−1))=(0,1)=O`. Consequently `[1]T=T`, `[2]T=O`, and any odd scalar returns `T`. Since `l` is odd, `[l]T=T≠O`: it is outside the prime subgroup. Checking only the curve equation therefore does not prove subgroup membership. A candidate subgroup check for a valid point is `[l]P=O`, plus protocol-specific rejection of the identity and any other forbidden encoding. Cofactor clearing `[8]P` has different semantics and cannot be substituted blindly for validation. [R6]
 
-A miniature version uses `F₁₇`, `a=1`, `d=3` and `P=(1,0)`. It satisfies `x²+y²=1+3x²y²`; the affine denominators are 1 for the additions here. `2P=(0,16)`, `3P=(16,0)`, and `4P=(0,1)`. This shows that even an on-curve point can have small order; the large BabyJubjub field changes the numbers, not the issue.
+A miniature version uses `F₁₇`, `a=1`, `d=3` and `P=(1,0)`. It satisfies `x²+y²=1+3x²y²`; the affine denominators are 1 for the additions here. `2P=(0,16)`, `3P=(16,0)`, and `4P=(0,1)`. This shows that even an on-curve point can have small order; the large BabyJubJub field changes the numbers, not the issue.
 
 ### 4.2 Trace the exact C path
 
@@ -184,7 +189,7 @@ The PR author reports that Daybreak Blue noticed this on-curve/subgroup gap, the
 
 Commit `e9cccc7` adds `test_firmware_public_mul_accepts_low_order_point`: it constructs `Fr−1` as `y`, calls the firmware public API with scalar 1 and checks that it returns `T`, then scalar 2 and checks that it returns `O`. This is a precise *behavior regression*. It does **not** reject low-order points, test every point of order dividing 8, exercise a private scalar, prove security for untrusted inputs, or execute physical PKA. The test's own comment says it does not endorse security-sensitive use. `S:tests/test_railgun_babyjubjub.c:893–937`; `git show e9cccc7`.
 
-## Part 5 — Poseidon t6
+## Part 5 — Poseidon T6
 
 ### 5.1 Why this hash and what the parameters mean
 
@@ -192,7 +197,7 @@ A conventional byte hash such as SHA-512 spends many Boolean/bit operations insi
 
 Here **t6** means a six-element state over BN254 `Fr`. This one-call API puts five input field elements in lanes 1–5 and zero in lane 0, conventionally describing a rate of five and capacity of one for this invocation. It executes a 68-round permutation: eight full rounds (first four and last four), 60 partial rounds, exponent-5 S-box, and a dense `6×6` MDS matrix. It returns lane 0. This function has no streaming absorb/squeeze interface and must not be described as a general arbitrary-length sponge. `S:app/crypto/railgun_poseidon_t6.c:7–15,64–116`; [R9].
 
-For one round, write the six lanes as vector `s`. First add six constants: `uᵢ=sᵢ+C[r,i] (mod Fr)`. Then apply `uᵢ←uᵢ⁵` to all lanes in a full round, or only lane 0 in a partial round. Then mix: `s'ᵢ=Σⱼ M[i,j]uⱼ (mod Fr)`. The matrix must be the exact compatible MDS matrix; replacing it with any invertible matrix changes every digest. The constants file contains `poseidon_t6_mds[6][6][32]` and `poseidon_t6_rc[68][6][32]` as big-endian field bytes, with a provenance comment identifying `kohaku-rs`/`poseidon-rust` `circom_t6`. The first MDS element is `M[0,0]=0x124666f80561ed5916f2f070b1bd248c6d53f44d273d956a0c87b917692a4d18`; the first round constant is `C[0,0]=0x1448614598e00f98e7ae7dea45fbd83bd968653ef8390cde2e86b706ad40c651`. Those concrete bytes fix the parameter set more clearly than a generic “Poseidon t6” label. The checked vectors establish selected outputs, not an exhaustive proof of how every constant was generated. `S:app/crypto/railgun_poseidon_t6_constants.h:1–11,60–68`.
+For one round, write the six lanes as vector `s`. First add six constants: `uᵢ=sᵢ+C[r,i] (mod Fr)`. Then apply `uᵢ←uᵢ⁵` to all lanes in a full round, or only lane 0 in a partial round. Then mix: `s'ᵢ=Σⱼ M[i,j]uⱼ (mod Fr)`. The matrix must be the exact compatible MDS matrix; replacing it with any invertible matrix changes every digest. The constants file contains `poseidon_t6_mds[6][6][32]` and `poseidon_t6_rc[68][6][32]` as big-endian field bytes, with a provenance comment identifying `kohaku-rs`/`poseidon-rust` `circom_t6`. The first MDS element is `M[0,0]=0x124666f80561ed5916f2f070b1bd248c6d53f44d273d956a0c87b917692a4d18`; the first round constant is `C[0,0]=0x1448614598e00f98e7ae7dea45fbd83bd968653ef8390cde2e86b706ad40c651`. Those concrete bytes fix the parameter set more clearly than a generic “Poseidon T6” label. The checked vectors establish selected outputs, not an exhaustive proof of how every constant was generated. `S:app/crypto/railgun_poseidon_t6_constants.h:1–11,60–68`.
 
 ### 5.2 One invocation, all the way to the HAL
 
@@ -239,7 +244,7 @@ RAILGUN V2's JoinSplit circuit verifies a private EdDSA-Poseidon signature over 
 
 ### 8.1 Follow a modular multiplication
 
-The cryptographic modules call the existing HAL interface with 32-byte big-endian operands and explicit modulus; they do not call PKA registers directly. BabyJubjub uses `field_binary → hal_bn_add_mod/sub_mod/mul_mod` or `field_inv → hal_bn_inv_mod`. Poseidon uses `add_into/sbox5/MDS loop → hal_bn_add_mod/mul_mod`. The STM32 target implementation is inherited upstream code, not a new PKA driver in this PR. `S:app/hal.h:165–179`; `S:app/crypto/railgun_babyjubjub.c:42–96`; `S:app/crypto/railgun_poseidon_t6.c:34–113`; `S:stm32/Core/Src/stm32_crypto.c:334–345,479–598`.
+The cryptographic modules call the existing HAL interface with 32-byte big-endian operands and explicit modulus; they do not call PKA registers directly. BabyJubJub uses `field_binary → hal_bn_add_mod/sub_mod/mul_mod` or `field_inv → hal_bn_inv_mod`. Poseidon uses `add_into/sbox5/MDS loop → hal_bn_add_mod/mul_mod`. The STM32 target implementation is inherited upstream code, not a new PKA driver in this PR. `S:app/hal.h:165–179`; `S:app/crypto/railgun_babyjubjub.c:42–96`; `S:app/crypto/railgun_poseidon_t6.c:34–113`; `S:stm32/Core/Src/stm32_crypto.c:334–345,479–598`.
 
 For `hal_bn_mul_mod(a,b,m,out)` the source sequence is:
 
@@ -258,7 +263,7 @@ The hardware's Montgomery product divides by `R` modulo `m`, so `(aR)·b·R⁻¹
 
 `PKA_Process` selects a mode, starts the peripheral, polls for completion, handles timeout and hardware error flags, then restores ready state. Its per-operation timeout is `PKA_TIMEOUT=500` ms in the inherited HAL; that is distinct from the diagnostic's many-second soft budget. A bad call returns `HAL_FAIL` up the cryptographic stack. `MX_PKA_Init` is called during `hal_init` before FreeRTOS tasks begin. Host tests bypass this register, RAM, clock and polling path entirely. `S:stm32/Core/Inc/stm32_internal.h:13–15`; `S:stm32/Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_pka.c:1603–1610,1987–2002,2262–2317`; `S:stm32/Core/Src/stm32.c:84–100`.
 
-The PKA has modular arithmetic and supported ECC modes. BabyJubjub is an Edwards curve; this implementation composes its point formula from modular field operations rather than invoking the existing `hal_ec_point_multiply`, whose curve interface is for the firmware's other curve family. ST's reference manual says Edwards curves are not directly accelerated as a point operation by this PKA. `S:stm32/Core/Src/stm32_crypto.c:400–424`; [R15].
+The PKA has modular arithmetic and supported ECC modes. BabyJubJub is an Edwards curve; this implementation composes its point formula from modular field operations rather than invoking the existing `hal_ec_point_multiply`, whose curve interface is for the firmware's other curve family. ST's reference manual says Edwards curves are not directly accelerated as a point operation by this PKA. `S:stm32/Core/Src/stm32_crypto.c:400–424`; [R15].
 
 ### 8.2 Original benchmark and the follow-up
 
@@ -277,8 +282,8 @@ flowchart TD
   E --> F[core_railgun_diagnostics_run]
   F --> G[bn64: 64 modular products]
   G -->|pass| H[bnedge: three boundary products]
-  H -->|pass| I[p6: Poseidon t6]
-  I -->|pass| J[bj2: public BabyJubjub doubling]
+  H -->|pass| I[p6: Poseidon T6]
+  I -->|pass| J[bj2: public BabyJubJub doubling]
   J -->|pass| K{Confirm full-width?}
   K -->|yes| L[bj256: public full-width multiplication]
   K -->|no / skipped| M[finish_report: stack mark + export prompt]
@@ -310,7 +315,7 @@ The project has a firmware signature verification path: bootloader code hashes t
 |---|---|---|
 | `bn64` | 64 repeated `7×11 mod Fr`; every result must equal 77. | One aggregate tick window; early failure stops later rows. |
 | `bnedge` | The three full-width results from Part 8 must exactly match fixed arrays. | Separate tick window; early failure stops later rows. |
-| `p6` | Poseidon t6 on `(1,2,3,4,5)` must equal `0dab9449e4a1398a15224c0b15a49d598b2174d305a316c918125f8feeb123c0`. | One hash, soft 120 s limit. |
+| `p6` | Poseidon T6 on `(1,2,3,4,5)` must equal `0dab9449e4a1398a15224c0b15a49d598b2174d305a316c918125f8feeb123c0`. | One hash, soft 120 s limit. |
 | `bj2` | `[2]Base8` must match stored `double_x,double_y`. | One public multiplication, soft 30 s limit. |
 | `bj256` | With user consent, multiply Base8 by `0ba9f4de43d3c912590c6ab4f8e7f3c0c0229e25c7dd052203b928fcdc87dfba`; compare x=`234056d968baf183fe8d237d496d1c04188220cd33e8f8d14df9b84479736b20`, y=`2624393fad9b71c04b3b14d8ac45202dbb4eaff4c2d1350c9453fc08d18651fe`. | One public multiplication, soft 180 s limit; user decline yields `skipped`. |
 
@@ -338,7 +343,7 @@ These inputs, expected arrays, budget initialization and comparisons are `S:app/
 | `S:tests/test_railgun_babyjubjub.c:802–954` | Production public API against seven fixed vectors, invalid/null inputs, accepted order-two point for scalars 1 and 2, checkpoint abort. | No subgroup enforcement, arbitrary input proof or silicon. |
 | `S:tests/test_railgun_poseidon.c:33–179` | Exact t6 digests, field reduction equivalence, null failures, checkpoint abort. | Physical PKA and exhaustive constant-table proof. |
 | `S:tests/test_railgun_blake512.c:15–154` | Exact empty/abc/key/nonce digests, padding boundaries, null failures. | Physical signing path and stack/timing measurements. |
-| `S:tests/test_hal_pka.c:44–259` | Host stand-in's secp256k1 sign/verify/point operations plus bignum add/sub/compare/modular/inversion vectors, including multiply-back checks. | Target PKA register path; secp256k1 tests do not establish BabyJubjub point acceleration. |
+| `S:tests/test_hal_pka.c:44–259` | Host stand-in's secp256k1 sign/verify/point operations plus bignum add/sub/compare/modular/inversion vectors, including multiply-back checks. | Target PKA register path; secp256k1 tests do not establish BabyJubJub point acceleration. |
 
 The RAILGUN tests compile real `app/crypto` sources but replace hardware with `tests/host/hal_pka_host.c`. That stand in performs byte-array `Fr` arithmetic, including binary double-and-add multiplication and Fermat inversion, and explicitly does not model silicon timing/edge behavior. Its canonical-input requirements can differ from target behavior. `S:tests/CMakeLists.txt:3–8,17–40,329–340`; `S:tests/host/hal_pka_host.c:473–681`. Some prose in `S:tests/README.md:72–86` predates the added host curve seam; use the current build/source/test assertions for actual coverage.
 
@@ -364,7 +369,7 @@ On **2026-11-11**, I configured an out-of-tree native build with AppleClang and 
 | Host-assisted computation | Existing clients can scan and prove with ample CPU/RAM. | Likely easiest for large proving artifacts and chain synchronization. | A host that receives private notes/witnesses can read them; a card signature alone does not undo this exposure. |
 | Dedicated cryptographic coprocessor | Could isolate keys or accelerate custom field arithmetic, depending on its actual API. | Custom silicon/board integration and transport overhead; no such device evaluated here. | Formal command contract, secure channel, independent validation, supply chain and lifecycle. |
 
-A Ledger comparison must be precise: Ledger's official architecture places apps and private keys in its secure element, and the RAILGUN Community has an **experimental sideloaded Ledger app** for BabyJubjub signing. That is a relevant feasibility example, not evidence that generic Ledger Ethereum signing suffices or that the app is broadly supported/audited. [R17][R18] Trezor Safe device architecture uses the main MCU with secure-element involvement in PIN-bound key protection; its own architecture documentation says its PKA is currently not used. I found no primary source establishing production RAILGUN signing on Trezor, so this comparison is about boundaries, not a support claim. [R19][R20]
+A Ledger comparison must be precise: Ledger's official architecture places apps and private keys in its secure element, and the RAILGUN Community has an **experimental sideloaded Ledger app** for BabyJubJub signing. That is a relevant feasibility example, not evidence that generic Ledger Ethereum signing suffices or that the app is broadly supported/audited. [R17][R18] Trezor Safe device architecture uses the main MCU with secure-element involvement in PIN-bound key protection; its own architecture documentation says its PKA is currently not used. I found no primary source establishing production RAILGUN signing on Trezor, so this comparison is about boundaries, not a support claim. [R19][R20]
 
 The branch can inform: whether fixed `Fr` operations and point formulas produce compatible outputs, whether target PKA handles high limbs, how long public computations take, how much core stack they consume, and whether a QR report is usable. It cannot decide: custody/recovery of RAILGUN spending and viewing keys, safe witness placement, transaction semantics, a secure Keycard APDU, proving performance, secret side-channel resistance, or production readiness. Those require separate design documents and experiments.
 
@@ -389,13 +394,13 @@ Do not treat a passing benchmark as proof that Shell can hold a spending key saf
 Work these without the solutions, then trace the cited source. Use paper or a short local script for arithmetic; do not infer security properties from a matching output.
 
 1. **Field basics.** In `F₁₇`, compute `15+7`, `3−8`, `5×7`, and `5⁻¹`. Explain why `0⁻¹` does not exist.
-2. **Three moduli.** Name the roles of BN254 base-field modulus, BN254 scalar-field `Fr`, and BabyJubjub subgroup order `l`. Which one is passed into the branch's `hal_bn_mul_mod` for Poseidon?
-3. **Canonical bytes.** What happens when the BabyJubjub API receives `x=Fr`? What happens when Poseidon receives an input `Fr+1`? Why might a protocol require one policy rather than the other?
+2. **Three moduli.** Name the roles of BN254 base-field modulus, BN254 scalar-field `Fr`, and BabyJubJub subgroup order `l`. Which one is passed into the branch's `hal_bn_mul_mod` for Poseidon?
+3. **Canonical bytes.** What happens when the BabyJubJub API receives `x=Fr`? What happens when Poseidon receives an input `Fr+1`? Why might a protocol require one policy rather than the other?
 4. **Endian conversion.** Encode integer `0x0102` in two bytes, both orders. For synthetic signing message `1`, write the first four nonce-message bytes and last four bytes of the 32-byte Poseidon message field input.
 5. **Montgomery toy.** With `p=17`, `R=32`, compute `R⁻¹ mod17`, Montgomery encodings of 5 and 7, their Montgomery product, and conversion of that result back.
 6. **Full-width PKA boundaries.** Derive expected results for `(Fr−1)²`, `2(Fr−1)`, and `0(Fr−1)` modulo `Fr`. State what the original `7×11` vector misses.
 7. **Small Edwards group.** On `x²+y²=1+3x²y²` over `F₁₇`, let `P=(1,0)`. Check the curve equation and compute `2P`, `3P`, `4P` using the affine formulas.
-8. **Low-order prediction.** Show algebraically why `T=(0,Fr−1)` is on BabyJubjub and why `[1]T=T`, `[2]T=O`, `[3]T=T`. Would checking only `point_on_curve` reject it?
+8. **Low-order prediction.** Show algebraically why `T=(0,Fr−1)` is on BabyJubJub and why `[1]T=T`, `[2]T=O`, `[3]T=T`. Would checking only `point_on_curve` reject it?
 9. **Scalar loop.** Trace the branch's MSB-first algorithm for scalar binary `101` on any valid public base `P`: list accumulator values after each set/clear bit. How many doublings and additions occur after the first set bit?
 10. **Projective conversion.** In `F₁₇`, represent affine `P=(1,0)` as `(X,Y,Z)=(4,0,4)`. Find `Z⁻¹` and convert back. Why is one final inverse preferable to one per addition?
 11. **One Poseidon round.** Let a *toy* post-constant-addition six-lane state in `F₁₇` be `(1,2,3,4,5,6)`. In a full round compute all six `x⁵ mod17` values. If an illustrative mixing row has six coefficients equal to 1, calculate its output. Do not call this the actual t6 MDS matrix.
@@ -403,15 +408,15 @@ Work these without the solutions, then trace the cited source. Use paper or a sh
 13. **Signature equation.** Given `A=[s/8]Base8`, `R8=[r]Base8`, and `S=r+c s mod l`, derive the verifier equation. Why is `R8+cA` insufficient?
 14. **Trace a hardware call.** List the three PKA operations in `hal_bn_mul_mod(a,b,Fr,out)`, describe the representation after each, and identify the byte-to-PKA-word conversion boundary.
 15. **Read a report.** Interpret `{"bn64":{"s":"pass","ms":8},"bnedge":{"s":"fail","ms":1},"p6":{"s":"not_run","ms":null}}`. Is `8 ms` a single PKA operation latency? Is the JSON itself attested?
-16. **Security boundary.** A design exports a BabyJubjub private spending scalar from Keycard to Shell, signs there, and sends only a proof to the host. Name at least four new trust or leakage questions; then explain why moving proof generation to the host can still expose private information.
+16. **Security boundary.** A design exports a BabyJubJub private spending scalar from Keycard to Shell, signs there, and sends only a proof to the host. Name at least four new trust or leakage questions; then explain why moving proof generation to the host can still expose private information.
 17. **Test classification.** A native ASan/UBSan run passes every RAILGUN vector; an ARM ELF links; a physical Shell times out on Poseidon. What does each observation establish, and what remains unknown about PKA correctness?
 18. **Call graph reading.** Starting at `app/ui/menu.c`, write the real function path to QR encoding. Mark the point where computation stops being timed and the point where the core waits for UI.
 
 ### Solutions and explanations
 
 1. `5`, `12`, `1`, and `7`; `5·7=35≡1`. An inverse of zero would require `0·x=1`, impossible in any field.
-2. BN254 base field is for coordinates of the pairing curve; `Fr` is its scalar field and the coordinate field of BabyJubjub/Poseidon here; `l` is BabyJubjub's prime subgroup order and signature scalar modulus. Poseidon passes `Fr`. `S:app/crypto/railgun_poseidon_t6.c:10–15,39–55`; [R6][R24].
-3. BabyJubjub rejects `x≥Fr` before reading it as a point. Poseidon reduces `Fr+1` to 1, as its public-input compatibility test verifies. A canonical protocol encoding avoids two byte strings naming the same point/value; a reference hash API may explicitly define reduction. `S:app/crypto/railgun_babyjubjub.c:206–209`; `S:app/crypto/railgun_poseidon_t6.c:17–32`; `S:tests/test_railgun_poseidon.c:110–147`.
+2. BN254 base field is for coordinates of the pairing curve; `Fr` is its scalar field and the coordinate field of BabyJubJub/Poseidon here; `l` is BabyJubJub's prime subgroup order and signature scalar modulus. Poseidon passes `Fr`. `S:app/crypto/railgun_poseidon_t6.c:10–15,39–55`; [R6][R24].
+3. BabyJubJub rejects `x≥Fr` before reading it as a point. Poseidon reduces `Fr+1` to 1, as its public-input compatibility test verifies. A canonical protocol encoding avoids two byte strings naming the same point/value; a reference hash API may explicitly define reduction. `S:app/crypto/railgun_babyjubjub.c:206–209`; `S:app/crypto/railgun_poseidon_t6.c:17–32`; `S:tests/test_railgun_poseidon.c:110–147`.
 4. Big-endian `01 02`; little-endian `02 01`. Nonce message 1 begins `01 00 00 00`; Poseidon field element 1 ends `00 00 00 01`. The full nonce message is 32 bytes, not four. `S:tests/test_railgun_babyjubjub.c:760–790`.
 5. `R mod17=15`, `R⁻¹=8`; encodings `5̄=7`, `7̄=3`; `MontMul(7,3)=21·8 mod17=15` (encoding of ordinary result 1); `MontMul(15,1)=15·8 mod17=1`.
 6. `1`, `Fr−2`, `0`. The original tiny operands do not put nonzero data in high limbs or challenge reductions near the modulus. `S:app/core/core_railgun_diagnostics.c:20–49,265–342`.
@@ -434,12 +439,12 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 
 ### Mathematics and implementation
 
-1. **Which modulus does the branch use, and why is “BN254 field” ambiguous?** It uses BN254 scalar field `Fr` for BabyJubjub coordinates and Poseidon. BN254 pairing-curve base field has a different prime, and BabyJubjub signature scalars reduce modulo `l`. Substituting one changes arithmetic and vectors. `S:app/crypto/railgun_babyjubjub.c:18–23`; [R6][R24].
+1. **Which modulus does the branch use, and why is “BN254 field” ambiguous?** It uses BN254 scalar field `Fr` for BabyJubJub coordinates and Poseidon. BN254 pairing-curve base field has a different prime, and BabyJubJub signature scalars reduce modulo `l`. Substituting one changes arithmetic and vectors. `S:app/crypto/railgun_babyjubjub.c:18–23`; [R6][R24].
 2. **Why can a 32-byte lexicographic `memcmp` implement the point-coordinate canonicality check?** All operands and the modulus are fixed-length big-endian unsigned encodings, so bytewise order equals integer order. This would be false with mixed lengths or little-endian bytes. `S:app/crypto/railgun_babyjubjub.c:202–209`.
 3. **Why does Poseidon accept `Fr+1` while the point API rejects it?** The hash API explicitly reduces public U256 inputs to field elements to match its reference; a curve point API requires a unique canonical coordinate encoding. The two input contracts are intentional and should not be mixed silently. `S:app/crypto/railgun_poseidon_t6.c:17–32`; `S:tests/test_railgun_poseidon.c:110–147`.
-4. **What is the exact affine BabyJubjub addition formula and what can go wrong?** `x₃=(x₁y₂+y₁x₂)/(1+d x₁x₂y₁y₂)`, `y₃=(y₁y₂−a x₁x₂)/(1−d x₁x₂y₁y₂)` in `Fr`. Denominator zero makes a particular affine formula undefined; the C code uses a projective form and returns failure if resulting `Z=0`. `S:app/crypto/railgun_babyjubjub.c:123–167`; [R6].
+4. **What is the exact affine BabyJubJub addition formula and what can go wrong?** `x₃=(x₁y₂+y₁x₂)/(1+d x₁x₂y₁y₂)`, `y₃=(y₁y₂−a x₁x₂)/(1−d x₁x₂y₁y₂)` in `Fr`. Denominator zero makes a particular affine formula undefined; the C code uses a projective form and returns failure if resulting `Z=0`. `S:app/crypto/railgun_babyjubjub.c:123–167`; [R6].
 5. **Why use projective coordinates here?** The repeated scalar loop can multiply/add without an inverse for every point operation; one inverse appears at final conversion. The tradeoff is more modular multiplications, larger temporaries and a zero-`Z` error path. `S:app/crypto/railgun_babyjubjub.c:123–183`.
-6. **Why does `point_on_curve` not make arbitrary public keys safe?** BabyJubjub has cofactor 8. An on-curve point may have order 2, 4 or 8 and lie outside the intended prime subgroup. The API never checks `[l]P=O`; protocol-specific identity policy is also needed. `S:app/crypto/railgun_babyjubjub.c:99–121,185–269`; [R6].
+6. **Why does `point_on_curve` not make arbitrary public keys safe?** BabyJubJub has cofactor 8. An on-curve point may have order 2, 4 or 8 and lie outside the intended prime subgroup. The API never checks `[l]P=O`; protocol-specific identity policy is also needed. `S:app/crypto/railgun_babyjubjub.c:99–121,185–269`; [R6].
 7. **What exactly does the order-two regression demonstrate?** It proves the current public API accepts `(0,Fr−1)`, returns it for scalar 1, and returns identity for scalar 2 under the host HAL. It is a documented limitation, not a fix or physical test. `S:tests/test_railgun_babyjubjub.c:893–937`.
 8. **Is the scalar loop suitable for a spending key if the base point is fixed?** No. Leading-zero skipping and conditional addition reveal scalar-bit structure through timing and likely power; the API header forbids private spending scalars. A fixed base does not erase secret-dependent control flow. `S:app/crypto/railgun_babyjubjub.h:9–18`; `S:app/crypto/railgun_babyjubjub.c:228–255`.
 9. **Why might rechecking the output point be useful, and what does it fail to prove?** It can catch some internal arithmetic failures that produce an off-curve result. It does not prove the correct multiple, prime-subgroup membership, fault resistance, or constant-time behavior. `S:app/crypto/railgun_babyjubjub.c:258–267`.
@@ -458,7 +463,7 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 
 ### MCU, HAL and validation
 
-19. **Does the STM32 PKA directly multiply BabyJubjub points?** No. The code uses software Edwards point formulas built from modular HAL operations. ST documents no direct Edwards point mode for this PKA; existing `hal_ec_*` targets another curve interface. `S:app/crypto/railgun_babyjubjub.c:123–167`; `S:stm32/Core/Src/stm32_crypto.c:400–424`; [R15].
+19. **Does the STM32 PKA directly multiply BabyJubJub points?** No. The code uses software Edwards point formulas built from modular HAL operations. ST documents no direct Edwards point mode for this PKA; existing `hal_ec_*` targets another curve interface. `S:app/crypto/railgun_babyjubjub.c:123–167`; `S:stm32/Core/Src/stm32_crypto.c:400–424`; [R15].
 20. **Why does one ordinary `hal_bn_mul_mod` cause three PKA operations?** The HAL computes Montgomery parameter `R²`, encodes `a` as `aR`, then Montgomery-multiplies that by ordinary `b` to return `ab`. The fixed modulus parameter is not cached in this path. `S:stm32/Core/Src/stm32_crypto.c:334–345,509–545`.
 21. **Where could an endian bug hide despite host tests passing?** In target `PKA_Memcpy_u8_to_u32`/reverse conversion or PKA RAM word order. The host stand in consumes byte arrays in software and does not use that target path. `S:stm32/Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_pka.c:2133–2228`; `S:tests/host/hal_pka_host.c:473–681`.
 22. **What does the 64-operation row measure?** Aggregate FreeRTOS tick time for repeated `7×11 mod Fr`, including HAL setup/polling and comparisons but excluding the later UI. It is not throughput across diverse operands, a cycle count, or a signed result. `S:app/core/core_railgun_diagnostics.c:265–306`.
@@ -473,14 +478,14 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 
 ### RAILGUN, Keycard and threat models
 
-31. **Why is an Ethereum account signature insufficient as a RAILGUN spend authorization?** JoinSplit constrains a BabyJubjub EdDSA-Poseidon signature over circuit public inputs, while an Ethereum EOA signs EVM transaction data with secp256k1. Different key, curve, hash, message and verifier. [R2][R3].
+31. **Why is an Ethereum account signature insufficient as a RAILGUN spend authorization?** JoinSplit constrains a BabyJubJub EdDSA-Poseidon signature over circuit public inputs, while an Ethereum EOA signs EVM transaction data with secp256k1. Different key, curve, hash, message and verifier. [R2][R3].
 32. **What is the difference between a commitment and a nullifier?** A commitment binds an output private note in the tree; a nullifier is a public spent marker derived for an input note, checked against a mapping to prevent double spend without revealing which leaf is spent. In inspected V2 circuit, nullifier is `Poseidon(nullifyingKey,leafIndex)`. [R2][R21].
 33. **What does a Merkle path prove, and what stays private?** It shows a leaf reaches an accepted root by hashing ordered siblings; the path and leaf preimage can be witness data, while the root is public. It proves membership, not ownership by itself; circuit key/signature constraints supply authorization. [R2][R22].
 34. **Why must viewing-key placement be designed separately from spending-key placement?** Viewing material supports note discovery/decryption and can expose private history even if it cannot authorize spending. The engine has distinct spending and viewing derivation paths. A view-only wallet can see history without spending. [R1][R23][R25].
-35. **[?] Can the existing Keycard applet sign the exact RAILGUN spend statement?** No documented BabyJubjub EdDSA-Poseidon APDU was found; the current public `SIGN` reference lists secp256k1 ECDSA and applet-4.0 BIP-340 Schnorr, but no BabyJubjub EdDSA-Poseidon. A new applet/API design and compatibility test would be required. Do not invent an APDU number. [R3][R26]; `S:AGENTS.md:166–174`.
+35. **[?] Can the existing Keycard applet sign the exact RAILGUN spend statement?** No documented BabyJubJub EdDSA-Poseidon APDU was found; the current public `SIGN` reference lists secp256k1 ECDSA and applet-4.0 BIP-340 Schnorr, but no BabyJubJub EdDSA-Poseidon. A new applet/API design and compatibility test would be required. Do not invent an APDU number. [R3][R26]; `S:AGENTS.md:166–174`.
 36. **How can a malicious host defeat a naive “secure key on card” design without stealing the key?** It may feed different outputs, fees, recipient, chain, bound parameters or witness than the user thinks they approved. The device must bind a human-readable review to the exact signed/proven public statement; hash-only signing is insufficient evidence of semantic approval. [R2][R13].
 37. **[?] Where should private witness construction and Groth16 proving run?** Not decided by this PR. Host proving has ample resources but may expose plaintext notes and secret witness; Shell/card confinement may exceed memory/time limits. Specify which witness fields each component sees, then measure. [R14]; `K:docs/V4-KEYCARD-SHELL-ARCHITECTURE-DRAFT.md:87–97` is a separate-track illustration.
-38. **What can one learn from the experimental Ledger RAILGUN app?** It is a primary-source example of BabyJubjub authorization in a secure-element app, with explicit experimental/sideloaded status. It cannot be used as proof that Keycard's existing ECDSA APDU supports RAILGUN or that the app is production certified. [R17][R18].
+38. **What can one learn from the experimental Ledger RAILGUN app?** It is a primary-source example of BabyJubJub authorization in a secure-element app, with explicit experimental/sideloaded status. It cannot be used as proof that Keycard's existing ECDSA APDU supports RAILGUN or that the app is production certified. [R17][R18].
 39. **How does Trezor's boundary differ from Keycard/Ledger?** Trezor's documented Safe-device design uses main-MCU keys with secure-element assistance in PIN-bound protection; Ledger documents secure-element apps/keys; Keycard exposes an APDU applet boundary. These need distinct threat models. No inspected Trezor primary source established production RAILGUN signing. [R17][R19][R20].
 40. **[?] What result would justify a next architecture decision?** First obtain actual PKA correctness, repeated latency, stack and QR observations on a development Shell. Separately define exact RAILGUN version, key derivation/recovery, signing message, witness fields and trust boundary. Only then compare card-only, Shell-assisted and host-assisted designs against explicit performance and security requirements. `S:app/core/core_railgun_diagnostics.c:265–435`; [R2][R13].
 
@@ -495,16 +500,16 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 | **Affine coordinates** | A curve point represented directly as `(x,y)`; many addition formulas require inversions. |
 | **ARM ELF** | Cross-linked executable file for the target MCU; linkage is not physical execution. |
 | **ASan / UBSan** | AddressSanitizer and UndefinedBehaviorSanitizer; host runtime instrumentation for classes of memory and C-language errors. |
-| **BabyJubjub** | The twisted Edwards curve over BN254 `Fr` specified by EIP-2494, with a prime subgroup and cofactor 8. [R6] |
-| **Base8** | The specified BabyJubjub generator of its prime-order subgroup, obtained by cofactor multiplication of a base point. [R6] |
+| **BabyJubJub** | The twisted Edwards curve over BN254 `Fr` specified by EIP-2494, with a prime subgroup and cofactor 8. [R6] |
+| **Base8** | The specified BabyJubJub generator of its prime-order subgroup, obtained by cofactor multiplication of a base point. [R6] |
 | **Big-endian / little-endian** | Orders bytes from most/least significant first. A byte order is part of a cryptographic interface, not a display preference. |
 | **BLAKE-512** | Original BLAKE family 512-bit hash with 1024-bit blocks and 16 compression rounds; distinct from BLAKE2b and SHA-512. [R10] |
 | **BN254 base field** | `Fq` for coordinates of BN254 pairing-curve points; different from BN254 scalar field `Fr`. [R24] |
-| **BN254 scalar field, `Fr`** | Field used by BabyJubjub coordinates and this Poseidon implementation; modulus printed in Part 3. [R6] |
+| **BN254 scalar field, `Fr`** | Field used by BabyJubJub coordinates and this Poseidon implementation; modulus printed in Part 3. [R6] |
 | **Canonical encoding** | Unique allowed byte representation of a field/scalar element, normally the fixed-width integer strictly below its modulus. |
 | **Capacity / rate** | In a sponge-like field state, capacity lanes reserve security margin and rate lanes accept/output data; this t6 API makes one five-input permutation call. |
 | **Circuit** | A system of arithmetic constraints used by the zero-knowledge prover and verifier. |
-| **Cofactor** | Ratio of full curve order to prime subgroup order; BabyJubjub's is 8. [R6] |
+| **Cofactor** | Ratio of full curve order to prime subgroup order; BabyJubJub's is 8. [R6] |
 | **Commitment** | Cryptographic binding to note contents used as a Merkle leaf; hides contents when correctly constructed with secret randomness. |
 | **Constant-time** | Control flow and memory/timing behavior designed to avoid dependence on secret values, within a stated leakage model. |
 | **Core task** | FreeRTOS task orchestrating card/UI operations and running this diagnostic. `S:app/tasks/core_task.c` |
@@ -517,7 +522,7 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 | **HAL** | Hardware abstraction layer; `hal_bn_*` is the byte-oriented interface between crypto C and target PKA or host stand in. |
 | **High-water mark** | FreeRTOS minimum-ever unused stack for a task, reported in words then converted to bytes here. |
 | **Host HAL stand in** | Software implementation compiled for native tests instead of the STM32 register path; it does not model silicon timing. `S:tests/host/hal_pka_host.c` |
-| **Identity point** | Group neutral element `O=(0,1)` on BabyJubjub. |
+| **Identity point** | Group neutral element `O=(0,1)` on BabyJubJub. |
 | **JavaCard applet** | Program on a JavaCard secure element reached through documented APDUs. [R5] |
 | **JoinSplit** | RAILGUN circuit relation tying input notes, nullifiers, output commitments, balance and spend authorization to public inputs. [R2] |
 | **Key derivation** | Deterministic generation of child keys from a parent seed/path; exact path and encoding are part of wallet compatibility. |
@@ -526,9 +531,9 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 | **Montgomery representation** | Encoding `x̄=xR mod p` that makes modular multiplication efficient with power-of-two `R`. |
 | **MPU / TrustZone** | Memory Protection Unit / Arm security-domain feature. Hardware capability is separate from how a firmware image configures it. [R27] |
 | **Nullifier** | Public one-time marker for a spent note; the inspected V2 circuit derives it from nullifying key and leaf index. [R21] |
-| **PKA** | STM32 public-key accelerator, used here for modular arithmetic; it does not directly implement BabyJubjub point formulas. [R15] |
+| **PKA** | STM32 public-key accelerator, used here for modular arithmetic; it does not directly implement BabyJubJub point formulas. [R15] |
 | **Poseidon** | Family of field-based permutations/hashes whose precise parameters and constants define compatibility. [R7][R9] |
-| **Prime subgroup order `l`** | BabyJubjub signing scalar modulus, distinct from `Fr`; `l` is printed in Part 4. [R6] |
+| **Prime subgroup order `l`** | BabyJubJub signing scalar modulus, distinct from `Fr`; `l` is printed in Part 4. [R6] |
 | **Projective coordinates** | `(X:Y:Z)` with affine `(X/Z,Y/Z)` when `Z≠0`; defer inversion in scalar multiplication. |
 | **Proof generation / verification** | Prover uses private witness and proving artifacts to create a proof; verifier checks public statement and proof. They have different resource and privacy needs. |
 | **QR report** | Optional JSON encoded on Shell display; this report carries diagnostic status and source revision, not a firmware attestation. |
@@ -549,7 +554,7 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 | Level | What to learn | Competency checkpoint |
 |---|---|---|
 | **1. Explain the architecture** | Draw Ethereum account, RAILGUN wallet, Keycard, Shell, host/prover and PKA boundaries. | In five minutes, explain where authorization, witness construction and proof generation differ; point out which arrows the PR implements and which it does not. |
-| **2. Understand the mathematics** | Work `F₁₇` arithmetic, Montgomery example, BabyJubjub order-two point, and one Poseidon round. | Solve exercises 1–13 without notes; distinguish `Fq`, `Fr` and `l` aloud and derive `[S]Base8=R8+[8c]A`. |
+| **2. Understand the mathematics** | Work `F₁₇` arithmetic, Montgomery example, BabyJubJub order-two point, and one Poseidon round. | Solve exercises 1–13 without notes; distinguish `Fq`, `Fr` and `l` aloud and derive `[S]Base8=R8+[8c]A`. |
 | **3. Trace the C implementation** | Read the source order at the start; follow bytes through HAL and PKA, then menu through QR. | Recreate the call graph and explain every row of the diagnostic without opening the PR description; predict return/status for a forced failure at each stage. |
 | **4. Validate correctness and security assumptions** | Re-run native tests; design independent differential/property tests; classify public and secret operands. | Produce a test matrix with exact oracle/version, failure/edge cases, and limitations. Explain why the accepted low-order point and variable-time loop bar use with a secret. |
 | **5. Defend architecture and tradeoffs** | Compare secure-element-only, Shell-assisted, host-assisted and coprocessor placements. | Answer all 40 questions in Part 15 with citations and mark unknowns. Present a data-flow threat model for one proposed design, including viewing-key and witness exposure. |
@@ -566,7 +571,7 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 [R3]: https://docs.keycard.tech/en/developers/apdu/sign "Keycard SIGN APDU"
 [R4]: https://docs.railgun.org/developer-guide/engine-1/state-structure "RAILGUN state structure"
 [R5]: https://docs.keycard.tech/en/developers/apdu/overview "Keycard APDU overview"
-[R6]: https://eips.ethereum.org/EIPS/eip-2494 "EIP-2494 BabyJubjub"
+[R6]: https://eips.ethereum.org/EIPS/eip-2494 "EIP-2494 BabyJubJub"
 [R7]: https://eprint.iacr.org/2019/458.pdf "Poseidon paper"
 [R8]: https://github.com/keycard-tech/keycard-shell/pull/235 "Keycard Shell PR 235"
 [R9]: https://raw.githubusercontent.com/iden3/circomlibjs/main/src/poseidon_reference.js "circomlibjs Poseidon reference"
@@ -590,4 +595,4 @@ These are deliberately answerable from mathematics, inspected code, or an honest
 [R27]: https://support.arm.com/compute-ip/trustzone-for-cortex-m "Arm TrustZone for Cortex-M"
 [R28]: https://docs.oracle.com/en/java/javacard/3.1/jc_api_srvc/api_classic/javacard/framework/APDU.html "Oracle Java Card APDU API"
 
-**What this created:** one source-grounded learning guide with mathematics, function traces, benchmark semantics, 18 exercises with separate solutions, 40 maintainer questions with model answers, glossary and six-level roadmap. **Insufficient evidence:** independent Daybreak report, physical PKA results, physical stack and QR observations, a pinned end-to-end RAILGUN engine/circuit integration, secure Keycard BabyJubjub authorization, and production firmware/secret-handling properties. These gaps are explicit research questions, not implied success.
+**What this created:** one source-grounded learning guide with mathematics, function traces, benchmark semantics, 18 exercises with separate solutions, 40 maintainer questions with model answers, glossary and six-level roadmap. **Insufficient evidence:** independent Daybreak report, physical PKA results, physical stack and QR observations, a pinned end-to-end RAILGUN engine/circuit integration, secure Keycard BabyJubJub authorization, and production firmware/secret-handling properties. These gaps are explicit research questions, not implied success.
