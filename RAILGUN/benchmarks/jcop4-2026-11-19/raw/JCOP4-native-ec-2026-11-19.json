@@ -1,0 +1,279 @@
+{
+  "status": "PARTIAL",
+  "mode": "physical-public-native-ec-probe",
+  "applet": "native-ec",
+  "applet_aid": "F0424E3235343701",
+  "reader": "ACS ACR39U ICC Reader 00 00",
+  "rounds": 10,
+  "operations_verified": 11,
+  "operations_total": 18,
+  "failed_operations": [
+    "xy_wide_0",
+    "xy_wide_1",
+    "xy_wide_2",
+    "xy_wide_3",
+    "xy_wide_4",
+    "xy_wide_5",
+    "xy_bench_k"
+  ],
+  "select_ms": 15.246,
+  "stage_query_sw": "9000",
+  "stage_query_ms": 4.304,
+  "timing_scope": "PC/SC transmit only; excludes SELECT and CLI startup",
+  "wallet_signing": false,
+  "installation": false,
+  "operations": {
+    "noop": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 4.464,
+      "min_ms": 3.973,
+      "max_ms": 5.098,
+      "median_above_noop_ms": 0.0,
+      "expected_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "mismatches": []
+    },
+    "select_scalar_2": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 10.407,
+      "min_ms": 10.01,
+      "max_ms": 11.291,
+      "median_above_noop_ms": 5.943,
+      "expected_sha256": "dbc1b4c900ffe48d575b5da5c638040125f65db0fe3e24494b76ea986457d986",
+      "mismatches": []
+    },
+    "plain_2b": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 79.876,
+      "min_ms": 78.74,
+      "max_ms": 81.15,
+      "median_above_noop_ms": 75.412,
+      "expected_sha256": "3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806",
+      "mismatches": []
+    },
+    "select_scalar_3": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 10.462,
+      "min_ms": 9.929,
+      "max_ms": 10.967,
+      "median_above_noop_ms": 5.998,
+      "expected_sha256": "084fed08b978af4d7d196a7446a86b58009e636b611db16211b65a9aadff29c5",
+      "mismatches": []
+    },
+    "plain_3b": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 79.554,
+      "min_ms": 78.585,
+      "max_ms": 81.155,
+      "median_above_noop_ms": 75.089,
+      "expected_sha256": "943ed988dddd7a48baa69e55a67c951ad5405c7442e75200e041ba20d2ab3945",
+      "mismatches": []
+    },
+    "plain_wide_0": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.667,
+      "min_ms": 85.073,
+      "max_ms": 86.697,
+      "median_above_noop_ms": 81.202,
+      "expected_sha256": "3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806",
+      "mismatches": []
+    },
+    "xy_wide_0": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "934a303b458b9465194487a5016c400e4d5c0d5ed1b8a856465c4ac492586483",
+      "mismatches": []
+    },
+    "plain_wide_1": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.64,
+      "min_ms": 85.201,
+      "max_ms": 86.759,
+      "median_above_noop_ms": 81.175,
+      "expected_sha256": "943ed988dddd7a48baa69e55a67c951ad5405c7442e75200e041ba20d2ab3945",
+      "mismatches": []
+    },
+    "xy_wide_1": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "5d70b0e050c3a077ea15bb32ec2168ea964457e7fcc639a88853bfeaef3414da",
+      "mismatches": []
+    },
+    "plain_wide_2": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.604,
+      "min_ms": 85.434,
+      "max_ms": 86.652,
+      "median_above_noop_ms": 81.139,
+      "expected_sha256": "4b05fcb27e09897e0f28be9ccbcbe1b4eb266c1c56172c59dac9c6d401443a0e",
+      "mismatches": []
+    },
+    "xy_wide_2": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "6f518b25caeb32b2b1858b69f8977aceb652039c03d54a3dded060bc8af36fcc",
+      "mismatches": []
+    },
+    "plain_wide_3": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.948,
+      "min_ms": 84.764,
+      "max_ms": 86.517,
+      "median_above_noop_ms": 81.484,
+      "expected_sha256": "fd4a4d319d37f77001c0844b462266944dc825a8d8bbd617e97ff46c034a21bb",
+      "mismatches": []
+    },
+    "xy_wide_3": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "b3fb5181004f46a5fb4a19317d06a222be8fb912757c497e9e9194d072862a88",
+      "mismatches": []
+    },
+    "plain_wide_4": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.865,
+      "min_ms": 85.242,
+      "max_ms": 86.76,
+      "median_above_noop_ms": 81.4,
+      "expected_sha256": "d484e0e5155c6bed8d77dc3c5da6f257f732db20a3e2063fc434a0452622b7dc",
+      "mismatches": []
+    },
+    "xy_wide_4": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "a18f91b65546993092868100616ceee7050f7a23463d12041430ebc88497dbb0",
+      "mismatches": []
+    },
+    "plain_wide_5": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.706,
+      "min_ms": 85.064,
+      "max_ms": 86.753,
+      "median_above_noop_ms": 81.242,
+      "expected_sha256": "24edb11ea37cdba7c8f4f354889ab436e6ad8ff9e40f5e186ca5daa73a57a0ad",
+      "mismatches": []
+    },
+    "xy_wide_5": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "ca522774cb0617b6e5cc655c8b7a6ef7f15131b298ca5007e713c25804d57724",
+      "mismatches": []
+    },
+    "xy_bench_k": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "0420075d3563217c78322c4688f8dc698c977f0694f5c8c0f3e2524a055196ba",
+      "mismatches": []
+    }
+  }
+}

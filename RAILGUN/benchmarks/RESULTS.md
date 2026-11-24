@@ -1,5 +1,7 @@
 # Physical JCOP3 Benchmark Summary
 
+**Authoritative fastest-measured-by-operation index:** [Hardware leaderboard](HARDWARE-LEADERBOARD.md). This page also preserves historical measurements whose timing scopes differ. Four independently supplied JCOP4 JSON reports are archived [here](jcop4-2026-11-19/README.md).
+
 Device: Experimental Keycard 4.x on JCOP3.
 
 Reader: HID OMNIKEY 3x21 over PC/SC.
@@ -54,7 +56,7 @@ RAILGUN/scripts and RAILGUN/tests.
 
 ## Poseidon T3 RSA-5 — JCOP3 7E
 
-Five canonical vectors and 325 physical round checkpoints passed. Reported latency: approximately 230.5 seconds/hash. See the [archived evidence](poseidon-t3-rsa5-7e-2026-11-21/README.md).
+Fastest measured JCOP3 on-card Poseidon T3: **7E RSA-5**. Five canonical vectors and 325 physical round checkpoints passed. Reported five-vector latency: **~230.520 seconds/hash**; two original per-run records are pinned (230.716374 s `one-two`, 230.569210 s `three-five`). See the [archived evidence](poseidon-t3-rsa5-7e-2026-11-21/README.md).
 
 ## Poseidon T3 — 7F Barrett
 

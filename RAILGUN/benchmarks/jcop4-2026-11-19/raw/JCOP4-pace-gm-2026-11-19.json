@@ -1,0 +1,457 @@
+{
+  "status": "PARTIAL",
+  "mode": "physical-public-native-ec-probe",
+  "applet": "pace-gm",
+  "applet_aid": "F0424E3235343C01",
+  "reader": "ACS ACR39U ICC Reader 00 00",
+  "rounds": 10,
+  "operations_verified": 13,
+  "operations_total": 30,
+  "failed_operations": [
+    "xy_wide_0",
+    "xy_wide_1",
+    "xy_wide_2",
+    "xy_wide_3",
+    "xy_wide_4",
+    "xy_wide_5",
+    "xy_bench_k",
+    "pace_add_0",
+    "pace_add_1",
+    "pace_add_2",
+    "pace_add_3",
+    "pace_add_4",
+    "pace_add_5",
+    "pace_add_6",
+    "pace_add_7",
+    "pace_add_8",
+    "pace_add_9"
+  ],
+  "select_ms": 16.323,
+  "stage_query_sw": "9000",
+  "stage_query_ms": 4.913,
+  "timing_scope": "PC/SC transmit only; excludes SELECT and CLI startup",
+  "wallet_signing": false,
+  "installation": false,
+  "operations": {
+    "noop": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 4.798,
+      "min_ms": 4.157,
+      "max_ms": 5.583,
+      "median_above_noop_ms": 0.0,
+      "expected_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "mismatches": []
+    },
+    "select_scalar_2": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 10.385,
+      "min_ms": 10.004,
+      "max_ms": 10.759,
+      "median_above_noop_ms": 5.587,
+      "expected_sha256": "dbc1b4c900ffe48d575b5da5c638040125f65db0fe3e24494b76ea986457d986",
+      "mismatches": []
+    },
+    "plain_2b": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 79.934,
+      "min_ms": 79.179,
+      "max_ms": 80.6,
+      "median_above_noop_ms": 75.136,
+      "expected_sha256": "3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806",
+      "mismatches": []
+    },
+    "select_scalar_3": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 10.544,
+      "min_ms": 9.83,
+      "max_ms": 10.941,
+      "median_above_noop_ms": 5.746,
+      "expected_sha256": "084fed08b978af4d7d196a7446a86b58009e636b611db16211b65a9aadff29c5",
+      "mismatches": []
+    },
+    "plain_3b": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 79.79,
+      "min_ms": 79.166,
+      "max_ms": 80.251,
+      "median_above_noop_ms": 74.992,
+      "expected_sha256": "943ed988dddd7a48baa69e55a67c951ad5405c7442e75200e041ba20d2ab3945",
+      "mismatches": []
+    },
+    "plain_wide_0": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.594,
+      "min_ms": 84.897,
+      "max_ms": 86.145,
+      "median_above_noop_ms": 80.796,
+      "expected_sha256": "3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806",
+      "mismatches": []
+    },
+    "xy_wide_0": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "934a303b458b9465194487a5016c400e4d5c0d5ed1b8a856465c4ac492586483",
+      "mismatches": []
+    },
+    "plain_wide_1": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.751,
+      "min_ms": 85.002,
+      "max_ms": 86.455,
+      "median_above_noop_ms": 80.953,
+      "expected_sha256": "943ed988dddd7a48baa69e55a67c951ad5405c7442e75200e041ba20d2ab3945",
+      "mismatches": []
+    },
+    "xy_wide_1": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "5d70b0e050c3a077ea15bb32ec2168ea964457e7fcc639a88853bfeaef3414da",
+      "mismatches": []
+    },
+    "plain_wide_2": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.921,
+      "min_ms": 85.189,
+      "max_ms": 86.427,
+      "median_above_noop_ms": 81.123,
+      "expected_sha256": "4b05fcb27e09897e0f28be9ccbcbe1b4eb266c1c56172c59dac9c6d401443a0e",
+      "mismatches": []
+    },
+    "xy_wide_2": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "6f518b25caeb32b2b1858b69f8977aceb652039c03d54a3dded060bc8af36fcc",
+      "mismatches": []
+    },
+    "plain_wide_3": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.632,
+      "min_ms": 85.198,
+      "max_ms": 86.271,
+      "median_above_noop_ms": 80.834,
+      "expected_sha256": "fd4a4d319d37f77001c0844b462266944dc825a8d8bbd617e97ff46c034a21bb",
+      "mismatches": []
+    },
+    "xy_wide_3": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "b3fb5181004f46a5fb4a19317d06a222be8fb912757c497e9e9194d072862a88",
+      "mismatches": []
+    },
+    "plain_wide_4": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.923,
+      "min_ms": 85.524,
+      "max_ms": 86.549,
+      "median_above_noop_ms": 81.125,
+      "expected_sha256": "d484e0e5155c6bed8d77dc3c5da6f257f732db20a3e2063fc434a0452622b7dc",
+      "mismatches": []
+    },
+    "xy_wide_4": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "a18f91b65546993092868100616ceee7050f7a23463d12041430ebc88497dbb0",
+      "mismatches": []
+    },
+    "plain_wide_5": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 32,
+      "median_ms": 85.771,
+      "min_ms": 85.089,
+      "max_ms": 86.473,
+      "median_above_noop_ms": 80.973,
+      "expected_sha256": "24edb11ea37cdba7c8f4f354889ab436e6ad8ff9e40f5e186ca5daa73a57a0ad",
+      "mismatches": []
+    },
+    "xy_wide_5": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "ca522774cb0617b6e5cc655c8b7a6ef7f15131b298ca5007e713c25804d57724",
+      "mismatches": []
+    },
+    "xy_bench_k": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "0420075d3563217c78322c4688f8dc698c977f0694f5c8c0f3e2524a055196ba",
+      "mismatches": []
+    },
+    "rsa_init": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 1,
+      "median_ms": 5.005,
+      "min_ms": 4.14,
+      "max_ms": 52.754,
+      "median_above_noop_ms": 0.207,
+      "expected_sha256": "4bf5122f344554c53bde2ebb8cd2b7e3d1600ad631c385a5d7cce23c7785459a",
+      "mismatches": []
+    },
+    "rsa_cube_1024": {
+      "attempts": 10,
+      "successes": 10,
+      "status_words": {
+        "9000": 10
+      },
+      "expected_bytes": 128,
+      "median_ms": 241.751,
+      "min_ms": 240.195,
+      "max_ms": 244.321,
+      "median_above_noop_ms": 236.953,
+      "expected_sha256": "a7283f9604e3cb795e9418ffd14e6bea054d77cf5b8f9ccfbd194445d877d81e",
+      "mismatches": []
+    },
+    "pace_add_0": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "934a303b458b9465194487a5016c400e4d5c0d5ed1b8a856465c4ac492586483",
+      "mismatches": []
+    },
+    "pace_add_1": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "5d70b0e050c3a077ea15bb32ec2168ea964457e7fcc639a88853bfeaef3414da",
+      "mismatches": []
+    },
+    "pace_add_2": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "e39f2f2725d83e18b6b5030cf27fd4bc677d542eb0e6ca9b2e8082e6a984bb69",
+      "mismatches": []
+    },
+    "pace_add_3": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "f17abcac94185862d796df62211732b0af09df85ec9f480bd8121dfaa4e2d200",
+      "mismatches": []
+    },
+    "pace_add_4": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "868f5be44351c04d71fd87475669461d005de9462f406d5989f4e6a8cff77107",
+      "mismatches": []
+    },
+    "pace_add_5": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "737cdea34dcc037b84b6f6568fde8dfcd36e8717ef52fec1b58c6e76019967f4",
+      "mismatches": []
+    },
+    "pace_add_6": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "feb9b99b9ccaeb42b722b41095a04179e4b2aab10b335fe473ca863e725e81ef",
+      "mismatches": []
+    },
+    "pace_add_7": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "88aeb1bf96a38938cce74fbdcae0885ea65ad9f9269f6b1ac0b1d2bfc7158443",
+      "mismatches": []
+    },
+    "pace_add_8": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "6f518b25caeb32b2b1858b69f8977aceb652039c03d54a3dded060bc8af36fcc",
+      "mismatches": []
+    },
+    "pace_add_9": {
+      "attempts": 10,
+      "successes": 0,
+      "status_words": {
+        "6F02": 10
+      },
+      "expected_bytes": 65,
+      "median_ms": null,
+      "min_ms": null,
+      "max_ms": null,
+      "median_above_noop_ms": null,
+      "expected_sha256": "2cd9dd96fb003751ce3d4f1478577957d912fc14e4d6bf89ae7de6c929e6ef71",
+      "mismatches": []
+    }
+  }
+}

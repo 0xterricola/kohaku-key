@@ -112,11 +112,7 @@ readers, host environments, or applet configurations.
 The reported numbers do not measure isolated
 cryptographic engine execution time.
 
-The original JCOP4 machine-readable JSON artifacts
-are not yet imported into this repository.
-
-No per-sample measurements have been reconstructed
-or invented from the published aggregates.
+The four original JCOP4 machine-readable JSON artifacts are now [archived and hash-pinned](jcop4-2026-11-19/README.md), including all 50 individual K=1 PACE-GM samples. Data-integrity regression tests pass; these are independently supplied reports, not locally repeated JCOP4 physical runs. No per-sample measurements have been reconstructed or invented.
 
 The results establish research capability and
 reproducibility, not side-channel security or a
@@ -135,5 +131,4 @@ dated 2026-11-19:
 - JCOP4-2026-11-19.md
 - https://gist.github.com/bitgamma/18bed236b7073b8b951f26ba68e76515
 
-Original JCOP4 machine-readable result files:
-pending import and independent verification.
+Original JCOP4 machine-readable result files: [imported evidence](jcop4-2026-11-19/README.md), SHA-256 and aggregate checks passed; independent physical reproduction of `4E01` pending.

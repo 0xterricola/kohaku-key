@@ -1,0 +1,390 @@
+{
+  "status": "PASS",
+  "mode": "physical-public-pace-vectors-k1-variant",
+  "applet_aid": "F0424E3235344D01",
+  "variant": "pace-gm with key.setK((short)1) at initialisation stage 7",
+  "variant_cap": "/home/milles/git/kohaku-key/RAILGUN/experiments/physical-benchmark-runner/applets/pace-gm-k1/pace-gm-k1.cap",
+  "variant_cap_sha256": "4e50bcd2092e8d5feaef36420016dbfa044465b55f7671380852040b737c0efc",
+  "reader": "ACS ACR39U ICC Reader 00 00",
+  "rounds": 5,
+  "vectors": 10,
+  "apdu_attempts": 50,
+  "exact_matches": 50,
+  "status_words": {
+    "9000": 50
+  },
+  "select_sw": "9000",
+  "select_ms": 16.206,
+  "stage_sw": "9000",
+  "stage_query_ms": 5.387,
+  "stage_initialized_by_this_run": true,
+  "median_transmit_ms": 150.046,
+  "min_transmit_ms": 149.144,
+  "max_transmit_ms": 168.936,
+  "timing_scope": "PC/SC transmit only; excludes SELECT and stage query",
+  "wallet_signing": false,
+  "installation": false,
+  "failures": [],
+  "rounds_detail": [
+    [
+      {
+        "index": 0,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 168.936
+      },
+      {
+        "index": 1,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.464
+      },
+      {
+        "index": 2,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.479
+      },
+      {
+        "index": 3,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.972
+      },
+      {
+        "index": 4,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.21
+      },
+      {
+        "index": 5,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 152.62
+      },
+      {
+        "index": 6,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.438
+      },
+      {
+        "index": 7,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.896
+      },
+      {
+        "index": 8,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 151.245
+      },
+      {
+        "index": 9,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 151.121
+      }
+    ],
+    [
+      {
+        "index": 0,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.097
+      },
+      {
+        "index": 1,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.533
+      },
+      {
+        "index": 2,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.238
+      },
+      {
+        "index": 3,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.981
+      },
+      {
+        "index": 4,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.243
+      },
+      {
+        "index": 5,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.517
+      },
+      {
+        "index": 6,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.87
+      },
+      {
+        "index": 7,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 151.37
+      },
+      {
+        "index": 8,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.338
+      },
+      {
+        "index": 9,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.931
+      }
+    ],
+    [
+      {
+        "index": 0,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.529
+      },
+      {
+        "index": 1,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.144
+      },
+      {
+        "index": 2,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.218
+      },
+      {
+        "index": 3,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.522
+      },
+      {
+        "index": 4,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 151.134
+      },
+      {
+        "index": 5,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.84
+      },
+      {
+        "index": 6,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.375
+      },
+      {
+        "index": 7,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.706
+      },
+      {
+        "index": 8,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.691
+      },
+      {
+        "index": 9,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.983
+      }
+    ],
+    [
+      {
+        "index": 0,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.094
+      },
+      {
+        "index": 1,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.323
+      },
+      {
+        "index": 2,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.79
+      },
+      {
+        "index": 3,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.244
+      },
+      {
+        "index": 4,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.863
+      },
+      {
+        "index": 5,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.627
+      },
+      {
+        "index": 6,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.179
+      },
+      {
+        "index": 7,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.873
+      },
+      {
+        "index": 8,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.922
+      },
+      {
+        "index": 9,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 151.347
+      }
+    ],
+    [
+      {
+        "index": 0,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.919
+      },
+      {
+        "index": 1,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 151.163
+      },
+      {
+        "index": 2,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.625
+      },
+      {
+        "index": 3,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.487
+      },
+      {
+        "index": 4,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.513
+      },
+      {
+        "index": 5,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.48
+      },
+      {
+        "index": 6,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.318
+      },
+      {
+        "index": 7,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.144
+      },
+      {
+        "index": 8,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 150.306
+      },
+      {
+        "index": 9,
+        "status_word": "9000",
+        "response_match": true,
+        "response_bytes": 65,
+        "transmit_ms": 149.997
+      }
+    ]
+  ]
+}

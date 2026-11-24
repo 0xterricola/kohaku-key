@@ -1,0 +1,941 @@
+{
+  "mode": "algoprobe-localisation",
+  "applet_aid": "F0424E3235345201",
+  "cap": "RAILGUN/experiments/physical-benchmark-runner/applets/algoprobe/build/cap/railgun/probe/javacard/probe.cap",
+  "cap_sha256": "a2c0dbdc4e6026c115594cb9a0475fc46928466bead1be5ada4b40706484860a",
+  "reader": "ACS ACR39U ICC Reader 00 00",
+  "repeat": 3,
+  "scalar": 2,
+  "custom_curve_cofactor": 8,
+  "p256_cofactor": 1,
+  "runtime_info": {
+    "memory_reported": true,
+    "persistent_free": 32767,
+    "transient_reset_free": 3587,
+    "object_deletion": true
+  },
+  "key_parameter_readback": {
+    "0": {
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY"
+    },
+    "1": {
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY"
+    },
+    "2": {
+      "outcome": "readback",
+      "stored_cofactor_K": 8,
+      "field_bytes": 32,
+      "a_bytes": 32,
+      "b_bytes": 32,
+      "g_bytes": 65,
+      "r_bytes": 32,
+      "key_initialized": false
+    },
+    "3": {
+      "outcome": "readback",
+      "stored_cofactor_K": 1,
+      "field_bytes": 32,
+      "a_bytes": 32,
+      "b_bytes": 32,
+      "g_bytes": 65,
+      "r_bytes": 32,
+      "key_initialized": false
+    },
+    "4": {
+      "outcome": "readback",
+      "stored_cofactor_K": 1,
+      "field_bytes": 32,
+      "a_bytes": 32,
+      "b_bytes": 32,
+      "g_bytes": 65,
+      "r_bytes": 32,
+      "key_initialized": false
+    },
+    "5": {
+      "outcome": "readback",
+      "stored_cofactor_K": 1,
+      "field_bytes": 32,
+      "a_bytes": 32,
+      "b_bytes": 32,
+      "g_bytes": 65,
+      "r_bytes": 32,
+      "key_initialized": false
+    }
+  },
+  "object_creation_caps": [
+    {
+      "temporary_key": false,
+      "temporary_agreement": false,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": false,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": false,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": false,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": false,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": false,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": false,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": false,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": false,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": false,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": false,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": false,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": true,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": true,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": true,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": true,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": true,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": false,
+      "temporary_agreement": true,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "success",
+      "data": "00",
+      "bytes": 1
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": true,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": true,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": true,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": true,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": true,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    },
+    {
+      "temporary_key": true,
+      "temporary_agreement": true,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 1,
+      "stage_name": "buildKey",
+      "reason": 3,
+      "reason_name": "NO_SUCH_ALGORITHM"
+    }
+  ],
+  "experiments": [
+    {
+      "variant": 0,
+      "curve": "research curve",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "c84c27accdc306de7c85d98ba3dc782f08a9143a",
+      "bytes": 20,
+      "elapsed_ms": 30.918,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||2G):9e52f9c2c691d54645bf57e8ae57e3b5bf1568b47abe3a7046e9d6334d263694",
+        "sha1(00||04||2G):5428216b58f6f31b790cc447f4f735d949bb0739894ac27159609e1cc430d86f"
+      ]
+    },
+    {
+      "variant": 0,
+      "curve": "research curve",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.528
+    },
+    {
+      "variant": 0,
+      "curve": "research curve",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "2d60f0a2d01345661b0662f4f8f603badfece890fbc9a07fa00b1f1a34328855",
+      "bytes": 32,
+      "elapsed_ms": 86.31,
+      "expected_match": "x(2G)",
+      "expected_sha256_alternatives": [
+        "x(2G):3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806"
+      ]
+    },
+    {
+      "variant": 0,
+      "curve": "research curve",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.45
+    },
+    {
+      "variant": 0,
+      "curve": "research curve",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.442
+    },
+    {
+      "variant": 0,
+      "curve": "research curve",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.444
+    },
+    {
+      "variant": 1,
+      "curve": "P-256",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "b59d61fedc3b7a1ee22fde1780a595225e1d9843",
+      "bytes": 20,
+      "elapsed_ms": 31.822,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||2G):7565d91875992fcb1ffb67db1837e77b3e23da4b218fd66f7638af847edb0494",
+        "sha1(00||04||2G):5ea76c828a208e7de136ff15d44e7763a7fcaf8ec77217cb3d0b47ea7056ed72"
+      ]
+    },
+    {
+      "variant": 1,
+      "curve": "P-256",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.788
+    },
+    {
+      "variant": 1,
+      "curve": "P-256",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "7cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc47669978",
+      "bytes": 32,
+      "elapsed_ms": 86.326,
+      "expected_match": "x(2G)",
+      "expected_sha256_alternatives": [
+        "x(2G):23775201799b2234a18e8071e409cec80d42632fe77534180afdc533c9b76f81"
+      ]
+    },
+    {
+      "variant": 1,
+      "curve": "P-256",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.5
+    },
+    {
+      "variant": 1,
+      "curve": "P-256",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 10.047
+    },
+    {
+      "variant": 1,
+      "curve": "P-256",
+      "cofactor_mode": "unset",
+      "cofactor_used": null,
+      "cofactor_set": false,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 2,
+      "reason_name": "UNINITIALIZED_KEY",
+      "elapsed_ms": 9.877
+    },
+    {
+      "variant": 2,
+      "curve": "research curve",
+      "cofactor_mode": "proven",
+      "cofactor_used": 8,
+      "cofactor_set": true,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "c84c27accdc306de7c85d98ba3dc782f08a9143a",
+      "bytes": 20,
+      "elapsed_ms": 31.32,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||2G):9e52f9c2c691d54645bf57e8ae57e3b5bf1568b47abe3a7046e9d6334d263694",
+        "sha1(00||04||2G):5428216b58f6f31b790cc447f4f735d949bb0739894ac27159609e1cc430d86f"
+      ]
+    },
+    {
+      "variant": 2,
+      "curve": "research curve",
+      "cofactor_mode": "proven",
+      "cofactor_used": 8,
+      "cofactor_set": true,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 1,
+      "reason_name": "ILLEGAL_VALUE",
+      "elapsed_ms": 9.963
+    },
+    {
+      "variant": 2,
+      "curve": "research curve",
+      "cofactor_mode": "proven",
+      "cofactor_used": 8,
+      "cofactor_set": true,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "2d60f0a2d01345661b0662f4f8f603badfece890fbc9a07fa00b1f1a34328855",
+      "bytes": 32,
+      "elapsed_ms": 85.959,
+      "expected_match": "x(2G)",
+      "expected_sha256_alternatives": [
+        "x(2G):3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806"
+      ]
+    },
+    {
+      "variant": 2,
+      "curve": "research curve",
+      "cofactor_mode": "proven",
+      "cofactor_used": 8,
+      "cofactor_set": true,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 1,
+      "reason_name": "ILLEGAL_VALUE",
+      "elapsed_ms": 9.788
+    },
+    {
+      "variant": 2,
+      "curve": "research curve",
+      "cofactor_mode": "proven",
+      "cofactor_used": 8,
+      "cofactor_set": true,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 1,
+      "reason_name": "ILLEGAL_VALUE",
+      "elapsed_ms": 10.159
+    },
+    {
+      "variant": 2,
+      "curve": "research curve",
+      "cofactor_mode": "proven",
+      "cofactor_used": 8,
+      "cofactor_set": true,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "failure",
+      "exception": "CryptoException",
+      "stage": 10,
+      "stage_name": "init",
+      "reason": 1,
+      "reason_name": "ILLEGAL_VALUE",
+      "elapsed_ms": 10.036
+    },
+    {
+      "variant": 3,
+      "curve": "P-256",
+      "cofactor_mode": "proven",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "b59d61fedc3b7a1ee22fde1780a595225e1d9843",
+      "bytes": 20,
+      "elapsed_ms": 34.671,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||2G):7565d91875992fcb1ffb67db1837e77b3e23da4b218fd66f7638af847edb0494",
+        "sha1(00||04||2G):5ea76c828a208e7de136ff15d44e7763a7fcaf8ec77217cb3d0b47ea7056ed72"
+      ]
+    },
+    {
+      "variant": 3,
+      "curve": "P-256",
+      "cofactor_mode": "proven",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "success",
+      "data": "b59d61fedc3b7a1ee22fde1780a595225e1d9843",
+      "bytes": 20,
+      "elapsed_ms": 35.202,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||K*2G):7565d91875992fcb1ffb67db1837e77b3e23da4b218fd66f7638af847edb0494",
+        "sha1(00||04||K*2G):5ea76c828a208e7de136ff15d44e7763a7fcaf8ec77217cb3d0b47ea7056ed72"
+      ]
+    },
+    {
+      "variant": 3,
+      "curve": "P-256",
+      "cofactor_mode": "proven",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "7cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc47669978",
+      "bytes": 32,
+      "elapsed_ms": 88.606,
+      "expected_match": "x(2G)",
+      "expected_sha256_alternatives": [
+        "x(2G):23775201799b2234a18e8071e409cec80d42632fe77534180afdc533c9b76f81"
+      ]
+    },
+    {
+      "variant": 3,
+      "curve": "P-256",
+      "cofactor_mode": "proven",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "7cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc47669978",
+      "bytes": 32,
+      "elapsed_ms": 89.857,
+      "expected_match": "x(K*2G)",
+      "expected_sha256_alternatives": [
+        "x(K*2G):23775201799b2234a18e8071e409cec80d42632fe77534180afdc533c9b76f81"
+      ]
+    },
+    {
+      "variant": 3,
+      "curve": "P-256",
+      "cofactor_mode": "proven",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "success",
+      "data": "045ecbe4d1a6330a44c8f7ef951d4bf165e6c6b721efada985fb41661bc6e7fd6c8734640c4998ff7e374b06ce1a64a2ecd82ab036384fb83d9a79b127a27d5032",
+      "bytes": 65,
+      "elapsed_ms": 148.05,
+      "expected_match": "04||3G",
+      "expected_sha256_alternatives": [
+        "x(3G):088c0e78fad73609bb3ff7673f10b861674284bdb9dd0c4db3bf07ebc77b4a31",
+        "04||3G:89896264c58fca553508257b18703781fcd99c22a66186aa74f56e76f9b27cbe"
+      ]
+    },
+    {
+      "variant": 3,
+      "curve": "P-256",
+      "cofactor_mode": "proven",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "success",
+      "data": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+      "bytes": 65,
+      "elapsed_ms": 148.465,
+      "expected_match": "04||2G",
+      "expected_sha256_alternatives": [
+        "04||2G:a9f300eb5960e89133af7362011a1e26f0e2ea2e36dc402a04af6c192b891a8c"
+      ]
+    },
+    {
+      "variant": 4,
+      "curve": "research curve",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "c84c27accdc306de7c85d98ba3dc782f08a9143a",
+      "bytes": 20,
+      "elapsed_ms": 31.457,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||2G):9e52f9c2c691d54645bf57e8ae57e3b5bf1568b47abe3a7046e9d6334d263694",
+        "sha1(00||04||2G):5428216b58f6f31b790cc447f4f735d949bb0739894ac27159609e1cc430d86f"
+      ]
+    },
+    {
+      "variant": 4,
+      "curve": "research curve",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "success",
+      "data": "c84c27accdc306de7c85d98ba3dc782f08a9143a",
+      "bytes": 20,
+      "elapsed_ms": 32.388,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||K*2G):9e52f9c2c691d54645bf57e8ae57e3b5bf1568b47abe3a7046e9d6334d263694",
+        "sha1(00||04||K*2G):5428216b58f6f31b790cc447f4f735d949bb0739894ac27159609e1cc430d86f"
+      ]
+    },
+    {
+      "variant": 4,
+      "curve": "research curve",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "2d60f0a2d01345661b0662f4f8f603badfece890fbc9a07fa00b1f1a34328855",
+      "bytes": 32,
+      "elapsed_ms": 84.902,
+      "expected_match": "x(2G)",
+      "expected_sha256_alternatives": [
+        "x(2G):3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806"
+      ]
+    },
+    {
+      "variant": 4,
+      "curve": "research curve",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "2d60f0a2d01345661b0662f4f8f603badfece890fbc9a07fa00b1f1a34328855",
+      "bytes": 32,
+      "elapsed_ms": 85.591,
+      "expected_match": "x(K*2G)",
+      "expected_sha256_alternatives": [
+        "x(K*2G):3ed0cdd56f8d01ebdf5c01c66ad6e9ba12b31291c7552f6d0c403d1980fd7806"
+      ]
+    },
+    {
+      "variant": 4,
+      "curve": "research curve",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "success",
+      "data": "040227b8ccf44db907aa0b626d1e5fc40926a40a9374eb0f4f41a9f656a21ca6d00ebf010a901932c8274d2dc69adf03a97b6f00d46e04eef7e25ec3a3d6a371b6",
+      "bytes": 65,
+      "elapsed_ms": 144.673,
+      "expected_match": "04||3G",
+      "expected_sha256_alternatives": [
+        "x(3G):943ed988dddd7a48baa69e55a67c951ad5405c7442e75200e041ba20d2ab3945",
+        "04||3G:5d70b0e050c3a077ea15bb32ec2168ea964457e7fcc639a88853bfeaef3414da"
+      ]
+    },
+    {
+      "variant": 4,
+      "curve": "research curve",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "success",
+      "data": "042d60f0a2d01345661b0662f4f8f603badfece890fbc9a07fa00b1f1a34328855189dec24f83c74e3a405e2281e7a35686dcbe4a04289b9332552453fbcc4f88e",
+      "bytes": 65,
+      "elapsed_ms": 142.32,
+      "expected_match": "04||2G",
+      "expected_sha256_alternatives": [
+        "04||2G:934a303b458b9465194487a5016c400e4d5c0d5ed1b8a856465c4ac492586483"
+      ]
+    },
+    {
+      "variant": 5,
+      "curve": "P-256",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 1,
+      "algorithm_name": "ALG_EC_SVDP_DH (3.0.4)",
+      "outcome": "success",
+      "data": "b59d61fedc3b7a1ee22fde1780a595225e1d9843",
+      "bytes": 20,
+      "elapsed_ms": 31.627,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||2G):7565d91875992fcb1ffb67db1837e77b3e23da4b218fd66f7638af847edb0494",
+        "sha1(00||04||2G):5ea76c828a208e7de136ff15d44e7763a7fcaf8ec77217cb3d0b47ea7056ed72"
+      ]
+    },
+    {
+      "variant": 5,
+      "curve": "P-256",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 2,
+      "algorithm_name": "ALG_EC_SVDP_DHC (3.0.4)",
+      "outcome": "success",
+      "data": "b59d61fedc3b7a1ee22fde1780a595225e1d9843",
+      "bytes": 20,
+      "elapsed_ms": 32.256,
+      "expected_match": "NO_MATCH",
+      "expected_sha256_alternatives": [
+        "sha1(04||K*2G):7565d91875992fcb1ffb67db1837e77b3e23da4b218fd66f7638af847edb0494",
+        "sha1(00||04||K*2G):5ea76c828a208e7de136ff15d44e7763a7fcaf8ec77217cb3d0b47ea7056ed72"
+      ]
+    },
+    {
+      "variant": 5,
+      "curve": "P-256",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 3,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "7cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc47669978",
+      "bytes": 32,
+      "elapsed_ms": 86.65,
+      "expected_match": "x(2G)",
+      "expected_sha256_alternatives": [
+        "x(2G):23775201799b2234a18e8071e409cec80d42632fe77534180afdc533c9b76f81"
+      ]
+    },
+    {
+      "variant": 5,
+      "curve": "P-256",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 4,
+      "algorithm_name": "ALG_EC_SVDP_DHC_PLAIN (3.0.4)",
+      "outcome": "success",
+      "data": "7cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc47669978",
+      "bytes": 32,
+      "elapsed_ms": 86.321,
+      "expected_match": "x(K*2G)",
+      "expected_sha256_alternatives": [
+        "x(K*2G):23775201799b2234a18e8071e409cec80d42632fe77534180afdc533c9b76f81"
+      ]
+    },
+    {
+      "variant": 5,
+      "curve": "P-256",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 5,
+      "algorithm_name": "ALG_EC_PACE_GM (3.0.5)",
+      "outcome": "success",
+      "data": "045ecbe4d1a6330a44c8f7ef951d4bf165e6c6b721efada985fb41661bc6e7fd6c8734640c4998ff7e374b06ce1a64a2ecd82ab036384fb83d9a79b127a27d5032",
+      "bytes": 65,
+      "elapsed_ms": 146.03,
+      "expected_match": "04||3G",
+      "expected_sha256_alternatives": [
+        "x(3G):088c0e78fad73609bb3ff7673f10b861674284bdb9dd0c4db3bf07ebc77b4a31",
+        "04||3G:89896264c58fca553508257b18703781fcd99c22a66186aa74f56e76f9b27cbe"
+      ]
+    },
+    {
+      "variant": 5,
+      "curve": "P-256",
+      "cofactor_mode": "forced 1",
+      "cofactor_used": 1,
+      "cofactor_set": true,
+      "algorithm": 6,
+      "algorithm_name": "ALG_EC_SVDP_DH_PLAIN_XY (3.0.5)",
+      "outcome": "success",
+      "data": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+      "bytes": 65,
+      "elapsed_ms": 144.179,
+      "expected_match": "04||2G",
+      "expected_sha256_alternatives": [
+        "04||2G:a9f300eb5960e89133af7362011a1e26f0e2ea2e36dc402a04af6c192b891a8c"
+      ]
+    }
+  ],
+  "wallet_signing": false,
+  "installation": false
+}

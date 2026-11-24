@@ -64,16 +64,8 @@ This baseline demonstrates physical Poseidon correctness, not
 complete RAILGUN signing, private-scalar isolation, side-channel
 resistance, or practical transaction-signing latency.
 
-## Next implementation: 7F
+## Subsequent implementation: 7F Barrett — physically measured
 
-7F replaces BN254 reduction with a Barrett candidate. It passed
-offline arithmetic validation, but has no completed physical hash
-benchmark.
+The first 7F installation attempt returned `6985` after successful package load. After targeted retirement of 7E's applet and package, the already-loaded 7F installed and selected successfully on November 23; wallet identity checks passed. The failure's exact resource cause remains unproven.
 
-On November 23, 2026, the pinned 7F package
-`F0424E3235347F00` loaded successfully; installation of applet
-`F0424E3235347F01` returned `6985`. The instance was not
-selectable. Available memory and the exact installation failure
-cause remain undetermined.
-
-Preserve this 7E benchmark before retiring its physical applet.
+7F physically verified the canonical `one-two` vector, all **65/65 intermediate rounds**, and final output at **255.289453 seconds** host elapsed. The original pinned 7E `one-two` run was **230.716374 seconds**: 7F was **10.65% slower** in this non-identical-timing-boundary, single-run comparison. See [7F benchmark](../poseidon-t3-rsa5-7f-2026-11-23/README.md). The 7E physical applet is retired from the card; its pinned CAP hash, runner, vectors, and original measurements remain archived.

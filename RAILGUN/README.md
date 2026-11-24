@@ -44,16 +44,13 @@ These measurements include process startup, applet selection,
 PC/SC transport, and card execution. They are not isolated
 coprocessor latencies.
 
-### Poseidon
+### Poseidon — fastest JCOP3 physical implementation
 
-Two complete physical two-input hashes passed, with
-130/130 intermediate round states matching reference results.
+The **7E RSA-5 sparse-dictionary** implementation is the fastest measured on-card Poseidon T3 implementation in this research: **~230.520 seconds/hash** reported over five canonical vectors, with **325/325 physical round states** verified. Two pinned original run records include `one-two` **230.716374 s** and `three-five` **230.569210 s**.
 
-- Hash [0,0]: 376.979 seconds
-- Hash [1,2]: 375.644 seconds
+The older implementation measured **376.979 s** for `[0,0]` and **375.644 s** for `[1,2]`; those remain historical baselines, not current records. The later **7F Barrett** variant passed 65/65 rounds on `one-two` but took **255.289453 s**, 10.65% longer than 7E in the reported single-run comparison. Benchmark timing boundaries are not fully identical. Neither T3 result establishes a viable on-card RAILGUN T6 challenge.
 
-The physical Poseidon implementation remains too slow for
-practical on-card signing without substantial optimization.
+See the [hardware leaderboard](benchmarks/HARDWARE-LEADERBOARD.md) and [7E/7F physical evidence](benchmarks/RESULTS.md).
 
 ### BN254 RSA modular squaring
 
@@ -105,14 +102,14 @@ JCOP4.5 performance and compatibility remain unverified.
 - [Hardware safety](HARDWARE-SAFETY.md)
 - [JavaCard error diagnostics](JAVACARD-ERRORS.md)
 
-The original JCOP4 machine-readable benchmark files are still
-pending import. No synthetic per-sample records are used.
+Four original machine-readable JCOP4 benchmark files supplied by Mikkoph are now archived, SHA-256-pinned and checked for internal consistency, without synthesizing samples. See [source and raw results](benchmarks/jcop4-2026-11-19/README.md). Physical re-execution of our separate `4E01` variant remains pending.
 
 ## Current objectives
 
-1. Physical BabyJubJub EdDSA-Poseidon signing
-2. Poseidon hardware acceleration on JCOP and Shell
-3. Secure RAILGUN signing integration and key isolation
+1. Verify JCOP4 compatibility (Mikkoph's `4D01` result is complete; our `4E01` is pending)
+2. Validate two-phase synthetic-key BabyJubJub EdDSA-Poseidon signing on JCOP3, then JCOP4
+3. Evaluate Shell approval, host challenge binding, and progressive hardening with Keycard/Railgun developers
+4. Keep on-card Poseidon RSA-5 as a documented, paused performance track
 
 See [Research Roadmap](docs/ROADMAP.md) and
 [Physical Benchmarks](benchmarks/RESULTS.md).
